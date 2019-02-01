@@ -3,6 +3,7 @@
     <string name="show_nearby_devices">Show nearby devices</string>
     <string name="Connect">Connect</string>
     <string name="message">Message à envoyer</string>
+    <string name="send">Send</string>
     <string-array name="devices_array">
     </string-array>
 </resources>
