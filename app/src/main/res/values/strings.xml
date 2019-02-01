@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="show_nearby_devices">Show nearby devices</string>
+    <string name="Connect">Connect</string>
+    <string name="message">Message à envoyer</string>
+    <string-array name="devices_array">
+    </string-array>
+</resources>
