@@ -3,8 +3,12 @@ package proj.myapplication;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,9 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView;
     private EditText editText;
     private Button sendBtn;
+    private  InputStream iStream;
+    private  OutputStream oStream;
+    private byte[] mmBuffer;
+    private String DATA;
 
     private Set<BluetoothDevice> pairedDevices;
     public ArrayAdapter<String> adapter;
@@ -50,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
             sendBtnClicked();
         }
     };
+    public static  String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,21 +70,21 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 
-        searchBtn = (Button)findViewById(R.id.button_search);
+        searchBtn = findViewById(R.id.button_search);
         searchBtn.setOnClickListener(searchBtnListener);
 
-        connectBtn = (Button)findViewById(R.id.button_connect);
+        connectBtn = findViewById(R.id.button_connect);
         connectBtn.setOnClickListener(connectBtnListener);
 
-        mySpinner = (Spinner)findViewById(R.id.spinner);
+        mySpinner = findViewById(R.id.spinner);
         mySpinner.setAdapter(adapter);
 
-        editText = (EditText)findViewById(R.id.editText);
+        editText = findViewById(R.id.editText);
 
-        sendBtn = (Button)findViewById(R.id.button_send);
+        sendBtn = findViewById(R.id.button_send);
         sendBtn.setOnClickListener(sendBtnListener);
 
-        textView = (TextView)findViewById(R.id.textView);
+        textView = findViewById(R.id.textView);
 
     }
 
@@ -116,11 +128,44 @@ public class MainActivity extends AppCompatActivity {
         try {
             OutputStream btOutputStream = btSocket.getOutputStream();
             btOutputStream.write(editText.getText().toString().getBytes());
-            btSocket.close();
+            iStream = btSocket.getInputStream();
+            mmBuffer = new byte[1024];
+            int numBytes; // bytes returned from read()
+
+            // Keep listening to the InputStream until an exception occurs.
+            while (true) {
+                try {
+                    // Read from the InputStream.
+                    numBytes = iStream.read(mmBuffer);
+
+
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                    break;
+                }
+                break;
+            }
+
+            Context context = getApplicationContext();
+
+            int duration = Toast.LENGTH_SHORT;
+            String data = new String(mmBuffer);
+            DATA = data;
+            Toast toast = Toast.makeText(context, data, duration);
+            //toast.show();
+            //btSocket.close();
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+        //creation intent
+        Intent intent = new Intent(this, DisplayMessageActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, DATA);
+        startActivity(intent);
+
     }
 
     private BluetoothDevice getSelectedSpinnerItem() {
@@ -131,4 +176,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return null;
     }
+
+
 }

@@ -4,6 +4,5 @@
     <string name="Connect">Connect</string>
     <string name="message">Message à envoyer</string>
     <string name="send">Send</string>
-    <string-array name="devices_array">
-    </string-array>
+    <string-array name="devices_array"></string-array>
 </resources>
