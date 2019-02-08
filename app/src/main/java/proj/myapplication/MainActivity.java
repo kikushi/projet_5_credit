@@ -1,12 +1,11 @@
 package proj.myapplication;
 
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,20 +15,24 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Set;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button searchBtn;
-    private Button connectBtn;
-    private Spinner mySpinner;
-    private TextView textView;
+    private Button connectPairedBtn;
+    private Button connectOtherBtn;
+    private Spinner pairedSpinner;
+    private Spinner otherSpinner;
+    private TextView connexionSuccessTextView;
+    private TextView pairedDevicesTextView;
+    private TextView otherDevicesTextView;
     private EditText editText;
     private Button sendBtn;
+    private BT BTObject;
 
-    private Set<BluetoothDevice> pairedDevices;
-    public ArrayAdapter<String> adapter;
-    private BluetoothSocket btSocket;
+
+    public ArrayAdapter<String> pairedAdapter;
+    public ArrayAdapter<String> otherAdapter;
 
     private View.OnClickListener searchBtnListener = new View.OnClickListener() {
         @Override
@@ -40,7 +43,12 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener connectBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            connectBtnClicked();
+            if (v.getId() == R.id.button_connectPaired) {
+                connectBtnClicked(true);
+            }
+            else if (v.getId() == R.id.button_connectOther) {
+                connectBtnClicked(false);
+            }
         }
     };
 
@@ -56,79 +64,85 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        pairedAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        otherAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+
+        BTObject = new BT();
+
+        BTObject.setPairedAdapter(pairedAdapter);
+        BTObject.setOtherAdapter(otherAdapter);
+
+        BTObject.searchPairedDevices();
 
         searchBtn = (Button)findViewById(R.id.button_search);
         searchBtn.setOnClickListener(searchBtnListener);
 
-        connectBtn = (Button)findViewById(R.id.button_connect);
-        connectBtn.setOnClickListener(connectBtnListener);
+        pairedSpinner = (Spinner)findViewById(R.id.spinner_paired);
+        pairedSpinner.setAdapter(pairedAdapter);
 
-        mySpinner = (Spinner)findViewById(R.id.spinner);
-        mySpinner.setAdapter(adapter);
+        otherSpinner = (Spinner)findViewById(R.id.spinner_other);
+        otherSpinner.setAdapter(otherAdapter);
+
+        connectPairedBtn = (Button)findViewById(R.id.button_connectPaired);
+        connectPairedBtn.setOnClickListener(connectBtnListener);
+
+        connectOtherBtn = (Button)findViewById(R.id.button_connectOther);
+        connectOtherBtn.setOnClickListener(connectBtnListener);
 
         editText = (EditText)findViewById(R.id.editText);
 
         sendBtn = (Button)findViewById(R.id.button_send);
         sendBtn.setOnClickListener(sendBtnListener);
 
-        textView = (TextView)findViewById(R.id.textView);
+        connexionSuccessTextView = (TextView)findViewById(R.id.textView_connexionSuccess);
+        pairedDevicesTextView = (TextView)findViewById(R.id.textView_pairedDevices);
+        otherDevicesTextView = (TextView)findViewById(R.id.textView_otherDevices);
 
     }
 
     private void searchBtnClicked() {
-        BluetoothAdapter myBTAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (myBTAdapter == null) {
-            // Device doesn't support Bluetooth
-            // Message a l'utilisateur pour lui dire d'activer BT
-        }
-        else {
-            pairedDevices = myBTAdapter.getBondedDevices();
-
-            if (pairedDevices.size() > 0) {
-                // There are paired devices. Get the name and address of each paired device.
-                for (BluetoothDevice device : pairedDevices) {
-                    adapter.add(device.getName());
-                }
-            }
-            else {
-                // There are no paired devices. We then try to discover available devices nearby
-            }
-        }
+        BTObject.discoverDevices();
     }
 
-    private void connectBtnClicked() {
-        BluetoothDevice device = getSelectedSpinnerItem();
-        UUID uuid = UUID.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee"); //Standard SerialPortService ID
-        try {
-            btSocket = device.createRfcommSocketToServiceRecord(uuid);
-            if (!btSocket.isConnected()){
-                btSocket.connect();
-                textView.setText("Connexion réussie");
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+
+    private void connectBtnClicked(boolean boundedPressed) {
+        boolean connected = BTObject.connect(getSelectedSpinnerItem(boundedPressed));
+        if (connected) {
+            connexionSuccessTextView.setText(getString(R.string.connexion_success));
         }
     }
 
     private void sendBtnClicked() {
         try {
+            BluetoothSocket btSocket = BTObject.getBtSocket();
             OutputStream btOutputStream = btSocket.getOutputStream();
             btOutputStream.write(editText.getText().toString().getBytes());
-            btSocket.close();
+            //btSocket.close();
         }
         catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private BluetoothDevice getSelectedSpinnerItem() {
-        for (BluetoothDevice device : pairedDevices) {
-           if(device.getName().equals(mySpinner.getSelectedItem().toString())) {
-               return device;
-           }
+    private BluetoothDevice getSelectedSpinnerItem(boolean bounded) {
+        Set<BluetoothDevice> devices;
+        if (bounded) {
+            devices = BTObject.getPairedDevices();
+            for (BluetoothDevice device : devices) {
+                if(device.getName().equals(pairedSpinner.getSelectedItem().toString())) {
+                    return device;
+                }
+            }
         }
+        else {
+            devices = BTObject.getOtherDevices();
+            for (BluetoothDevice device : devices) {
+                if(device.getName().equals(otherSpinner.getSelectedItem().toString())) {
+                    return device;
+                }
+            }
+        }
+
         return null;
     }
 }

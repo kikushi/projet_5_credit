@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">My Application</string>
-    <string name="show_nearby_devices">Show nearby devices</string>
+    <string name="search_nearby_devices">Search nearby devices</string>
     <string name="Connect">Connect</string>
-    <string name="message">Message à envoyer</string>
+    <string name="message">Message to send</string>
     <string name="send">Send</string>
+    <string name="connexion_success">Connexion successful</string>
+    <string name="paired_devices">Known Devices</string>
+    <string name="other_devices">Other Devices</string>
     <string-array name="devices_array">
     </string-array>
 </resources>

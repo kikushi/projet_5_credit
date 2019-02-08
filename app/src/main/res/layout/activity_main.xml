@@ -6,41 +6,74 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/textView_pairedDevices"
+        android:text="@string/paired_devices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+       />
+
+    <TextView
+        android:id="@+id/textView_otherDevices"
+        android:text="@string/other_devices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/textView_pairedDevices"
+        android:layout_marginLeft="130dp"
+        />
     <Button
         android:id="@+id/button_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/show_nearby_devices"
-        android:layout_centerHorizontal="true"/>
+        android:text="@string/search_nearby_devices"
+        android:layout_below="@+id/textView_otherDevices"
+        android:layout_marginLeft="210dp"/>
+
+    <Spinner
+        android:id="@+id/spinner_paired"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@id/textView_pairedDevices" />
+
+    <Spinner
+        android:id="@+id/spinner_other"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/spinner_paired"
+        android:layout_marginLeft="200dp"
+        android:layout_below="@id/button_search" />
 
     <Button
-        android:id="@+id/button_connect"
+        android:id="@+id/button_connectPaired"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Connect"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/spinner"/>
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/spinner_paired"/>
 
-    <Spinner
-        android:id="@+id/spinner"
+    <Button
+        android:id="@+id/button_connectOther"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/button_search"
-         />
+        android:layout_below="@id/spinner_other"
+        android:layout_marginLeft="160dp"
+        android:layout_toRightOf="@id/button_connectPaired"
+        android:text="@string/Connect" />
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView_connexionSuccess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/button_connect"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_below="@id/button_connectPaired"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView"
+        android:layout_below="@id/textView_connexionSuccess"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="40dp"
         android:text="@string/message" />
@@ -53,6 +86,6 @@
         android:layout_toRightOf="@id/editText"
         android:layout_marginTop="40dp"
         android:layout_marginLeft="40dp"
-        android:layout_below="@id/textView"/>
+        android:layout_below="@id/textView_connexionSuccess"/>
 
 </RelativeLayout>
