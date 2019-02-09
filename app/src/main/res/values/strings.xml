@@ -5,4 +5,7 @@
     <string name="message">Message à envoyer</string>
     <string name="send">Send</string>
     <string-array name="devices_array"></string-array>
+    <string name="textView">GOD</string>
+    <string name="textview">TextView</string>
+    <string name="new_activity">GOD MODE</string>
 </resources>

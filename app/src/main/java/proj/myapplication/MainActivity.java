@@ -1,5 +1,6 @@
 package proj.myapplication;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -9,6 +10,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,7 +27,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private Button searchBtn;
     private Button connectBtn;
@@ -33,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView;
     private EditText editText;
     private Button sendBtn;
-    private  InputStream iStream;
-    private  OutputStream oStream;
-    private byte[] mmBuffer;
-    private String DATA;
+    public  InputStream iStream;
+    public  OutputStream oStream;
+    public byte[] mmBuffer;
+    public String DATA;
 
     private Set<BluetoothDevice> pairedDevices;
     public ArrayAdapter<String> adapter;
@@ -55,12 +57,14 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
     private View.OnClickListener sendBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             sendBtnClicked();
         }
     };
+
     public static  String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
     @Override
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+
 
         searchBtn = findViewById(R.id.button_search);
         searchBtn.setOnClickListener(searchBtnListener);
@@ -85,6 +90,19 @@ public class MainActivity extends AppCompatActivity {
         sendBtn.setOnClickListener(sendBtnListener);
 
         textView = findViewById(R.id.textView);
+
+    }
+    private void changeView(){
+       Context context = getApplicationContext();
+
+
+
+        Intent intent = null;
+        intent = new Intent(context, DisplayMessageActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, "GOD");
+
+         if(intent!=null){
+        startActivity(intent);}
 
     }
 
@@ -111,12 +129,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void connectBtnClicked() {
         BluetoothDevice device = getSelectedSpinnerItem();
-        UUID uuid = UUID.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee"); //Standard SerialPortService ID
+        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
         try {
             btSocket = device.createRfcommSocketToServiceRecord(uuid);
             if (!btSocket.isConnected()){
                 btSocket.connect();
                 textView.setText("Connexion réussie");
+
             }
         }
         catch (IOException e) {
@@ -149,22 +168,17 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
 
-            Context context = getApplicationContext();
 
-            int duration = Toast.LENGTH_SHORT;
-            String data = new String(mmBuffer);
-            DATA = data;
-            Toast toast = Toast.makeText(context, data, duration);
-            //toast.show();
-            //btSocket.close();
+
+
+           // btSocket.close();
+            changeView();
         }
         catch (IOException e) {
             e.printStackTrace();
         }
         //creation intent
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
-        intent.putExtra(EXTRA_MESSAGE, DATA);
-        startActivity(intent);
+
 
     }
 
