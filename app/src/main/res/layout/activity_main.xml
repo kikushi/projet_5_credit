@@ -11,7 +11,8 @@
         android:text="@string/paired_devices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
        />
 
     <TextView
@@ -19,8 +20,10 @@
         android:text="@string/other_devices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/textView_pairedDevices"
-        android:layout_marginLeft="130dp"
+        android:layout_toEndOf="@id/textView_pairedDevices"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginStart="120dp"
         />
     <Button
         android:id="@+id/button_search"
@@ -28,21 +31,21 @@
         android:layout_height="wrap_content"
         android:text="@string/search_nearby_devices"
         android:layout_below="@+id/textView_otherDevices"
-        android:layout_marginLeft="210dp"/>
+        android:layout_marginStart="210dp"/>
 
     <Spinner
         android:id="@+id/spinner_paired"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
         android:layout_below="@id/textView_pairedDevices" />
 
     <Spinner
         android:id="@+id/spinner_other"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/spinner_paired"
-        android:layout_marginLeft="200dp"
+        android:layout_toEndOf="@id/spinner_paired"
+        android:layout_marginStart="150dp"
         android:layout_below="@id/button_search" />
 
     <Button
@@ -50,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Connect"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:layout_below="@id/spinner_paired"/>
 
     <Button
@@ -58,15 +61,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/spinner_other"
-        android:layout_marginLeft="160dp"
-        android:layout_toRightOf="@id/button_connectPaired"
+        android:layout_marginStart="160dp"
+        android:layout_toEndOf="@id/button_connectPaired"
         android:text="@string/Connect" />
 
     <TextView
         android:id="@+id/textView_connexionSuccess"
+        android:textSize="20sp"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/button_connectPaired"
+        android:layout_below="@id/button_connectOther"
         android:layout_centerHorizontal="true" />
 
     <EditText
@@ -74,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textView_connexionSuccess"
-        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="40dp"
         android:text="@string/message" />
 
@@ -83,9 +88,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/send"
-        android:layout_toRightOf="@id/editText"
+        android:layout_toEndOf="@id/editText"
         android:layout_marginTop="40dp"
-        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
         android:layout_below="@id/textView_connexionSuccess"/>
 
 </RelativeLayout>
