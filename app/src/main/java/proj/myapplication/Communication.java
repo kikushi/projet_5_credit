@@ -20,6 +20,7 @@ public class Communication extends AppCompatActivity {
 
     private EditText editText;
     private Button sendBtn;
+    private Button disconnectBtn;
     private BluetoothSocket btSocket = null;
 
     private IntentFilter filter_aclDisconnected;
@@ -33,6 +34,9 @@ public class Communication extends AppCompatActivity {
 
         sendBtn = (Button)findViewById(R.id.button_send);
         sendBtn.setOnClickListener(sendBtnListener);
+
+        disconnectBtn = (Button)findViewById(R.id.button_disconnect);
+        disconnectBtn.setOnClickListener(disconnectBtnListener);
 
         filter_aclDisconnected = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         registerReceiver(mReceiverActionAclDisconnected, filter_aclDisconnected);
@@ -48,6 +52,13 @@ public class Communication extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             SendBtnClicked();
+        }
+    };
+
+    private View.OnClickListener disconnectBtnListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ChangeView();
         }
     };
 

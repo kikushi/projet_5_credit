@@ -13,12 +13,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -49,7 +47,7 @@ public class Connexion extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_connexion);
 
         pairedAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         otherAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
