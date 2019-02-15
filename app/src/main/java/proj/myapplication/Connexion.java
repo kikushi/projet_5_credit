@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity {
+public class Connexion extends AppCompatActivity {
 
     private UUID uuid;
     private Button searchBtn;
@@ -34,17 +34,16 @@ public class MainActivity extends AppCompatActivity {
     private TextView informationsTextView;
     private TextView pairedDevicesTextView;
     private TextView otherDevicesTextView;
-    private EditText editText;
-    private Button sendBtn;
 
     public Set<BluetoothDevice> pairedDevices;
     public Set<BluetoothDevice> otherDevices;
     public ArrayAdapter<String> pairedAdapter = null;
     public ArrayAdapter<String> otherAdapter = null;
-    public BluetoothSocket btSocket = null;
+
+    public static BluetoothSocket btSocket = null;
+
     public BluetoothAdapter myBTAdapter;
     public IntentFilter filter_found;
-    public IntentFilter filter_aclDisconnected;
     public IntentFilter filter_discoveryFinished;
 
     @Override
@@ -60,12 +59,11 @@ public class MainActivity extends AppCompatActivity {
         pairedDevices = new HashSet<BluetoothDevice>();
         otherDevices = new HashSet<BluetoothDevice>();
         uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
+        btSocket = null;
 
         filter_found = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        filter_aclDisconnected = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         filter_discoveryFinished = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         registerReceiver(mReceiverActionFound, filter_found);
-        registerReceiver(mReceiverActionAclDisconnected, filter_aclDisconnected);
         registerReceiver(mReceiverActionDiscoveryFinished, filter_discoveryFinished);
 
         //Widgets
@@ -85,13 +83,6 @@ public class MainActivity extends AppCompatActivity {
         connectOtherBtn = (Button)findViewById(R.id.button_connectOther);
         connectOtherBtn.setOnClickListener(connectBtnListener);
         connectOtherBtn.setVisibility(View.INVISIBLE);
-
-        editText = (EditText)findViewById(R.id.editText);
-        editText.setVisibility(View.INVISIBLE);
-
-        sendBtn = (Button)findViewById(R.id.button_send);
-        sendBtn.setOnClickListener(sendBtnListener);
-        sendBtn.setVisibility(View.INVISIBLE);
 
         informationsTextView = (TextView)findViewById(R.id.textView_informations);
         pairedDevicesTextView = (TextView)findViewById(R.id.textView_pairedDevices);
@@ -118,18 +109,8 @@ public class MainActivity extends AppCompatActivity {
                 success = ConnectBtnClicked(false);
             }
             if (success) {
-                informationsTextView.setText(getString(R.string.connexion_success) + btSocket.getRemoteDevice().getName());
-                informationsTextView.setVisibility(View.VISIBLE);
-                editText.setVisibility(View.VISIBLE);
-                sendBtn.setVisibility(View.VISIBLE);
+                ChangeView();
             }
-        }
-    };
-
-    private View.OnClickListener sendBtnListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            SendBtnClicked();
         }
     };
 
@@ -145,24 +126,6 @@ public class MainActivity extends AppCompatActivity {
                 if (!Contains(otherAdapter, device.getName())) {
                     otherAdapter.add(device.getName());
                 }
-            }
-        }
-    };
-
-    // Create a BroadcastReceiver for Bluetooth.ACTION_ACL_DISCONNECTED
-    private final BroadcastReceiver mReceiverActionAclDisconnected = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
-                //Device disconnected
-                Log.i("TAG", "Disconnected");
-                sendBtn.setVisibility(View.INVISIBLE);
-                editText.setVisibility(View.INVISIBLE);
-                informationsTextView.setText(getString(R.string.connexion_with_host_ended));
-                try {btSocket.close();} catch (IOException e) { e.printStackTrace();}
-                btSocket = null;
-                SearchPairedDevices();
-                //Retour a la page de connexion
             }
         }
     };
@@ -195,13 +158,14 @@ public class MainActivity extends AppCompatActivity {
         //A optimiser
 
         try {
-            if (btSocket == null) {
-                BluetoothDevice device = GetSelectedSpinnerItem(boundedPressed);
-                if (device == null) {
-                    informationsTextView.setText(getString(R.string.no_device_selected));
-                }
-                else {
-                    btSocket = GetSelectedSpinnerItem(boundedPressed).createRfcommSocketToServiceRecord(uuid);
+            BluetoothDevice device = GetSelectedSpinnerItem(boundedPressed);
+            if (device == null) {
+                informationsTextView.setText(getString(R.string.no_device_selected));
+                return false;
+            }
+            else {
+                if (btSocket == null) {
+                    btSocket = device.createRfcommSocketToServiceRecord(uuid);
                     btSocket.connect();
                     if (btSocket.isConnected()) {
                         return true;
@@ -217,17 +181,6 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return false;
-    }
-
-    private void SendBtnClicked() {
-        try {
-            OutputStream btOutputStream = btSocket.getOutputStream();
-            btOutputStream.write(editText.getText().toString().getBytes());
-            //btSocket.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private BluetoothDevice GetSelectedSpinnerItem(boolean bounded) {
@@ -276,11 +229,19 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    private void ChangeView() {
+        Context context = getApplicationContext();
+
+        Intent intent = new Intent(context, Communication.class);
+        if (intent != null) {
+            startActivity(intent);
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mReceiverActionFound);
-        unregisterReceiver(mReceiverActionAclDisconnected);
         unregisterReceiver(mReceiverActionDiscoveryFinished);
     }
 

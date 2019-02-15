@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Connexion">
 
     <TextView
         android:id="@+id/textView_pairedDevices"
@@ -73,23 +73,4 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/button_connectOther"
         android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView_informations"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp" />
-
-    <Button
-        android:id="@+id/button_send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/send"
-        android:layout_toEndOf="@id/editText"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="40dp"
-        android:layout_below="@id/textView_informations"/>
-
 </RelativeLayout>
