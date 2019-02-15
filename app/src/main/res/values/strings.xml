@@ -2,11 +2,14 @@
     <string name="app_name">My Application</string>
     <string name="search_nearby_devices">Search nearby devices</string>
     <string name="Connect">Connect</string>
-    <string name="message">Message to send</string>
     <string name="send">Send</string>
-    <string name="connexion_success">Connexion successful</string>
+    <string name="connexion_success">Connexion successful with&#160;</string>
     <string name="paired_devices">Known Devices</string>
     <string name="other_devices">Other Devices</string>
+    <string name="connexion_with_host_ended">Connexion with host has ended</string>
+    <string name="device_discovery_finished">Device discovery finished</string>
+    <string name="looking_for_nearby_devices">Looking for nearby devices ...</string>
+    <string name="no_device_selected">No device selected</string>
     <string-array name="devices_array">
     </string-array>
 </resources>

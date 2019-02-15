@@ -25,12 +25,13 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
+    private UUID uuid;
     private Button searchBtn;
     private Button connectPairedBtn;
     private Button connectOtherBtn;
     private Spinner pairedSpinner;
     private Spinner otherSpinner;
-    private TextView connexionSuccessTextView;
+    private TextView informationsTextView;
     private TextView pairedDevicesTextView;
     private TextView otherDevicesTextView;
     private EditText editText;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         myBTAdapter = BluetoothAdapter.getDefaultAdapter();
         pairedDevices = new HashSet<BluetoothDevice>();
         otherDevices = new HashSet<BluetoothDevice>();
+        uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
 
         filter_found = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         filter_aclDisconnected = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
@@ -91,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         sendBtn.setOnClickListener(sendBtnListener);
         sendBtn.setVisibility(View.INVISIBLE);
 
-        connexionSuccessTextView = (TextView)findViewById(R.id.textView_connexionSuccess);
+        informationsTextView = (TextView)findViewById(R.id.textView_informations);
         pairedDevicesTextView = (TextView)findViewById(R.id.textView_pairedDevices);
         otherDevicesTextView = (TextView)findViewById(R.id.textView_otherDevices);
 
@@ -116,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
                 success = ConnectBtnClicked(false);
             }
             if (success) {
-                connexionSuccessTextView.setText(getString(R.string.connexion_success) + " with " + btSocket.getRemoteDevice().getName());
-                connexionSuccessTextView.setVisibility(View.VISIBLE);
+                informationsTextView.setText(getString(R.string.connexion_success) + btSocket.getRemoteDevice().getName());
+                informationsTextView.setVisibility(View.VISIBLE);
                 editText.setVisibility(View.VISIBLE);
                 sendBtn.setVisibility(View.VISIBLE);
             }
@@ -156,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("TAG", "Disconnected");
                 sendBtn.setVisibility(View.INVISIBLE);
                 editText.setVisibility(View.INVISIBLE);
-                connexionSuccessTextView.setVisibility(View.INVISIBLE);
+                informationsTextView.setText(getString(R.string.connexion_with_host_ended));
                 try {btSocket.close();} catch (IOException e) { e.printStackTrace();}
                 btSocket = null;
                 SearchPairedDevices();
@@ -171,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
             String action = intent.getAction();
             if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 //Discovery is finished
-                Log.i("TAG", "cancelDiscovery");
+                informationsTextView.setText(getString(R.string.device_discovery_finished));
                 myBTAdapter.cancelDiscovery();
                 unregisterReceiver(mReceiverActionDiscoveryFinished);
             }
@@ -186,20 +188,27 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(mReceiverActionDiscoveryFinished, filter_discoveryFinished);
         otherSpinner.setVisibility(View.VISIBLE);
         connectOtherBtn.setVisibility(View.VISIBLE);
+        informationsTextView.setText(getString(R.string.looking_for_nearby_devices));
     }
 
     private boolean ConnectBtnClicked(boolean boundedPressed) {
         //A optimiser
-        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
+
         try {
             if (btSocket == null) {
-                btSocket = GetSelectedSpinnerItem(boundedPressed).createRfcommSocketToServiceRecord(uuid);
-                btSocket.connect();
-                if (btSocket.isConnected()) {
-                    return true;
+                BluetoothDevice device = GetSelectedSpinnerItem(boundedPressed);
+                if (device == null) {
+                    informationsTextView.setText(getString(R.string.no_device_selected));
                 }
                 else {
-                    return false;
+                    btSocket = GetSelectedSpinnerItem(boundedPressed).createRfcommSocketToServiceRecord(uuid);
+                    btSocket.connect();
+                    if (btSocket.isConnected()) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
                 }
             }
         }
@@ -228,6 +237,8 @@ public class MainActivity extends AppCompatActivity {
                     return device;
                 }
             }
+            //No device selected
+            return null;
         }
         else {
             for (BluetoothDevice device : otherDevices) {
