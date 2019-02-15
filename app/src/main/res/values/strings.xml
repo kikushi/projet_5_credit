@@ -8,4 +8,6 @@
     <string name="textView">GOD</string>
     <string name="textview">TextView</string>
     <string name="new_activity">GOD MODE</string>
+    <string name="ecran2_On">ON</string>
+    <string name="spinner2">Devices</string>
 </resources>

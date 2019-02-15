@@ -20,6 +20,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -40,9 +42,9 @@ public class MainActivity extends Activity {
     public byte[] mmBuffer;
     public String DATA;
 
-    private Set<BluetoothDevice> pairedDevices;
+    public Set<BluetoothDevice> pairedDevices;
     public ArrayAdapter<String> adapter;
-    private BluetoothSocket btSocket;
+    public BluetoothSocket btSocket;
 
     private View.OnClickListener searchBtnListener = new View.OnClickListener() {
         @Override
@@ -64,8 +66,9 @@ public class MainActivity extends Activity {
             sendBtnClicked();
         }
     };
-
+    public static  String EXTRA_MESSAGE_2 = "com.example.myfirstapp.MESSAGE";
     public static  String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +96,8 @@ public class MainActivity extends Activity {
 
     }
     private void changeView(){
-       Context context = getApplicationContext();
+
+        Context context = getApplicationContext();
 
 
 
@@ -101,10 +105,11 @@ public class MainActivity extends Activity {
         intent = new Intent(context, DisplayMessageActivity.class);
         intent.putExtra(EXTRA_MESSAGE, "GOD");
 
-         if(intent!=null){
-        startActivity(intent);}
+        if(intent!=null){
+            startActivity(intent);}
 
     }
+
 
     private void searchBtnClicked() {
         BluetoothAdapter myBTAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -171,7 +176,7 @@ public class MainActivity extends Activity {
 
 
 
-           // btSocket.close();
+            btSocket.close();
             changeView();
         }
         catch (IOException e) {
@@ -182,7 +187,7 @@ public class MainActivity extends Activity {
 
     }
 
-    private BluetoothDevice getSelectedSpinnerItem() {
+     private BluetoothDevice getSelectedSpinnerItem() {
         for (BluetoothDevice device : pairedDevices) {
            if(device.getName().equals(mySpinner.getSelectedItem().toString())) {
                return device;
