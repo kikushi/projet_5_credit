@@ -11,4 +11,7 @@
     <string name="looking_for_nearby_devices">Looking for nearby devices ...</string>
     <string name="no_device_selected">No device selected</string>
     <string-array name="devices_array"></string-array>
+    <string name="btn_ajouter">ADD</string>
+    <string name="btn_deconnecter">DEC</string>
+    <string name="btn_supprimer">DEL</string>
 </resources>

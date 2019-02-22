@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,18 +23,36 @@ public class Communication extends AppCompatActivity {
     private EditText editText;
     private Button sendBtn;
     private BluetoothSocket btSocket = null;
+    private Button ajouterbtn;
+    private Button supprimerBtn;
+    private Button Deconnecter;
 
     private IntentFilter filter_aclDisconnected;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_communication);
 
+
         editText = (EditText)findViewById(R.id.editText_msg);
 
         sendBtn = (Button)findViewById(R.id.button_send);
         sendBtn.setOnClickListener(sendBtnListener);
+
+        ajouterbtn = (Button)findViewById(R.id.buttonajouter);
+        ajouterbtn.setOnClickListener(ajouterBtnListener);
+        ajouterbtn.isShown();
+
+
+        supprimerBtn = (Button)findViewById(R.id.buttonsupprimer);
+        supprimerBtn.setOnClickListener(supprimerBtnListener);
+
+        Deconnecter = (Button)findViewById(R.id.buttondeconnecter);
+        Deconnecter.setOnClickListener(deconnecterBtnListener);
+
 
         filter_aclDisconnected = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         registerReceiver(mReceiverActionAclDisconnected, filter_aclDisconnected);
@@ -49,6 +69,27 @@ public class Communication extends AppCompatActivity {
         public void onClick(View v) {
             SendBtnClicked();
         }
+    };
+    private View.OnClickListener ajouterBtnListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            ajouterBtnClicked();
+        }
+
+    };
+    private View.OnClickListener supprimerBtnListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            ajouterBtnClicked();
+        }
+
+    };
+    private View.OnClickListener deconnecterBtnListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            ajouterBtnClicked();
+        }
+
     };
 
     // Create a BroadcastReceiver for Bluetooth.ACTION_ACL_DISCONNECTED
@@ -107,6 +148,15 @@ public class Communication extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mReceiverActionAclDisconnected);
+    }
+    private void Ajouter_btn( String nm_btn){
+
+    }
+    private void ajouterBtnClicked(){
+        Context context = getApplicationContext();
+        Toast toast = Toast.makeText(context," GOD Mode",Toast.LENGTH_SHORT);
+        toast.show();
+
     }
 
 }
