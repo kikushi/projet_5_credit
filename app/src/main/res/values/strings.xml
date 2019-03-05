@@ -14,4 +14,6 @@
     <string name="btn_ajouter">ADD</string>
     <string name="btn_deconnecter">DEC</string>
     <string name="btn_supprimer">DEL</string>
+    <string name="reponse_RPI">Message From RPI</string>
+    <string name="LED_SWITCH">LED</string>
 </resources>

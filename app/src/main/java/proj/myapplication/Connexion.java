@@ -45,6 +45,7 @@ public class Connexion extends AppCompatActivity {
     public BluetoothAdapter myBTAdapter;
     public IntentFilter filter_found;
     public IntentFilter filter_discoveryFinished;
+    public static int nbwidgt =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
