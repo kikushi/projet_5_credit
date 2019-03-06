@@ -201,10 +201,13 @@ public class Communication extends AppCompatActivity {
 
         try{
             saveInterne();
+            getFromInterne();
 
         }catch(IOException e) {
             e.printStackTrace();
         }
+        Toast toast= Toast.makeText(context," nb = "+ nbwidget_read.toString(),Toast.LENGTH_SHORT);
+        toast.show();
 
 
 
@@ -217,6 +220,7 @@ public class Communication extends AppCompatActivity {
         Connexion.nbwidgt = Connexion.nbwidgt -1;
         ledSwitch.setVisibility(View.GONE);
         try{
+            saveInterne();
             getFromInterne();
 
         }catch(IOException e) {
@@ -295,7 +299,6 @@ public class Communication extends AppCompatActivity {
     private void saveInterne() throws IOException{
         FileOutputStream outputStream = openFileOutput("preference.txt",MODE_PRIVATE);
         String numero = String.valueOf(Connexion.nbwidgt);
-
         outputStream.write(numero.getBytes());
         outputStream.close();
     }
