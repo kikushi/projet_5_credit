@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -40,6 +43,10 @@ public class Communication extends AppCompatActivity {
     public OutputStream oStream;
     private String m = "on";
     private String mn = "off";
+    private String nbwidget_read;
+
+
+
 
 
 
@@ -186,20 +193,37 @@ public class Communication extends AppCompatActivity {
     }
 
     private void ajouterBtnClicked(){
-        Context context = getApplicationContext();
-        Toast toast = Toast.makeText(context," Ajout de Widget",Toast.LENGTH_SHORT);
-        toast.show();
+
         Connexion.nbwidgt+=1;
         ledSwitch.setVisibility(View.VISIBLE);
+
+        Context context = getApplicationContext();
+
+        try{
+            saveInterne();
+
+        }catch(IOException e) {
+            e.printStackTrace();
+        }
+
+
+
 
 
     }
     private void SupprimerBtnCliked(){
         Context context = getApplicationContext();
-        Toast toast = Toast.makeText(context," Suppression de Widget",Toast.LENGTH_SHORT);
-        toast.show();
+
         Connexion.nbwidgt = Connexion.nbwidgt -1;
         ledSwitch.setVisibility(View.GONE);
+        try{
+            getFromInterne();
+
+        }catch(IOException e) {
+            e.printStackTrace();
+        }
+        Toast toast= Toast.makeText(context," nb = "+ nbwidget_read.toString(),Toast.LENGTH_SHORT);
+        toast.show();
 
 
 
@@ -215,7 +239,6 @@ public class Communication extends AppCompatActivity {
         }
         catch (IOException e) {
             e.printStackTrace();
-
         }
 
     }
@@ -269,5 +292,23 @@ public class Communication extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    private void saveInterne() throws IOException{
+        FileOutputStream outputStream = openFileOutput("preference.txt",MODE_PRIVATE);
+        String numero = String.valueOf(Connexion.nbwidgt);
+
+        outputStream.write(numero.getBytes());
+        outputStream.close();
+    }
+    private void getFromInterne() throws IOException{
+        String value = "";
+        FileInputStream inputStream = openFileInput("preference.txt");
+        StringBuilder Stringb = new StringBuilder();
+        int content;
+        while((content = inputStream.read())!=-1){
+            value = String.valueOf(Stringb.append((char)content));
+        }
+        nbwidget_read = value;
+    }
+
 
 }
