@@ -13,12 +13,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -109,7 +107,7 @@ public class Connexion extends AppCompatActivity {
                 success = ConnectBtnClicked(false);
             }
             if (success) {
-                ChangeView();
+                ChangeView(Communication.class);
             }
         }
     };
@@ -229,13 +227,11 @@ public class Connexion extends AppCompatActivity {
         return false;
     }
 
-    private void ChangeView() {
+    private void ChangeView(Class activity) {
         Context context = getApplicationContext();
 
-        Intent intent = new Intent(context, Communication.class);
-        if (intent != null) {
-            startActivity(intent);
-        }
+        Intent intent = new Intent(context, activity);
+        startActivity(intent);
     }
 
     @Override

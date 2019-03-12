@@ -1,25 +1,500 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Communication">
 
-    <EditText
-        android:id="@+id/editText_msg"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/button_send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/send"
-        android:layout_toEndOf="@id/editText_msg"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="40dp"/>
+        <Button
+            android:id="@+id/button_writeFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Write file"
+            android:onClick="writeFile"
+            />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/button_readFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Read file"
+            android:onClick="readFile"
+            />
+        <TextView
+            android:id="@+id/text_fileContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="50">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <TextView
+                    android:rotation="270"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Lecture"
+                    android:gravity="center_vertical"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="70">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="12">
+                        <TextView
+                            android:rotation="270"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Binary"
+                            android:gravity="center_vertical"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="88">
+
+                        <TableLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="50">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+
+
+                        </TableLayout>
+                        <TableLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="50">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textOff="Off"
+                                    android:textOn="On"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+
+
+                        </TableLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="30">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="12">
+                        <TextView
+                            android:rotation="270"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Byte"
+                            android:gravity="center_vertical"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="88">
+                        <TableLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="50">
+
+                        </TableLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="50">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <TextView
+                    android:rotation="270"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Écriture"
+                    android:gravity="center_vertical"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="70">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="12">
+                        <TextView
+                            android:rotation="270"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Binary"
+                            android:gravity="center_vertical"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="88">
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="A"
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="30">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="12">
+                        <TextView
+                            android:rotation="270"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Byte"
+                            android:gravity="center_vertical"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="88">
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="A"
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
+
+
+
+

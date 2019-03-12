@@ -12,7 +12,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -20,7 +23,12 @@ public class Communication extends AppCompatActivity {
 
     private EditText editText;
     private Button sendBtn;
+    private Button readFileBtn;
+    private Button writeFileBtn;
+    private TextView textFileContent;
     private BluetoothSocket btSocket = null;
+
+    public static String fileContent;
 
     private IntentFilter filter_aclDisconnected;
 
@@ -29,10 +37,14 @@ public class Communication extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_communication);
 
-        editText = (EditText)findViewById(R.id.editText_msg);
 
-        sendBtn = (Button)findViewById(R.id.button_send);
-        sendBtn.setOnClickListener(sendBtnListener);
+
+        readFileBtn = (Button)findViewById(R.id.button_readFile);
+        writeFileBtn = (Button)findViewById(R.id.button_writeFile);
+
+        textFileContent = (TextView)findViewById(R.id.text_fileContent);
+
+
 
         filter_aclDisconnected = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         registerReceiver(mReceiverActionAclDisconnected, filter_aclDisconnected);
@@ -41,7 +53,7 @@ public class Communication extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        ChangeView();
+        ChangeView(Connexion.class);
     }
 
     private View.OnClickListener sendBtnListener = new View.OnClickListener() {
@@ -70,7 +82,7 @@ public class Communication extends AppCompatActivity {
                     }
                 }
                 //Retour a la page de connexion
-                ChangeView();
+                ChangeView(Connexion.class);
             }
         }
     };
@@ -86,7 +98,7 @@ public class Communication extends AppCompatActivity {
         }
     }
 
-    private void ChangeView() {
+    private void ChangeView(Class activity) {
         Context context = getApplicationContext();
         if (btSocket != null) {
             try {
@@ -97,9 +109,34 @@ public class Communication extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        Intent intent = new Intent(context, Connexion.class);
-        if (intent != null) {
-            startActivity(intent);
+        Intent intent = new Intent(context, activity);
+        startActivity(intent);
+    }
+
+    public void readFile(View v) throws IOException{
+        String value = "";
+        FileInputStream inputStream = openFileInput("myfile.txt");
+        StringBuilder Stringb = new StringBuilder();
+        int content;
+        while((content = inputStream.read())!=-1){
+            value = String.valueOf(Stringb.append((char)content));
+        }
+        inputStream.close();
+        textFileContent.setText(value);
+    }
+
+    public void writeFile(View v) {
+
+        String filename = "myfile.txt";
+        String fileContents = "000001111100000111112222222222";
+        FileOutputStream outputStream;
+
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(fileContents.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
