@@ -37,8 +37,6 @@ public class Communication extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_communication);
 
-
-
         readFileBtn = (Button)findViewById(R.id.button_readFile);
         writeFileBtn = (Button)findViewById(R.id.button_writeFile);
 

@@ -94,17 +94,12 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="PIN #1 :"
-                                    />
+                                    style="@style/AppTheme.widget"
+                                    android:text="PIN #1 :" />
                                 <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
+                                    style="@style/AppTheme.widget.switch"
+                                    android:clickable="false"
+                                    />
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -112,17 +107,10 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="PIN #1 :"
-                                    />
+                                    style="@style/AppTheme.widget"
+                                    android:text="PIN #1 :" />
                                 <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
+                                    style="@style/AppTheme.widget.switch"/>
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -130,17 +118,10 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="PIN #1 :"
-                                    />
+                                    style="@style/AppTheme.widget"
+                                    android:text="PIN #1 :" />
                                 <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
+                                    style="@style/AppTheme.widget.switch"/>
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -148,17 +129,10 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="PIN #1 :"
-                                    />
+                                    style="@style/AppTheme.widget"
+                                    android:text="PIN #1 :" />
                                 <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
+                                    style="@style/AppTheme.widget.switch"/>
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -166,17 +140,10 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="PIN #1 :"
-                                    />
+                                    style="@style/AppTheme.widget"
+                                    android:text="PIN #1 :" />
                                 <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
+                                    style="@style/AppTheme.widget.switch"/>
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -184,17 +151,10 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="PIN #1 :"
-                                    />
+                                    style="@style/AppTheme.widget"
+                                    android:text="PIN #1 :" />
                                 <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
+                                    style="@style/AppTheme.widget.switch"/>
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -202,17 +162,10 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="PIN #1 :"
-                                    />
+                                    style="@style/AppTheme.widget"
+                                    android:text="PIN #1 :" />
                                 <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
+                                    style="@style/AppTheme.widget.switch"/>
                             </LinearLayout>
 
 
@@ -228,17 +181,55 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
+                                    style="@style/AppTheme.widget"
+                                    android:text="PIN #1 :" />
+                                <Switch
+                                    style="@style/AppTheme.widget.switch"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    style="@style/AppTheme.widget"
+                                    android:text="PIN #1 :" />
+                                <Switch
+                                    style="@style/AppTheme.widget.switch"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    style="@style/AppTheme.widget"
+                                    android:text="PIN #1 :" />
+                                <Switch
+                                    style="@style/AppTheme.widget.switch"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    style="@style/AppTheme.widget"
+                                    android:text="PIN #1 :" />
+                                <Switch
+                                    style="@style/AppTheme.widget.switch"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    style="@style/AppTheme.widget"
                                     android:text="PIN #1 :"
                                     />
                                 <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
+                                    style="@style/AppTheme.widget.switch"/>
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -252,10 +243,19 @@
                                     android:text="PIN #1 :"
                                     />
                                 <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
+                                    style="@style/AppTheme.widget.switch"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    style="@style/AppTheme.widget"
+                                    android:text="PIN #1 :"
+                                    />
+                                <Switch
+                                    style="@style/AppTheme.widget.switch"
                                     android:gravity="center"/>
                             </LinearLayout>
                             <LinearLayout
@@ -264,107 +264,11 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
+                                    style="@style/AppTheme.widget"
                                     android:text="PIN #1 :"
                                     />
                                 <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="PIN #1 :"
-                                    />
-                                <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="PIN #1 :"
-                                    />
-                                <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="PIN #1 :"
-                                    />
-                                <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="PIN #1 :"
-                                    />
-                                <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="PIN #1 :"
-                                    />
-                                <Switch
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:textOff="Off"
-                                    android:textOn="On"
-                                    android:gravity="center"/>
+                                    style="@style/AppTheme.widget.switch"/>
                             </LinearLayout>
 
 
@@ -399,6 +303,55 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="50">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    style="@style/AppTheme.widget"
+                                    android:text="PINS #1 to #8:"
+                                    android:id="@+id/input_byte_1"
+                                    />
+                                <TextView
+                                    android:text="@string/default_byte_value"
+                                    style="@style/AppTheme.widget"
+                                    android:layout_toEndOf="@+id/input_byte_1"
+                                    android:layout_marginStart="20dp"/>
+                            </RelativeLayout>
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    style="@style/AppTheme.widget"
+                                    android:text="PINS #1 to #8:"
+                                    android:id="@+id/input_byte_2"
+                                    />
+                                <TextView
+                                    android:text="@string/default_byte_value"
+                                    style="@style/AppTheme.widget"
+                                    android:layout_toEndOf="@+id/input_byte_2"
+                                    android:layout_marginStart="20dp"/>
+                            </RelativeLayout>
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    style="@style/AppTheme.widget"
+                                    android:text="PINS #1 to #8:"
+                                    android:id="@+id/input_byte_3"
+                                    />
+                                <TextView
+                                    android:text="@string/default_byte_value"
+                                    style="@style/AppTheme.widget"
+                                    android:layout_toEndOf="@+id/input_byte_3"
+                                    android:layout_marginStart="20dp"/>
+                            </RelativeLayout>
 
                         </TableLayout>
 

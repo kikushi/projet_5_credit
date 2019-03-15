@@ -10,5 +10,7 @@
     <string name="device_discovery_finished">Device discovery finished</string>
     <string name="looking_for_nearby_devices">Looking for nearby devices ...</string>
     <string name="no_device_selected">No device selected</string>
-    <string-array name="devices_array"></string-array>
+    <string name="Off">Off</string>
+    <string name="On">On</string>
+    <string name="default_byte_value">000</string>
 </resources>
