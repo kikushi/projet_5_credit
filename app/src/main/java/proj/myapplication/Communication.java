@@ -39,10 +39,6 @@ public class Communication extends AppCompatActivity {
 
         btSocket = Connexion.btSocket;
     }
-    @Override
-    public void onBackPressed() {
-        ChangeView();
-    }
 
     private View.OnClickListener sendBtnListener = new View.OnClickListener() {
         @Override

@@ -13,12 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -26,14 +25,14 @@ import java.util.UUID;
 public class Connexion extends AppCompatActivity {
 
     private UUID uuid;
-    private Button searchBtn;
-    private Button connectPairedBtn;
-    private Button connectOtherBtn;
+
+    private Button getPairedBtn;
     private Spinner pairedSpinner;
+    private Button connectPairedBtn;
+    private Button searchOtherBtn;
+    private Button connectOtherBtn;
     private Spinner otherSpinner;
     private TextView informationsTextView;
-    private TextView pairedDevicesTextView;
-    private TextView otherDevicesTextView;
 
     public Set<BluetoothDevice> pairedDevices;
     public Set<BluetoothDevice> otherDevices;
@@ -41,8 +40,8 @@ public class Connexion extends AppCompatActivity {
     public ArrayAdapter<String> otherAdapter = null;
 
     public static BluetoothSocket btSocket = null;
+    public BluetoothAdapter myBtAdapter;
 
-    public BluetoothAdapter myBTAdapter;
     public IntentFilter filter_found;
     public IntentFilter filter_discoveryFinished;
 
@@ -53,48 +52,74 @@ public class Connexion extends AppCompatActivity {
 
         pairedAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         otherAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-
-        //Bluetooth
-        myBTAdapter = BluetoothAdapter.getDefaultAdapter();
         pairedDevices = new HashSet<BluetoothDevice>();
         otherDevices = new HashSet<BluetoothDevice>();
+
+        //Bluetooth
+        myBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (myBtAdapter == null) {
+            //Bluetooth not supported by device
+            finish();
+        }
+        else if (!myBtAdapter.isEnabled()) {
+            //Bluetooth is disabled
+            myBtAdapter.enable();
+        }
+
         uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
-        btSocket = null;
 
         filter_found = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         filter_discoveryFinished = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        registerReceiver(mReceiverActionFound, filter_found);
-        registerReceiver(mReceiverActionDiscoveryFinished, filter_discoveryFinished);
 
         //Widgets
-        searchBtn = (Button)findViewById(R.id.button_search);
-        searchBtn.setOnClickListener(searchBtnListener);
+        getPairedBtn = (Button)findViewById(R.id.button_get_paired);
+        getPairedBtn.setOnClickListener(getPairedBtnListener);
+
+        searchOtherBtn = (Button)findViewById(R.id.button_search_other);
+        searchOtherBtn.setOnClickListener(searchOtherBtnListener);
 
         pairedSpinner = (Spinner)findViewById(R.id.spinner_paired);
         pairedSpinner.setAdapter(pairedAdapter);
 
         otherSpinner = (Spinner)findViewById(R.id.spinner_other);
         otherSpinner.setAdapter(otherAdapter);
-        otherSpinner.setVisibility(View.INVISIBLE);
 
         connectPairedBtn = (Button)findViewById(R.id.button_connectPaired);
         connectPairedBtn.setOnClickListener(connectBtnListener);
 
         connectOtherBtn = (Button)findViewById(R.id.button_connectOther);
         connectOtherBtn.setOnClickListener(connectBtnListener);
-        connectOtherBtn.setVisibility(View.INVISIBLE);
 
         informationsTextView = (TextView)findViewById(R.id.textView_informations);
-        pairedDevicesTextView = (TextView)findViewById(R.id.textView_pairedDevices);
-        otherDevicesTextView = (TextView)findViewById(R.id.textView_otherDevices);
 
-        SearchPairedDevices();
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i("Tag", "onStart");
+        btSocket = null;
+        registerReceiver(mReceiverActionFound, filter_found);
+        registerReceiver(mReceiverActionDiscoveryFinished, filter_discoveryFinished);
+
+        GetPairedDevices(); //Updates known devices spinner
+
+        otherSpinner.setVisibility(View.INVISIBLE);
+        connectOtherBtn.setVisibility(View.INVISIBLE);
+        informationsTextView.setVisibility(View.INVISIBLE);
+
     }
 
-    private View.OnClickListener searchBtnListener = new View.OnClickListener() {
+    private View.OnClickListener getPairedBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            SearchBtnClicked();
+            GetPairedDevices();
+        }
+    };
+
+    private View.OnClickListener searchOtherBtnListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            SearchOtherDevices();
         }
     };
 
@@ -103,13 +128,17 @@ public class Connexion extends AppCompatActivity {
         public void onClick(View v) {
             boolean success = false;
             if (v.getId() == R.id.button_connectPaired) {
-                success = ConnectBtnClicked(true);
+                success = Connect(true);
             }
             else if (v.getId() == R.id.button_connectOther) {
-                success = ConnectBtnClicked(false);
+                success = Connect(false);
             }
             if (success) {
-                ChangeView();
+                ChangeView(Communication.class);
+            }
+            else {
+                btSocket = null;
+                Toast.makeText(getApplicationContext(), getString(R.string.connexion_failed), Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -117,7 +146,6 @@ public class Connexion extends AppCompatActivity {
     // Create a BroadcastReceiver for Bluetooth.ACTION_FOUND
     private final BroadcastReceiver mReceiverActionFound = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            Log.i("TAG", "DeviceFound");
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // Device Found
@@ -137,50 +165,62 @@ public class Connexion extends AppCompatActivity {
             if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 //Discovery is finished
                 informationsTextView.setText(getString(R.string.device_discovery_finished));
-                myBTAdapter.cancelDiscovery();
+                myBtAdapter.cancelDiscovery();
+                Toast.makeText(getApplicationContext(), getString(R.string.Discovery_finished), Toast.LENGTH_SHORT).show();
                 unregisterReceiver(mReceiverActionDiscoveryFinished);
             }
         }
     };
 
-    private void SearchBtnClicked() {
-        if (myBTAdapter.isDiscovering()) {
-            myBTAdapter.cancelDiscovery();
-        }
-        myBTAdapter.startDiscovery();
-        registerReceiver(mReceiverActionDiscoveryFinished, filter_discoveryFinished);
-        otherSpinner.setVisibility(View.VISIBLE);
-        connectOtherBtn.setVisibility(View.VISIBLE);
-        informationsTextView.setText(getString(R.string.looking_for_nearby_devices));
-    }
-
-    private boolean ConnectBtnClicked(boolean boundedPressed) {
-        //A optimiser
-
-        try {
-            BluetoothDevice device = GetSelectedSpinnerItem(boundedPressed);
-            if (device == null) {
-                informationsTextView.setText(getString(R.string.no_device_selected));
-                return false;
-            }
-            else {
-                if (btSocket == null) {
-                    btSocket = device.createRfcommSocketToServiceRecord(uuid);
-                    btSocket.connect();
-                    if (btSocket.isConnected()) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
+    private void GetPairedDevices() {
+        if (myBtAdapter != null) {
+            pairedDevices = myBtAdapter.getBondedDevices();
+            if (pairedDevices.size() > 0) {
+                // There are paired devices. Get the name and address of each paired device.
+                pairedAdapter.clear();
+                for (BluetoothDevice device : pairedDevices) {
+                    pairedAdapter.add(device.getName());
                 }
             }
         }
-        catch (IOException e) {
-            e.printStackTrace();
+    }
+
+    private void SearchOtherDevices() {
+        if (myBtAdapter.isDiscovering()) {
+            myBtAdapter.cancelDiscovery();
+        }
+        myBtAdapter.startDiscovery();
+        registerReceiver(mReceiverActionDiscoveryFinished, filter_discoveryFinished);
+        otherSpinner.setVisibility(View.VISIBLE);
+        connectOtherBtn.setVisibility(View.VISIBLE);
+        informationsTextView.setVisibility(View.VISIBLE);
+        informationsTextView.setText(getString(R.string.looking_for_nearby_devices));
+    }
+
+    private boolean Connect(boolean boundedPressed) {
+        BluetoothDevice device = GetSelectedSpinnerItem(boundedPressed);
+
+        if (device == null) {
+            Toast.makeText(getApplicationContext(), getString(R.string.no_device_selected), Toast.LENGTH_SHORT).show();
             return false;
         }
-        return false;
+        else {
+
+            if (btSocket == null) {
+                try {
+                    btSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
+                } catch (IOException e) {
+                    Log.e("Tag", "Socket's create() method failed", e);
+                }
+                try {
+                    btSocket.connect();
+                } catch (IOException e) {
+                    Log.e("Tag", "Socket's connect() method failed", e);
+                }
+                return btSocket.isConnected();
+            }
+            return false;
+        }
     }
 
     private BluetoothDevice GetSelectedSpinnerItem(boolean bounded) {
@@ -203,46 +243,34 @@ public class Connexion extends AppCompatActivity {
         return null;
     }
 
-    private void SearchPairedDevices() {
-        if (myBTAdapter == null) {
-            // Device doesn't support Bluetooth
-            // Message a l'utilisateur pour lui dire d'activer BT
-        }
-        else {
-            pairedDevices = myBTAdapter.getBondedDevices();
-            if (pairedDevices.size() > 0) {
-                // There are paired devices. Get the name and address of each paired device.
-                pairedAdapter.clear();
-                for (BluetoothDevice device : pairedDevices) {
-                    pairedAdapter.add(device.getName());
-                }
-            }
-        }
-    }
-
     private boolean Contains(ArrayAdapter<String> theAdapter, String element) {
-        for (int i = 0; i < theAdapter.getCount(); i++) {
-            if (theAdapter.getItem(i).equals(element)) {
-                return true;
+        if (!theAdapter.isEmpty()) {
+            for (int i = 0; i < theAdapter.getCount(); i++) {
+                if (theAdapter.getItem(i).equals(element)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    private void ChangeView() {
-        Context context = getApplicationContext();
-
-        Intent intent = new Intent(context, Communication.class);
-        if (intent != null) {
-            startActivity(intent);
-        }
+    public void ChangeView(Class activity) {
+        Intent intent = new Intent(getApplicationContext(), activity);
+        startActivity(intent);
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(mReceiverActionFound);
-        unregisterReceiver(mReceiverActionDiscoveryFinished);
+    protected void onStop() {
+        super.onStop();
+        try {
+            unregisterReceiver(mReceiverActionFound);
+        } catch(IllegalArgumentException e) {
+            Log.e("Tag", "Unregistering receiver mReceiverActionFound failed", e);
+        }
+        try {
+            unregisterReceiver(mReceiverActionDiscoveryFinished);
+        } catch(IllegalArgumentException e) {
+            Log.e("Tag", "Unregistering receiver mReceiverActionDiscoveryFinished failed", e);
+        }
     }
-
 }

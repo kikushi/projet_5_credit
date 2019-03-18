@@ -1,76 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Connexion">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView_pairedDevices"
-        android:text="@string/paired_devices"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="bold"
-       />
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/textView_otherDevices"
-        android:text="@string/other_devices"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/textView_pairedDevices"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginStart="120dp"
-        />
-    <Button
-        android:id="@+id/button_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/search_nearby_devices"
-        android:layout_below="@+id/textView_otherDevices"
-        android:layout_marginStart="210dp"/>
+        <TextView
+            android:id="@+id/textView_pairedDevices"
+            android:text="@string/paired_devices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <Spinner
-        android:id="@+id/spinner_paired"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_below="@id/textView_pairedDevices" />
+        <Button
+            android:id="@+id/button_get_paired"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/update_paired_devices"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/textView_pairedDevices" />
 
-    <Spinner
-        android:id="@+id/spinner_other"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/spinner_paired"
-        android:layout_marginStart="150dp"
-        android:layout_below="@id/button_search" />
+        <Spinner
+            android:id="@+id/spinner_paired"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/button_get_paired" />
 
-    <Button
-        android:id="@+id/button_connectPaired"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Connect"
-        android:layout_marginStart="20dp"
-        android:layout_below="@id/spinner_paired"/>
+        <Button
+            android:id="@+id/button_connectPaired"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/Connect"
+            android:layout_below="@id/spinner_paired"/>
 
-    <Button
-        android:id="@+id/button_connectOther"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/spinner_other"
-        android:layout_marginStart="160dp"
-        android:layout_toEndOf="@id/button_connectPaired"
-        android:text="@string/Connect" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView_informations"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/button_connectOther"
-        android:layout_centerHorizontal="true" />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/textView_otherDevices"
+            android:text="@string/other_devices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/button_search_other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_nearby_devices"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/textView_otherDevices" />
+
+        <Spinner
+            android:id="@+id/spinner_other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/button_search_other" />
+
+        <Button
+            android:id="@+id/button_connectOther"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/spinner_other"
+            android:text="@string/Connect" />
+
+        <TextView
+            android:id="@+id/textView_informations"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_connectOther"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+</LinearLayout>
