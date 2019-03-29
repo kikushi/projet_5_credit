@@ -14,5 +14,18 @@
     <string name="Discovery_finished">Device Discovery Finished !</string>
     <string name="update_paired_devices">Update paired devices</string>
     <string name="connexion_failed">Connexion has failed</string>
+    <string name="k_btn_ajouter_byte">AddByteR</string>
+    <string name="k_btn_ajouter_bit">AddBitR</string>
+    <string name="k_btn_OK">Ok</string>
+    <string name="k_add_bit_W">AddBitW</string>
+    <string name="k_Add_Byte_W">AddByteW</string>
+    <string name="k_remove">remove</string>
+    <string name="k_del">Del</string>
+    <string name="k_load">load</string>
+    <string name="k_save">save</string>
+    <string name="k_refresh">refresh</string>
+    <string name="k_change_nip">Change Nip</string>
+    <string name="k_save_and_start">Save and Start</string>
+    <string name="k_disconnect">Disconnect</string>
 
 </resources>

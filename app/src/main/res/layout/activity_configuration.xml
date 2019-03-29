@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Configuration">
+    <LinearLayout
+        android:layout_width="115dp"
+        android:layout_height="770dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#c20000"
+                android:clickable="false"
+                android:text="1"
+                android:textColorHighlight="#248d51"
+                android:textColorLink="#000" />
+
+            <RadioButton
+                android:id="@+id/rbtn_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#c20000"
+                android:clickable="false"
+                android:layout_alignParentEnd="true"
+                android:textColorLink="#7e7e7e"
+                android:layout_marginEnd="9dp"
+                android:text="2" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#248d51"
+
+                android:text="3"
+                android:textColorLink="#000" />
+
+            <RadioButton
+                android:id="@+id/rbtn_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:buttonTint="#c20000"
+                android:clickable="false"
+                android:layout_marginEnd="9dp"
+                android:text="4" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_5"
+                android:buttonTint="#248d51"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5" />
+
+            <RadioButton
+                android:id="@+id/rbtn_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_alignParentEnd="true"
+                android:clickable="false"
+                android:layout_marginEnd="9dp"
+                android:buttonTint="#c20000"
+                android:text="6" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_7"
+                android:layout_width="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_height="wrap_content"
+                android:text="7" />
+
+            <RadioButton
+                android:id="@+id/rbtn_8"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:buttonTint="#248d51"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="9dp"
+                android:text="8" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#c20000"
+                android:clickable="false"
+                android:text="9" />
+
+            <RadioButton
+                android:id="@+id/rbtn_10"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:buttonTint="#248d51"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:text="10" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_11"
+                android:layout_width="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_height="wrap_content"
+                android:text="11" />
+
+            <RadioButton
+                android:id="@+id/rbtn_12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:text="12" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_13"
+                android:layout_width="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_height="wrap_content"
+                android:text="13" />
+
+            <RadioButton
+                android:id="@+id/rbtn_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:buttonTint="#c20000"
+                android:clickable="false"
+                android:layout_marginEnd="1dp"
+                android:text="14" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_15"
+                android:buttonTint="#248d51"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15" />
+
+            <RadioButton
+                android:id="@+id/rbtn_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:text="16" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#c20000"
+                android:clickable="false"
+                android:text="17" />
+
+            <RadioButton
+                android:id="@+id/rbtn_18"
+                android:layout_width="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:text="18" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_19"
+                android:layout_width="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_height="wrap_content"
+                android:text="19" />
+
+            <RadioButton
+                android:id="@+id/rbtn_20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:clickable="false"
+                android:buttonTint="#c20000"
+                android:text="20" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_21"
+                android:layout_width="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_height="wrap_content"
+                android:text="21" />
+
+            <RadioButton
+                android:id="@+id/rbtn_22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:text="22" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_23"
+                android:layout_width="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_height="wrap_content"
+                android:text="23" />
+
+            <RadioButton
+                android:id="@+id/rbtn_24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:text="24" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:buttonTint="#c20000"
+                android:text="25" />
+
+            <RadioButton
+                android:id="@+id/rbtn_26"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:text="26" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_27"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:buttonTint="#c20000"
+                android:text="27" />
+
+            <RadioButton
+                android:id="@+id/rbtn_28"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:buttonTint="#c20000"
+                android:text="28" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_29"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="29" />
+
+            <RadioButton
+                android:id="@+id/rbtn_30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:buttonTint="#c20000"
+                android:clickable="false"
+                android:text="30" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_31"
+                android:layout_width="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_height="wrap_content"
+                android:text="31" />
+
+            <RadioButton
+                android:id="@+id/rbtn_32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:text="32" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_33"
+                android:buttonTint="#248d51"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="33" />
+
+            <RadioButton
+                android:id="@+id/rbtn_34"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:buttonTint="#c20000"
+                android:clickable="false"
+                android:text="34" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_35"
+                android:buttonTint="#248d51"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="35" />
+
+            <RadioButton
+                android:id="@+id/rbtn_36"
+                android:layout_width="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:text="36" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_37"
+                android:buttonTint="#248d51"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="37" />
+
+            <RadioButton
+                android:id="@+id/rbtn_38"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:text="38" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_39"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#c20000"
+                android:clickable="false"
+                android:text="39" />
+
+            <RadioButton
+                android:id="@+id/rbtn_40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#248d51"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="1dp"
+                android:text="40" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="307dp"
+        android:layout_height="758dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btn_ajouter_byte_R"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="6dp"
+                android:text="@string/k_btn_ajouter_byte"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/btn_ajouter_bit_R"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/btn_ajouter_byte_R"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="1dp"
+                android:text="@string/k_btn_ajouter_bit"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/btn_ok"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/btn_ajouter_bit_R"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="0dp"
+                android:text="@string/k_btn_OK"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/btn_ajouter_byte_W"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="19dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginTop="7dp"
+                android:layout_toEndOf="@+id/btn_ajouter_byte_R"
+                android:layout_toRightOf="@+id/btn_ajouter_byte_R"
+                android:text="@string/k_Add_Byte_W"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/btn_ajouter_bit_W"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/btn_ajouter_byte_R"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/btn_ajouter_bit_R"
+                android:layout_toRightOf="@+id/btn_ajouter_bit_R"
+                android:text="@string/k_add_bit_W"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/btn_remove"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/btn_ajouter_bit_W"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/btn_ajouter_bit_R"
+                android:layout_toRightOf="@+id/btn_ajouter_bit_R"
+                android:text="@string/k_remove"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/btn_changer_nip"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/btn_remove"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/btn_ajouter_bit_R"
+                android:layout_toRightOf="@+id/btn_ajouter_bit_R"
+                android:text="@string/k_change_nip"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/btn_refresh"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/editText"
+                android:layout_marginStart="19dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/btn_ajouter_bit_R"
+                android:layout_toRightOf="@+id/btn_ajouter_bit_R"
+                android:text="@string/k_refresh"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/btn_load"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/btn_refresh"
+                android:layout_marginStart="19dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/btn_ajouter_bit_R"
+                android:layout_toRightOf="@+id/btn_ajouter_bit_R"
+                android:text="@string/k_load"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/btn_delete"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/btn_load"
+                android:layout_marginStart="19dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/btn_ajouter_bit_R"
+                android:layout_toRightOf="@+id/btn_ajouter_bit_R"
+                android:text="@string/k_del"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/btn_delete"
+                android:layout_marginStart="19dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/btn_ajouter_bit_R"
+                android:layout_toRightOf="@+id/btn_ajouter_bit_R"
+                android:text="@string/k_save"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/btn_save_and_start"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/btn_save"
+                android:layout_marginStart="19dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/btn_ajouter_bit_R"
+                android:layout_toRightOf="@+id/btn_ajouter_bit_R"
+                android:text="@string/k_save_and_start"
+                android:textSize="8sp" />
+
+            <Button
+                android:id="@+id/btn_disconnect"
+                android:layout_width="124dp"
+                android:layout_height="34dp"
+                android:layout_below="@+id/btn_save_and_start"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/btn_ajouter_bit_R"
+                android:layout_toRightOf="@+id/btn_ajouter_bit_R"
+                android:text="@string/k_disconnect"
+                android:textSize="8sp" />
+
+
+            <ListView
+                android:id="@+id/simpleListView"
+                android:layout_width="121dp"
+                android:layout_height="184dp"
+                android:layout_below="@+id/btn_ok"
+                android:layout_alignStart="@+id/btn_ok"
+                android:layout_alignLeft="@+id/btn_ok"
+                android:layout_marginStart="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="0dp"
+                android:divider="#000"
+                android:dividerHeight="1dp"
+                android:listSelector="#0f0">
+
+            </ListView>
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="124dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_changer_nip"
+                android:layout_alignStart="@+id/btn_changer_nip"
+                android:layout_alignLeft="@+id/btn_changer_nip"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="1dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="NIP" />
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="143dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/simpleListView"
+                android:layout_alignStart="@+id/simpleListView"
+                android:layout_alignLeft="@+id/simpleListView"
+                android:layout_marginStart="-8dp"
+                android:layout_marginLeft="-8dp"
+                android:layout_marginTop="0dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="configname" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
