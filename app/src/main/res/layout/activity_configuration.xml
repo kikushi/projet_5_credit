@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Configuration">
+    tools:context=".configuration">
     <LinearLayout
         android:layout_width="115dp"
         android:layout_height="770dp"
@@ -494,9 +494,10 @@
         android:layout_height="758dp"
         android:orientation="vertical">
 
+
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="300dp"
+            android:layout_height="399dp">
 
             <Button
                 android:id="@+id/btn_ajouter_byte_R"
@@ -706,6 +707,26 @@
                 android:inputType="textPersonName"
                 android:text="configname" />
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="296dp"
+            android:layout_height="331dp">
+            <ListView
+                android:id="@+id/simpleListView3"
+                android:layout_width="121dp"
+                android:layout_height="184dp"
+
+                android:layout_marginStart="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="0dp"
+                android:divider="#000"
+                android:dividerHeight="1dp"
+                android:listSelector="#0f0">
+
+            </ListView>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 

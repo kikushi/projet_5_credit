@@ -134,7 +134,7 @@ public class Connexion extends AppCompatActivity {
                 success = Connect(false);
             }
             if (success) {
-                ChangeView(Configuration.class);
+                ChangeView(configuration.class);
             }
             else {
                 btSocket = null;

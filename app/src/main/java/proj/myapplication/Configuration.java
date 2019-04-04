@@ -34,7 +34,7 @@ import java.util.ArrayList;
 
 import static proj.myapplication.Connexion.btSocket;
 
-public class Configuration extends AppCompatActivity {
+public class configuration extends AppCompatActivity {
     private Button btn_Add_bit_R;
     private Button btn_Add_byte_R;
     private Button btn_Add_bit_W;
@@ -56,6 +56,8 @@ public class Configuration extends AppCompatActivity {
     private String NIP="";
     private String config_name;
     private String recieved;
+
+
 
 
     private Button btn_OK;
@@ -98,18 +100,24 @@ public class Configuration extends AppCompatActivity {
     private static String selected = "";
     private int index_r=0;
     ListView Lv1;
+    ListView Lv2;
     ArrayList<String> Target = new ArrayList<String>();
+    ArrayList<String> Target2 = new ArrayList<>();
     RadioButton[] btnWord = new RadioButton[40];
     ArrayList<Button> BtnWord = new ArrayList<Button>();
     PINConfig[] btnWorld2 = new PINConfig[40];
     public byte[] mmBuffer3;
     public InputStream iStream;
+    private String gm = "adja/Fama/Dia";
+    public String config_names_received[] = gm.split("/");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,Target);
+        final ArrayAdapter<String> arrayAdapter2= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,Target2);
+
         btSocket = Connexion.btSocket;
         Lv1 = (ListView)findViewById(R.id.simpleListView);
         Lv1.setAdapter(arrayAdapter);
@@ -123,13 +131,34 @@ public class Configuration extends AppCompatActivity {
                 index_r=position;
             }
         });
+        Lv2 =(ListView)findViewById(R.id.simpleListView3);
+        Lv2.setAdapter(arrayAdapter2);
+        Lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                selected = Lv2.getItemAtPosition(position).toString();
+                Toast toast2= Toast.makeText(getApplicationContext(),selected,Toast.LENGTH_SHORT);
+                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
+                toast2.show();
+                index_r=position;
+            }
+        });
         // button load
         btn_load = (Button)findViewById(R.id.btn_load);
         btn_load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadbtncliked();
+
                 sendStringMessage("loadConfig");
+
+
+                for (int i=0;i<config_names_received.length;i++){
+                    Target.add(config_names_received[i]);
+                    arrayAdapter.notifyDataSetChanged();
+
+                }
+
+
             }
         });
         // button save and start
@@ -141,10 +170,7 @@ public class Configuration extends AppCompatActivity {
                 sendStringMessage("start");
                 Context context = getApplicationContext();
 
-                Intent intent = new Intent(context, Communication.class);
-                if (intent != null) {
-                    startActivity(intent);
-                }
+                ChangeView();
 
 
             }
@@ -159,6 +185,7 @@ public class Configuration extends AppCompatActivity {
                 sendStringMessage("disconnect");
                 try{
                     Connexion.btSocket.close();
+                    ChangeView(Connexion.class);
                 }
                 catch(IOException e){
 
@@ -174,7 +201,8 @@ public class Configuration extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(Configuration.this)
+
+                new AlertDialog.Builder(configuration.this)
                         .setTitle("GOD MODE")
                         .setMessage("voulez vous vraiment supprimer la configuration?")
                         .setIcon(R.drawable.ic_launcher_foreground)
@@ -183,6 +211,7 @@ public class Configuration extends AppCompatActivity {
                                     @TargetApi(11)
                                     public void onClick(DialogInterface dialog, int id) {
                                         etat_btn_save = 1;
+
                                         btnsavecliked();
                                         dialog.cancel();
                                     }
@@ -197,14 +226,16 @@ public class Configuration extends AppCompatActivity {
                         }).show();
 
 
+
             }
-        });
+        }
+        );
         // button del
         btn_del = (Button)findViewById(R.id.btn_delete);
         btn_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(Configuration.this)
+                new AlertDialog.Builder(configuration.this)
                         .setTitle("GOD MODE")
                         .setMessage("voulez vous vraiment supprimer la configuration?")
                         .setIcon(R.drawable.ic_launcher_foreground)
@@ -234,10 +265,11 @@ public class Configuration extends AppCompatActivity {
         btn_Add_bit_R.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Target.add(pin_config);
-                arrayAdapter.notifyDataSetChanged();
+                Target2.add(pin_config);
+
+                arrayAdapter2.notifyDataSetChanged();
                 AddBitRBtnClicked();
-                sendStringMessage("writeBit");
+
             }
         });
         // button ajouter bit W
@@ -245,8 +277,8 @@ public class Configuration extends AppCompatActivity {
         btn_Add_bit_W.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Target.add(pin_config);
-                arrayAdapter.notifyDataSetChanged();
+                Target2.add(pin_config);
+                arrayAdapter2.notifyDataSetChanged();
                 AddBitwBtnClicked();
                 sendStringMessage("writeBit");
             }
@@ -275,7 +307,7 @@ public class Configuration extends AppCompatActivity {
         });
         // edittext2
         myconfigname = (EditText)findViewById(R.id.editText2);
-        myconfigname.setVisibility(View.INVISIBLE);
+        myconfigname.setVisibility(View.VISIBLE);
         myconfigname.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -297,7 +329,7 @@ public class Configuration extends AppCompatActivity {
                 }
 
                 if(count!=0){
-                    new AlertDialog.Builder(Configuration.this)
+                    new AlertDialog.Builder(configuration.this)
                             .setTitle("GOD MODE")
                             .setMessage("Impossible d'enregistrer la configuration. Nom invalide")
                             .setIcon(R.drawable.ic_launcher_foreground)
@@ -317,6 +349,7 @@ public class Configuration extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
+                config_name = "toto";
             }
 
             @Override
@@ -331,9 +364,18 @@ public class Configuration extends AppCompatActivity {
         btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                arrayAdapter.notifyDataSetChanged();
-                Toast toast= Toast.makeText(getApplicationContext(),"GOD MODE",Toast.LENGTH_SHORT);
-                toast.show();
+                sendStringMessage("refreshConfigs");
+                try{
+                    recieved = receiveStringMessage();
+                }catch (IOException e){
+
+                }
+                String a_b[]=recieved.split("\\r?\\n");
+                for(int i=0;i<a_b.length;i++){
+                    Target.add(a_b[i]);
+                    arrayAdapter.notifyDataSetChanged();
+                }
+
 
             }
         });
@@ -364,7 +406,7 @@ public class Configuration extends AppCompatActivity {
                             count = Character.getNumericValue(selected.charAt(i));
                             if(count !=0){
                                 btnWord[count-1].setChecked(false);}
-                            btnWord[count-1].setVisibility(View.VISIBLE);
+                                btnWord[count-1].setVisibility(View.VISIBLE);
                         }
 
 
@@ -374,8 +416,8 @@ public class Configuration extends AppCompatActivity {
                 }
                 Toast toast= Toast.makeText(getApplicationContext(),String.valueOf(count),Toast.LENGTH_SHORT);
                 toast.show();
-                Target.remove(index_r);
-                arrayAdapter.notifyDataSetChanged();
+                Target2.remove(index_r);
+                arrayAdapter2.notifyDataSetChanged();
                 RenmoveBtnClicked();
                 pin_config ="P-";
                 sendStringMessage("deleteConfig");
@@ -397,9 +439,11 @@ public class Configuration extends AppCompatActivity {
         btn_Add_byte_R.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                arrayAdapter.notifyDataSetChanged();
+                //sendStringMessage("writeByte");
+
                 AddByteRBtnClicked();
-                sendStringMessage("writeByte");
+                arrayAdapter2.notifyDataSetChanged();
+
                 //arrayAdapter.notifyDataSetChanged();
             }
         });
@@ -888,7 +932,6 @@ public class Configuration extends AppCompatActivity {
         widget_s = widget_s.substring(0,40)+"i" ;
 
 
-
         try {
             saveInterne_input();
             saveInterne_output();
@@ -903,14 +946,10 @@ public class Configuration extends AppCompatActivity {
             if(widget_input.charAt(i)=='P'){
                 PINConfig pi = new PINConfig(false,true,i,'P',String.valueOf(i+1));
                 btnWorld2[i] = pi;
-
-                btnWord[i].setHintTextColor(getResources().getColorStateList(R.color.dark_gray));
-
+                btnWord[i].setVisibility(View.GONE);
             }
         }
-        Toast toast2= Toast.makeText(getApplicationContext(),btnWorld2[2].text,Toast.LENGTH_SHORT);
-        toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-        toast2.show();
+
 
     }
     private void AddBitwBtnClicked(){
@@ -958,7 +997,7 @@ public class Configuration extends AppCompatActivity {
                 }
             }
 
-            Target.add(pin_config);
+            Target2.add(pin_config);
             try {
                 saveInterne_input();
                 saveInterne_output();
@@ -988,7 +1027,7 @@ public class Configuration extends AppCompatActivity {
             widget_s= widget_s.replaceAll("1","G");
             String widgets = widget_s.substring(0,40);
             widget_output = widgets;
-            Target.add(pin_config);
+            Target2.add(pin_config);
             try {
                 saveInterne_input();
                 saveInterne_output();
@@ -1058,13 +1097,11 @@ public class Configuration extends AppCompatActivity {
 
     }
     private void loadbtncliked(){
-        Toast toast= Toast.makeText(getApplicationContext(),"GOD MODE",Toast.LENGTH_SHORT);
-        toast.show();
+        splitString();
 
     }
     private void btnsavecliked(){
         if(etat_btn_save==1){
-            myconfigname.setVisibility(View.VISIBLE);
             sendStringMessage("saveConfig");
             sendStringMessage(config_name);
             sendStringMessage(widget_input);
@@ -1088,11 +1125,18 @@ public class Configuration extends AppCompatActivity {
         mmBuffer3 = new byte[1024];
         ByteArrayInputStream input = new ByteArrayInputStream(mmBuffer3);
         InputStream inputStream = btSocket.getInputStream();
-        inputStream.read(mmBuffer3);
-        return mmBuffer3.toString();
-    }
-    private void changeolorBtn(String color){
+        inputStream.read( mmBuffer3);
+        String b = new String(mmBuffer3);
+        return b;
 
+    }
+    private String splitString(){
+
+        return gm;
+    }
+    public void ChangeView(Class activity) {
+        Intent intent = new Intent(getApplicationContext(), activity);
+        startActivity(intent);
     }
 
 }
