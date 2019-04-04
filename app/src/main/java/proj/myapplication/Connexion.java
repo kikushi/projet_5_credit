@@ -48,7 +48,7 @@ public class Connexion extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_connexion);
 
         pairedAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         otherAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -134,7 +134,7 @@ public class Connexion extends AppCompatActivity {
                 success = Connect(false);
             }
             if (success) {
-                ChangeView(configuration.class);
+                ChangeView(Configuration.class);
             }
             else {
                 btSocket = null;

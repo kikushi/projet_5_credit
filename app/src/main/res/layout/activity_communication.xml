@@ -1,25 +1,1012 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Communication">
 
-    <EditText
-        android:id="@+id/editText_msg"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp" />
+        android:background="@drawable/border">
 
-    <Button
-        android:id="@+id/button_send"
-        android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btn_UpdateAllInputs"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="70"
+            android:text="@string/update_all_inputs"
+            />
+        <Button
+            android:id="@+id/btn_ShowHideHint"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="30"
+            android:text="@string/show_gpio_hint"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@drawable/border">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="50"
+            android:background="@color/blue1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="14"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:rotation="270"
+                    android:text="@string/inputs"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="86"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="70">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="12"
+                        android:background="@drawable/border">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:rotation="270"
+                            android:text="@string/bit"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="88"
+                        android:background="@drawable/border">
+
+                        <TableLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="50"
+                            android:background="@drawable/border">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+                                    <TextView
+                                        android:id="@+id/tv_pinnbI0"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch.readonly"
+                                        android:id="@+id/sw_I0"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbI1"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch.readonly"
+                                        android:id="@+id/sw_I1"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbI2"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch.readonly"
+                                        android:id="@+id/sw_I2"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbI3"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch.readonly"
+                                        android:id="@+id/sw_I3"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbI4"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch.readonly"
+                                        android:id="@+id/sw_I4"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </TableLayout>
+
+                        <TableLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="50"
+                            android:background="@drawable/border">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbI5"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch.readonly"
+                                        android:id="@+id/sw_I5"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbI6"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch.readonly"
+                                        android:id="@+id/sw_I6"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbI7"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch.readonly"
+                                        android:id="@+id/sw_I7"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbI8"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch.readonly"
+                                        android:id="@+id/sw_I8"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbI9"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch.readonly"
+                                        android:id="@+id/sw_I9"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </TableLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="30"
+                    android:background="@drawable/border">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="12"
+                        android:background="@drawable/border">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:rotation="270"
+                            android:text="@string/Byte"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="88"
+                        android:background="@drawable/border">
+
+                        <TableLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="50">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tv_ByteI0"
+                                    style="@style/AppTheme.widget"
+                                    android:text="@string/byte_1"
+                                    android:layout_marginStart="20dp"/>
+
+                                <TextView
+                                    style="@style/AppTheme.widget"
+                                    android:id="@+id/tv_ByteValI0"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_toEndOf="@+id/tv_ByteI0"
+                                    android:text="@string/default_byte_value" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tv_ByteI1"
+                                    style="@style/AppTheme.widget"
+                                    android:text="@string/byte_2"
+                                    android:layout_marginStart="20dp"/>
+
+                                <TextView
+                                    style="@style/AppTheme.widget"
+                                    android:id="@+id/tv_ByteValI1"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_toEndOf="@+id/tv_ByteI1"
+                                    android:text="@string/default_byte_value" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tv_ByteI2"
+                                    style="@style/AppTheme.widget"
+                                    android:text="@string/byte_3"
+                                    android:layout_marginStart="20dp"/>
+
+                                <TextView
+                                    style="@style/AppTheme.widget"
+                                    android:id="@+id/tv_ByteValI2"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_toEndOf="@+id/tv_ByteI2"
+                                    android:text="@string/default_byte_value" />
+                            </RelativeLayout>
+
+                        </TableLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="50"
+            android:background="@color/yellow4">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="14"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:rotation="270"
+                    android:text="@string/outputs"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="86"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="70">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="12"
+                        android:background="@drawable/border">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:rotation="270"
+                            android:text="@string/bit"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="88">
+
+                        <TableLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="50"
+                            android:background="@drawable/border">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbO0"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch"
+                                        android:id="@+id/sw_O0"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbO1"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch"
+                                        android:id="@+id/sw_O1"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbO2"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch"
+                                        android:id="@+id/sw_O2"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbO3"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch"
+                                        android:id="@+id/sw_O3"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbO4"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch"
+                                        android:id="@+id/sw_O4"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </TableLayout>
+
+                        <TableLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="50"
+                            android:background="@drawable/border">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbO5"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch"
+                                        android:id="@+id/sw_O5"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbO6"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch"
+                                        android:id="@+id/sw_O6"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbO7"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch"
+                                        android:id="@+id/sw_O7"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbO8"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch"
+                                        android:id="@+id/sw_O8"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/tv_pinnbO9"
+                                        style="@style/AppTheme.widget"
+                                        android:text="@string/pin_nb" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1">
+
+                                    <Switch
+                                        style="@style/AppTheme.widget.switch"
+                                        android:id="@+id/sw_O9"
+                                        />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </TableLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="30"
+                    android:background="@drawable/border">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="12"
+                        android:background="@drawable/border">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:rotation="270"
+                            android:text="@string/Byte"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="88"
+                        android:background="@drawable/border">
+
+                        <TableLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="50">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tv_ByteO0"
+                                    style="@style/AppTheme.widget"
+                                    android:text="@string/byte_1"
+                                    android:layout_marginStart="20dp"/>
+
+                                <EditText
+                                    style="@style/AppTheme.widget.edittext"
+                                    android:id="@+id/et_ByteO0"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_toEndOf="@+id/tv_ByteO0" />
+
+                                <Button
+                                    style="@style/AppTheme.widget"
+                                    android:id="@+id/btn_ByteO0"
+                                    android:layout_toEndOf="@+id/et_ByteO0"
+                                    android:layout_marginStart="5dp"
+                                    android:text="@string/send"/>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tv_ByteO1"
+                                    style="@style/AppTheme.widget"
+                                    android:text="@string/byte_2"
+                                    android:layout_marginStart="20dp"/>
+
+                                <EditText
+                                    style="@style/AppTheme.widget.edittext"
+                                    android:id="@+id/et_ByteO1"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_toEndOf="@+id/tv_ByteO1" />
+
+                                <Button
+                                    style="@style/AppTheme.widget"
+                                    android:id="@+id/btn_ByteO1"
+                                    android:layout_toEndOf="@+id/et_ByteO1"
+                                    android:layout_marginStart="5dp"
+                                    android:text="@string/send"/>
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/tv_ByteO2"
+                                    style="@style/AppTheme.widget"
+                                    android:text="@string/byte_3"
+                                    android:layout_marginStart="20dp"/>
+
+                                <EditText
+                                    style="@style/AppTheme.widget.edittext"
+                                    android:id="@+id/et_ByteO2"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_toEndOf="@+id/tv_ByteO2" />
+
+                                <Button
+                                    style="@style/AppTheme.widget"
+                                    android:id="@+id/btn_ByteO2"
+                                    android:layout_toEndOf="@+id/et_ByteO2"
+                                    android:layout_marginStart="5dp"
+                                    android:text="@string/send"/>
+                            </RelativeLayout>
+
+                        </TableLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/Hint_Layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/send"
-        android:layout_toEndOf="@id/editText_msg"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="40dp"/>
+        android:visibility="gone">
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/image_visage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/hint_gpio"/>
+
+    </RelativeLayout>
+</LinearLayout>
+
+
+
+

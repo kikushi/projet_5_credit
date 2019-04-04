@@ -8,4 +8,28 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.widget">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name = "AppTheme.widget.textviewByte">
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="AppTheme.widget.switch">
+        <item name="android:textOff">@string/Off</item>
+        <item name="android:textOn">@string/On</item>
+    </style>
+
+    <style name="AppTheme.widget.switch.readonly">
+        <item name="android:clickable">false</item>
+    </style>
+
+    <style name="AppTheme.widget.edittext">
+        <item name="android:hint">@string/value_0_255</item>
+        <item name="android:inputType">number</item>
+    </style>
 </resources>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Blueberry Pi</string>
     <string name="search_nearby_devices">Search nearby devices</string>
     <string name="Connect">Connect</string>
     <string name="send">Send</string>
@@ -10,6 +10,9 @@
     <string name="device_discovery_finished">Device discovery finished</string>
     <string name="looking_for_nearby_devices">Looking for nearby devices …</string>
     <string name="no_device_selected">No device selected</string>
+    <string name="Off">Off</string>
+    <string name="On">On</string>
+    <string name="default_byte_value">000</string>
     <string name="disconnect">Disconnect</string>
     <string name="Discovery_finished">Device Discovery Finished !</string>
     <string name="update_paired_devices">Update paired devices</string>
@@ -27,6 +30,17 @@
     <string name="k_change_nip">Change Nip</string>
     <string name="k_save_and_start">Save and Start</string>
     <string name="k_disconnect">Disconnect</string>
-
+    <string name="update_all_inputs">Update All Inputs</string>
+    <string name="inputs">Inputs</string>
+    <string name="bit">Bit</string>
+    <string name="pin_nb">PIN #1 :&#009;</string>
+    <string name="byte_1">Byte 1 :&#009;</string>
+    <string name="byte_2">Byte 2 :&#009;</string>
+    <string name="byte_3">Byte 3 :&#009;</string>
+    <string name="Byte">Byte</string>
+    <string name="value_0_255">value(0&#8211;255)</string>
+    <string name="outputs">Outputs</string>
+    <string name="show_gpio_hint">Show GPIO Hint</string>
+    <string name="hide_gpio_hint">Hide GPIO Hint</string>
 
 </resources>

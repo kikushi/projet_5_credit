@@ -6,13 +6,9 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.text.StringSearch;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,7 +30,7 @@ import java.util.ArrayList;
 
 import static proj.myapplication.Connexion.btSocket;
 
-public class configuration extends AppCompatActivity {
+public class Configuration extends AppCompatActivity {
     private Button btn_Add_bit_R;
     private Button btn_Add_byte_R;
     private Button btn_Add_bit_W;
@@ -91,9 +87,9 @@ public class configuration extends AppCompatActivity {
 
 
     static String nbwidget_read;
-    static  String nbwidget_saved;
-    private String widget_input="3303030030000300300300003033030003000030";
-    private String widget_output ="3303030030000300300300003033030003000030";
+    static String nbwidget_saved;
+    public static String inputs ="3303030030000300300300003033030003000030";
+    public static String outputs ="3303030030000300300300003033030003000030";
     private String widget_s="3303030030000300300300003033030003000030i";
     private String mode = "i";
     private String pin_config ="P-";
@@ -170,7 +166,7 @@ public class configuration extends AppCompatActivity {
                 sendStringMessage("start");
                 Context context = getApplicationContext();
 
-                ChangeView();
+                ChangeView(Communication.class);
 
 
             }
@@ -199,43 +195,43 @@ public class configuration extends AppCompatActivity {
         // button save
         btn_save = (Button)findViewById(R.id.btn_save);
         btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                                        @Override
+                                        public void onClick(View v) {
 
-                new AlertDialog.Builder(configuration.this)
-                        .setTitle("GOD MODE")
-                        .setMessage("voulez vous vraiment supprimer la configuration?")
-                        .setIcon(R.drawable.ic_launcher_foreground)
-                        .setPositiveButton("Oui",
-                                new DialogInterface.OnClickListener() {
-                                    @TargetApi(11)
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        etat_btn_save = 1;
+                                            new AlertDialog.Builder(Configuration.this)
+                                                    .setTitle("GOD MODE")
+                                                    .setMessage("voulez vous vraiment supprimer la configuration?")
+                                                    .setIcon(R.drawable.ic_launcher_foreground)
+                                                    .setPositiveButton("Oui",
+                                                            new DialogInterface.OnClickListener() {
+                                                                @TargetApi(11)
+                                                                public void onClick(DialogInterface dialog, int id) {
+                                                                    etat_btn_save = 1;
 
-                                        btnsavecliked();
-                                        dialog.cancel();
+                                                                    btnsavecliked();
+                                                                    dialog.cancel();
+                                                                }
+                                                            })
+                                                    .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                                                        @TargetApi(11)
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            etat_btn_save =0;
+
+                                                            dialog.cancel();
+                                                        }
+                                                    }).show();
+
+
+
+                                        }
                                     }
-                                })
-                        .setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                            @TargetApi(11)
-                            public void onClick(DialogInterface dialog, int id) {
-                                etat_btn_save =0;
-
-                                dialog.cancel();
-                            }
-                        }).show();
-
-
-
-            }
-        }
         );
         // button del
         btn_del = (Button)findViewById(R.id.btn_delete);
         btn_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(configuration.this)
+                new AlertDialog.Builder(Configuration.this)
                         .setTitle("GOD MODE")
                         .setMessage("voulez vous vraiment supprimer la configuration?")
                         .setIcon(R.drawable.ic_launcher_foreground)
@@ -329,7 +325,7 @@ public class configuration extends AppCompatActivity {
                 }
 
                 if(count!=0){
-                    new AlertDialog.Builder(configuration.this)
+                    new AlertDialog.Builder(Configuration.this)
                             .setTitle("GOD MODE")
                             .setMessage("Impossible d'enregistrer la configuration. Nom invalide")
                             .setIcon(R.drawable.ic_launcher_foreground)
@@ -406,7 +402,7 @@ public class configuration extends AppCompatActivity {
                             count = Character.getNumericValue(selected.charAt(i));
                             if(count !=0){
                                 btnWord[count-1].setChecked(false);}
-                                btnWord[count-1].setVisibility(View.VISIBLE);
+                            btnWord[count-1].setVisibility(View.VISIBLE);
                         }
 
 
@@ -941,9 +937,9 @@ public class configuration extends AppCompatActivity {
 
         widget_s= widget_s.replaceAll("1","P");
         String widgets = widget_s.substring(0,40);
-        widget_input = widgets;
-        for(int i=0;i<widget_input.length();i++){
-            if(widget_input.charAt(i)=='P'){
+        inputs = widgets;
+        for(int i = 0; i< inputs.length(); i++){
+            if(inputs.charAt(i)=='P'){
                 PINConfig pi = new PINConfig(false,true,i,'P',String.valueOf(i+1));
                 btnWorld2[i] = pi;
                 btnWord[i].setVisibility(View.GONE);
@@ -964,9 +960,9 @@ public class configuration extends AppCompatActivity {
 
         widget_s= widget_s.replaceAll("1","P");
         String widgets = widget_s.substring(0,40);
-        widget_output = widgets;
-        for(int i=0;i<widget_output.length();i++){
-            if(widget_output.charAt(i)=='P'){
+        outputs = widgets;
+        for(int i = 0; i< outputs.length(); i++){
+            if(outputs.charAt(i)=='P'){
                 PINConfig pi = new PINConfig(false,true,i,'P',String.valueOf(i+1));
                 btnWorld2[i] = pi;
                 btnWord[i].setVisibility(View.GONE);
@@ -988,9 +984,9 @@ public class configuration extends AppCompatActivity {
             toast.show();
             widget_s= widget_s.replaceAll("1","G");
             String widgets = widget_s.substring(0,40);
-            widget_input = widgets;
-            for(int i=0;i<widget_input.length();i++){
-                if(widget_input.charAt(i)=='G'){
+            inputs = widgets;
+            for(int i = 0; i< inputs.length(); i++){
+                if(inputs.charAt(i)=='G'){
                     PINConfig pi = new PINConfig(false,true,i,'G',String.valueOf(i+1));
                     btnWorld2[i] = pi;
                     btnWord[i].setVisibility(View.GONE);
@@ -1026,7 +1022,7 @@ public class configuration extends AppCompatActivity {
             toast.show();
             widget_s= widget_s.replaceAll("1","G");
             String widgets = widget_s.substring(0,40);
-            widget_output = widgets;
+            outputs = widgets;
             Target2.add(pin_config);
             try {
                 saveInterne_input();
@@ -1034,8 +1030,8 @@ public class configuration extends AppCompatActivity {
             }catch (IOException e){
 
             }
-            for(int i=0;i<widget_output.length();i++){
-                if(widget_output.charAt(i)=='G'){
+            for(int i = 0; i< outputs.length(); i++){
+                if(outputs.charAt(i)=='G'){
                     PINConfig pi = new PINConfig(false,true,i,'G',String.valueOf(i+1));
                     btnWorld2[i] = pi;
                     btnWord[i].setVisibility(View.GONE);
@@ -1048,7 +1044,7 @@ public class configuration extends AppCompatActivity {
         }
     }
     private void OkBtnClicked(){
-        Toast toast= Toast.makeText(getApplicationContext(),widget_input,Toast.LENGTH_SHORT);
+        Toast toast= Toast.makeText(getApplicationContext(), inputs,Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
         toast.show();
 
@@ -1056,13 +1052,13 @@ public class configuration extends AppCompatActivity {
 
     private void saveInterne_input() throws IOException {
         FileOutputStream outputStream = openFileOutput("input.txt",MODE_PRIVATE);
-        String numero = widget_input;
+        String numero = inputs;
         outputStream.write(numero.getBytes());
         outputStream.close();
     }
     private void saveInterne_output() throws IOException {
         FileOutputStream outputStream = openFileOutput("output.txt",MODE_PRIVATE);
-        String numero = widget_output;
+        String numero = outputs;
         outputStream.write(numero.getBytes());
         outputStream.close();
     }
@@ -1074,7 +1070,7 @@ public class configuration extends AppCompatActivity {
         while((content = inputStream.read())!=-1){
             value = String.valueOf(Stringb.append((char)content));
         }
-        widget_input = value;
+        inputs = value;
 
     }
     private void getFromInterne_output() throws IOException{
@@ -1085,7 +1081,7 @@ public class configuration extends AppCompatActivity {
         while((content = inputStream.read())!=-1){
             value = String.valueOf(Stringb.append((char)content));
         }
-        widget_output = value;
+        outputs = value;
     }
     private void changeNipcliked(){
         if(etat_btn_change_nip ==1){
@@ -1104,8 +1100,8 @@ public class configuration extends AppCompatActivity {
         if(etat_btn_save==1){
             sendStringMessage("saveConfig");
             sendStringMessage(config_name);
-            sendStringMessage(widget_input);
-            sendStringMessage(widget_output);
+            sendStringMessage(inputs);
+            sendStringMessage(outputs);
 
         }
 
