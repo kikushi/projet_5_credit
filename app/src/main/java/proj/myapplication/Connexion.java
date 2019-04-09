@@ -32,7 +32,6 @@ public class Connexion extends AppCompatActivity {
     private Button searchOtherBtn;
     private Button connectOtherBtn;
     private Spinner otherSpinner;
-    private TextView informationsTextView;
 
     public Set<BluetoothDevice> pairedDevices;
     public Set<BluetoothDevice> otherDevices;
@@ -44,14 +43,18 @@ public class Connexion extends AppCompatActivity {
 
     public IntentFilter filter_found;
     public IntentFilter filter_discoveryFinished;
+    public IntentFilter filter_disconnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connexion);
 
-        pairedAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-        otherAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        pairedAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, R.id.tv_spinner);
+        pairedAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        otherAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, R.id.tv_spinner);
+        otherAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+
         pairedDevices = new HashSet<BluetoothDevice>();
         otherDevices = new HashSet<BluetoothDevice>();
 
@@ -70,6 +73,7 @@ public class Connexion extends AppCompatActivity {
 
         filter_found = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         filter_discoveryFinished = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        filter_disconnected = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 
         //Widgets
         getPairedBtn = (Button)findViewById(R.id.button_get_paired);
@@ -80,8 +84,10 @@ public class Connexion extends AppCompatActivity {
 
         pairedSpinner = (Spinner)findViewById(R.id.spinner_paired);
         pairedSpinner.setAdapter(pairedAdapter);
+        pairedSpinner.setDropDownVerticalOffset(30);
 
         otherSpinner = (Spinner)findViewById(R.id.spinner_other);
+        otherSpinner.setDropDownVerticalOffset(30);
         otherSpinner.setAdapter(otherAdapter);
 
         connectPairedBtn = (Button)findViewById(R.id.button_connectPaired);
@@ -90,14 +96,13 @@ public class Connexion extends AppCompatActivity {
         connectOtherBtn = (Button)findViewById(R.id.button_connectOther);
         connectOtherBtn.setOnClickListener(connectBtnListener);
 
-        informationsTextView = (TextView)findViewById(R.id.textView_informations);
-
     }
     @Override
     public void onStart() {
         super.onStart();
         Log.i("Tag", "onStart");
         btSocket = null;
+
         registerReceiver(mReceiverActionFound, filter_found);
         registerReceiver(mReceiverActionDiscoveryFinished, filter_discoveryFinished);
 
@@ -105,8 +110,12 @@ public class Connexion extends AppCompatActivity {
 
         otherSpinner.setVisibility(View.INVISIBLE);
         connectOtherBtn.setVisibility(View.INVISIBLE);
-        informationsTextView.setVisibility(View.INVISIBLE);
 
+        try {
+            unregisterReceiver(mReceiverActionAclDisconnected);
+        } catch(IllegalArgumentException e) {
+            Log.e("Tag", "Unregistering receivermReceiverActionAclDisconnected failed");
+        }
     }
 
     private View.OnClickListener getPairedBtnListener = new View.OnClickListener() {
@@ -134,6 +143,7 @@ public class Connexion extends AppCompatActivity {
                 success = Connect(false);
             }
             if (success) {
+                registerReceiver(mReceiverActionAclDisconnected, filter_disconnected);
                 ChangeView(Configuration.class);
             }
             else {
@@ -149,6 +159,7 @@ public class Connexion extends AppCompatActivity {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // Device Found
+                Log.i("Tag", "Device Found");
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 otherDevices.add(device);
                 if (!Contains(otherAdapter, device.getName())) {
@@ -164,10 +175,26 @@ public class Connexion extends AppCompatActivity {
             String action = intent.getAction();
             if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 //Discovery is finished
-                informationsTextView.setText(getString(R.string.device_discovery_finished));
                 myBtAdapter.cancelDiscovery();
+                findViewById(R.id.tv_lookingNearbyDevices).setVisibility(View.INVISIBLE);
                 Toast.makeText(getApplicationContext(), getString(R.string.Discovery_finished), Toast.LENGTH_SHORT).show();
                 unregisterReceiver(mReceiverActionDiscoveryFinished);
+            }
+        }
+    };
+
+    // Create a BroadcastReceiver for Bluetooth.ACTION_ACL_DISCONNECTED
+    private final BroadcastReceiver mReceiverActionAclDisconnected = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+                //Device disconnected
+                Log.i("Tag", "Disconnected");
+                //Retour a la page de connexion
+                if (getApplicationContext() != Connexion.this) {
+                    ChangeView(Connexion.class);
+                }
+                Toast.makeText(Connexion.this, R.string.connexion_with_host_ended, Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -193,8 +220,7 @@ public class Connexion extends AppCompatActivity {
         registerReceiver(mReceiverActionDiscoveryFinished, filter_discoveryFinished);
         otherSpinner.setVisibility(View.VISIBLE);
         connectOtherBtn.setVisibility(View.VISIBLE);
-        informationsTextView.setVisibility(View.VISIBLE);
-        informationsTextView.setText(getString(R.string.looking_for_nearby_devices));
+        findViewById(R.id.tv_lookingNearbyDevices).setVisibility(View.VISIBLE);
     }
 
     private boolean Connect(boolean boundedPressed) {
@@ -205,7 +231,6 @@ public class Connexion extends AppCompatActivity {
             return false;
         }
         else {
-
             if (btSocket == null) {
                 try {
                     btSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
@@ -271,6 +296,16 @@ public class Connexion extends AppCompatActivity {
             unregisterReceiver(mReceiverActionDiscoveryFinished);
         } catch(IllegalArgumentException e) {
             Log.e("Tag", "Unregistering receiver mReceiverActionDiscoveryFinished failed", e);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            unregisterReceiver(mReceiverActionAclDisconnected);
+        } catch(IllegalArgumentException e) {
+            Log.e("Tag", "Unregistering receiver mReceiverActionAclDisconnected failed");
         }
     }
 }

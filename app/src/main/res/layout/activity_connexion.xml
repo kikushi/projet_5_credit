@@ -1,12 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10">
+
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:src="@drawable/bluetooth_logo"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="60"
+            android:gravity="center"
+            android:text="@string/connexion"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:src="@drawable/bluetooth_logo"/>
+
+    </LinearLayout>
+
 
     <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="45">
 
         <TextView
             android:id="@+id/textView_pairedDevices"
@@ -14,37 +45,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:background="@color/cornflower_blue"/>
 
         <Button
             android:id="@+id/button_get_paired"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/update_paired_devices"
+            android:layout_below="@+id/textView_pairedDevices"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/textView_pairedDevices" />
+            android:text="@string/update_paired_devices"
+            android:textSize="20sp" />
 
         <Spinner
             android:id="@+id/spinner_paired"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/button_get_paired" />
+            android:layout_centerInParent="true"
+            android:background="@null"/>
 
         <Button
             android:id="@+id/button_connectPaired"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:text="@string/Connect"
-            android:layout_below="@id/spinner_paired"/>
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+             />
 
     </RelativeLayout>
     <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="45"
         android:orientation="vertical">
 
         <TextView
@@ -53,8 +88,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:background="@color/cornflower_blue"/>
 
         <Button
             android:id="@+id/button_search_other"
@@ -62,31 +98,34 @@
             android:layout_height="wrap_content"
             android:text="@string/search_nearby_devices"
             android:layout_centerHorizontal="true"
+            android:textSize="20sp"
             android:layout_below="@+id/textView_otherDevices" />
 
         <Spinner
             android:id="@+id/spinner_other"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@null"/>
+
+        <TextView
+            android:id="@+id/tv_lookingNearbyDevices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/looking_for_nearby_devices"
+            android:layout_below="@id/button_search_other"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/button_search_other" />
+            android:textSize="20sp"
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/button_connectOther"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/Connect"
+            android:textSize="20sp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/spinner_other"
-            android:text="@string/Connect" />
-
-        <TextView
-            android:id="@+id/textView_informations"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/button_connectOther"
-            android:layout_centerHorizontal="true" />
+            android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 
