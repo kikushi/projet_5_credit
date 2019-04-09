@@ -45,5 +45,8 @@
     <string name="connexion">Connexion</string>
     <string name="actual_configuration">Actual Configuration</string>
     <string name="configs_on_rpi">Configurations on Raspberry PI</string>
+    <string name="close_app">Close App</string>
+    <string name="change_config">Change Config</string>
+    <string name="enter_configname_here">Enter ConfigName here</string>
 
 </resources>

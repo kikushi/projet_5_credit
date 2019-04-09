@@ -2,6 +2,7 @@ package proj.myapplication;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.annotation.TargetApi;
@@ -16,6 +17,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -58,9 +61,6 @@ public class Configuration extends AppCompatActivity {
     private String NIP="";
     private String config_name;
     private String recieved;
-
-
-
 
     private Button btn_OK;
 
@@ -134,7 +134,7 @@ public class Configuration extends AppCompatActivity {
                 index_r=position;
             }
         });
-        Lv2 =(ListView)findViewById(R.id.simpleListView3);
+        Lv2 =(ListView)findViewById(R.id.simpleListView2);
         Lv2.setAdapter(arrayAdapter2);
         Lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
@@ -151,22 +151,10 @@ public class Configuration extends AppCompatActivity {
         btn_load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                sendStringMessage("loadConfig-");
-                sendStringMessage(selected);
-
-                try{
-                    //sendStringMessage(selected);
-                    recieved = receiveStringMessage();
-                    //widget_output = receiveStringMessage();
-                }
-                catch(IOException e){
-
-                }
-
-
+                loadbtncliked();
             }
         });
+
         // button save and start
         btn_save_and_start = (Button)findViewById(R.id.btn_save_and_start);
         btn_save_and_start.setOnClickListener(new View.OnClickListener() {
@@ -176,26 +164,6 @@ public class Configuration extends AppCompatActivity {
                 ChangeView(Communication.class);
             }
         });
-        // button disconnect
-        btn_disconnect = (Button)findViewById(R.id.btn_disconnect);
-        btn_disconnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //disconnect
-                sendStringMessage("disconnect");
-                try{
-                    Connexion.btSocket.close();
-                    ChangeView(Connexion.class);
-                }
-                catch(IOException e){
-
-                }
-            }
-        });
-
-
-
 
         // button save
         btn_save = (Button)findViewById(R.id.btn_save);
@@ -293,9 +261,10 @@ public class Configuration extends AppCompatActivity {
 
             }
         });
+
+ /*
         // Edittext
         mytext = (EditText)findViewById(R.id.editText);
-        mytext.setVisibility(View.INVISIBLE);
         mytext.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -315,9 +284,14 @@ public class Configuration extends AppCompatActivity {
 
             }
         });
+
+*/
+
+
         // edittext2
-        myconfigname = (EditText)findViewById(R.id.editText2);
-        myconfigname.setVisibility(View.VISIBLE);
+
+
+        myconfigname = (EditText)findViewById(R.id.editText);
         myconfigname.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -375,11 +349,7 @@ public class Configuration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sendStringMessage("refreshConfigs");
-                try{
-                    recieved = receiveStringMessage();
-                }catch (IOException e){
-
-                }
+                recieved = receiveStringMessage();
                 String a_b[]=recieved.split("\\r?\\n");
                 for(int i=0;i<a_b.length;i++){
                     Target.add(a_b[i]);
@@ -414,7 +384,9 @@ public class Configuration extends AppCompatActivity {
 
                 btnWord[Integer.valueOf(pin)-1].setVisibility(View.VISIBLE);
                 btnWord[Integer.valueOf(pin)-1].setChecked(false);
-                btnWord[Integer.valueOf(pin)-1].setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    btnWord[Integer.valueOf(pin)-1].setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
+                }
                 //btnWord[Integer.valueOf(pin)-1].setButtonDrawable(android.R.color.holo_green_light);
                 Target2.remove(index_r);
                 arrayAdapter2.notifyDataSetChanged();
@@ -423,16 +395,6 @@ public class Configuration extends AppCompatActivity {
                 //pin_config2 ="";
 
 
-            }
-        });
-        // boutton change nip
-        btn_change_nip  =(Button)findViewById(R.id.btn_changer_nip);
-        btn_change_nip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etat_btn_change_nip =1;
-                changeNipcliked();
-                sendStringMessage("changeNIP");
             }
         });
 
@@ -455,16 +417,21 @@ public class Configuration extends AppCompatActivity {
         rbtn3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 3 selected",Toast.LENGTH_SHORT);
-                toast.show();
-                widget_s = "331" +widget_s.substring(3);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s.toString(),Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
-                btnWord[2] = rbtn3;
-                BtnWord.add(rbtn3);
-                pin_config = "P-3";
-                pin_config2 = pin_config2 +"3-";
+                if (!isChecked) {
+                    rbtn3.setChecked(false);
+                }
+                else {
+                    Toast toast= Toast.makeText(getApplicationContext()," pin 3 selected",Toast.LENGTH_SHORT);
+                    toast.show();
+                    widget_s = "331" +widget_s.substring(3);
+                    Toast toast2= Toast.makeText(getApplicationContext(),widget_s.toString(),Toast.LENGTH_SHORT);
+                    toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
+                    toast2.show();
+                    btnWord[2] = rbtn3;
+                    BtnWord.add(rbtn3);
+                    pin_config = "P-3";
+                    pin_config2 = pin_config2 +"3-";
+                }
             }
         });
         //ajout des radiobutton
@@ -922,6 +889,40 @@ public class Configuration extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_configuration, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_comm_changeNip:
+                etat_btn_change_nip =1;
+                changeNipcliked();
+                sendStringMessage("changeNIP");
+                return true;
+
+            case R.id.menu_comm_disconnect:
+                //disconnect
+                sendStringMessage("disconnect");
+                try{
+                    Connexion.btSocket.close();
+                }
+                catch(IOException e){
+                    Log.e("Tag", "btsocket's close() method failed", e);
+                }
+                ChangeView(Connexion.class);
+                return true;
+
+            case R.id.menu_comm_close_app:
+                this.finishAffinity();
+                return true;
+        }
+        return false;
+    }
     private View.OnClickListener AddBitBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -964,7 +965,9 @@ public class Configuration extends AppCompatActivity {
                 PINConfig pi = new PINConfig(false,true,i,'P',String.valueOf(i+1));
                 btnWorld2[i] = pi;
                 //btnWord[i].setButtonTintList("#248d51");
-                btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                }
                 //btnWord[i].setPadding(31, 0, 0, 0);
                 //btnWord[i].setVisibility(View.INVISIBLE);
                 //btnWord[i].setVisibility(View.GONE);
@@ -992,7 +995,9 @@ public class Configuration extends AppCompatActivity {
             if(widget_output.charAt(i)=='P'){
                 PINConfig pi = new PINConfig(false,true,i,'P',String.valueOf(i+1));
                 btnWorld2[i] = pi;
-                btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                }
             }
         }
 
@@ -1015,7 +1020,9 @@ public class Configuration extends AppCompatActivity {
                 if(widget_input.charAt(i)=='G'){
                     PINConfig pi = new PINConfig(false,true,i,'G',String.valueOf(i+1));
                     btnWorld2[i] = pi;
-                    btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                    }
                 }
             }
 
@@ -1053,7 +1060,9 @@ public class Configuration extends AppCompatActivity {
                 if(widget_output.charAt(i)=='G'){
                     PINConfig pi = new PINConfig(false,true,i,'G',String.valueOf(i+1));
                     btnWorld2[i] = pi;
-                    btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                    }
                 }
             }
 
@@ -1119,17 +1128,10 @@ public class Configuration extends AppCompatActivity {
 
         sendStringMessage("loadConfig");
         sendStringMessage(selected);
-        try{
-            recieved = receiveStringMessage();
-            //widget_output = receiveStringMessage();
-        }
-        catch(IOException e){
-
-        }
+        recieved = receiveStringMessage();
+        Log.i("Tag", "Received : "+ recieved);
         Toast toast= Toast.makeText(getApplicationContext(),recieved,Toast.LENGTH_SHORT);
         toast.show();
-
-
     }
     private void btnsavecliked(){
         if(etat_btn_save==1){
@@ -1148,15 +1150,17 @@ public class Configuration extends AppCompatActivity {
             //btSocket.close();
         }
         catch (IOException e) {
-            e.printStackTrace();
+            Log.e("Tag", "Writing failed. Tried to write : "+ mot);
         }
-
     }
-    private String receiveStringMessage()throws IOException{
+    private String receiveStringMessage() {
         mmBuffer3 = new byte[1024];
-        ByteArrayInputStream input = new ByteArrayInputStream(mmBuffer3);
-        InputStream inputStream = btSocket.getInputStream();
-        inputStream.read( mmBuffer3);
+        try {
+            InputStream inputStream = btSocket.getInputStream();
+            inputStream.read( mmBuffer3);
+        } catch (IOException e) {
+            Log.e("Tag", "Reading failed");
+        }
         String b = new String(mmBuffer3);
         return b;
 

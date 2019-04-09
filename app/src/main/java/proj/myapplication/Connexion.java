@@ -10,6 +10,8 @@ import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -116,6 +118,22 @@ public class Connexion extends AppCompatActivity {
         } catch(IllegalArgumentException e) {
             Log.e("Tag", "Unregistering receivermReceiverActionAclDisconnected failed");
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_connexion, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_comm_close_app:
+                this.finishAffinity();
+                return true;
+        }
+        return false;
     }
 
     private View.OnClickListener getPairedBtnListener = new View.OnClickListener() {

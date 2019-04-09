@@ -312,11 +312,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textStyle="bold"
-                app:autoSizeTextType="uniform"
-                app:autoSizeMinTextSize="12sp"
-                app:autoSizeMaxTextSize="100sp"
-                app:autoSizeStepGranularity="2sp"
-                android:hint="Enter ConfigName here"
+                android:hint="@string/enter_configname_here"
                 android:background="@color/cornflower_blue">
             </EditText>
 
@@ -374,7 +370,7 @@
             </LinearLayout>
 
             <ListView
-                android:id="@+id/simpleListView"
+                android:id="@+id/simpleListView2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="4"
@@ -416,7 +412,7 @@
             </TextView>
 
             <ListView
-                android:id="@+id/simpleListView3"
+                android:id="@+id/simpleListView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="2"

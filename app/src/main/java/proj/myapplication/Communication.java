@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -105,8 +107,8 @@ public class Communication extends AppCompatActivity {
         //Init config Arrays
         //Initiate inputs and outputs array
         inputsOutputs = new String[] {
-                Configuration.inputs, //Inputs
-                Configuration.outputs  //Outputs
+                Configuration.widget_input, //Inputs
+                Configuration.widget_output  //Outputs
         };
         //2202020020000200200200002022020002000020
 
@@ -179,6 +181,34 @@ public class Communication extends AppCompatActivity {
             outBytesBtn.get(i).setOnClickListener(OutBytesBtnListener);
         }
         registerReceiver(mReceiverActionAclDisconnected, new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_communication, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_comm_changeConfig:
+                ChangeView(Configuration.class);
+                return true;
+
+            case R.id.menu_comm_changeNip:
+                //Call fct ChangeNIP
+                return true;
+
+            case R.id.menu_comm_disconnect:
+                ChangeView(Connexion.class);
+                return true;
+
+            case R.id.menu_comm_close_app:
+                this.finishAffinity();
+                return true;
+        }
+        return false;
     }
 
     private View.OnClickListener UpdateAllInputsBtnListener = new View.OnClickListener() {
