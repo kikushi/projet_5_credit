@@ -1,14 +1,20 @@
 package proj.myapplication;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.text.StringSearch;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -87,12 +93,13 @@ public class Configuration extends AppCompatActivity {
 
 
     static String nbwidget_read;
-    static String nbwidget_saved;
-    public static String inputs ="3303030030000300300300003033030003000030";
-    public static String outputs ="3303030030000300300300003033030003000030";
+    static  String nbwidget_saved;
+    public static String widget_input="3303030030000300300300003033030003000030";
+    public static String widget_output ="3303030030000300300300003033030003000030";
     private String widget_s="3303030030000300300300003033030003000030i";
     private String mode = "i";
     private String pin_config ="P-";
+    private String pin_config2="";
     private static String selected = "";
     private int index_r=0;
     ListView Lv1;
@@ -145,12 +152,15 @@ public class Configuration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                sendStringMessage("loadConfig");
+                sendStringMessage("loadConfig-");
+                sendStringMessage(selected);
 
-
-                for (int i=0;i<config_names_received.length;i++){
-                    Target.add(config_names_received[i]);
-                    arrayAdapter.notifyDataSetChanged();
+                try{
+                    //sendStringMessage(selected);
+                    recieved = receiveStringMessage();
+                    //widget_output = receiveStringMessage();
+                }
+                catch(IOException e){
 
                 }
 
@@ -162,13 +172,8 @@ public class Configuration extends AppCompatActivity {
         btn_save_and_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 sendStringMessage("start");
-                Context context = getApplicationContext();
-
                 ChangeView(Communication.class);
-
-
             }
         });
         // button disconnect
@@ -262,7 +267,6 @@ public class Configuration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Target2.add(pin_config);
-
                 arrayAdapter2.notifyDataSetChanged();
                 AddBitRBtnClicked();
 
@@ -276,7 +280,17 @@ public class Configuration extends AppCompatActivity {
                 Target2.add(pin_config);
                 arrayAdapter2.notifyDataSetChanged();
                 AddBitwBtnClicked();
-                sendStringMessage("writeBit");
+
+            }
+        });
+        btn_Add_byte_W = (Button)findViewById(R.id.btn_ajouter_byte_W);
+        btn_Add_byte_W.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AddByteWBtnClicked();
+                arrayAdapter2.notifyDataSetChanged();
+
             }
         });
         // Edittext
@@ -382,41 +396,33 @@ public class Configuration extends AppCompatActivity {
         btn_remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String alphabet = "PG-                                      ";
-                int count =99;
+                String convo ="PG-";
+                String pin ="";
+                int len = selected.length();
 
-                //Toast toast= Toast.makeText(getApplicationContext(),selected,Toast.LENGTH_SHORT);
-                // toast.show();
-                for(int i=0;i<selected.length();i++){
-
-                    if(alphabet.indexOf(selected.charAt(i))==-1){
-                        //count =Character.toString(selected.charAt(i))
-                        if(alphabet.indexOf(selected.charAt(i+1))==-1){
-                            String a = Character.toString(selected.charAt(i)) + Character.toString(selected.charAt(i+1));
-                            count = Integer.valueOf(a);
-                            btnWord[count-1].setChecked(false);
-                            btnWord[count-1].setVisibility(View.VISIBLE);
-                            i=i+1;
-                        }
-                        else if(alphabet.indexOf(selected.charAt(i+1))!=-1){
-                            count = Character.getNumericValue(selected.charAt(i));
-                            if(count !=0){
-                                btnWord[count-1].setChecked(false);}
-                            btnWord[count-1].setVisibility(View.VISIBLE);
-                        }
-
-
+                for(int i =0;i<len;i++){
+                    if(convo.indexOf(selected.charAt(i))==-1 && len==3){
+                        pin = pin +selected.charAt(i);
 
                     }
-
+                    else if (convo.indexOf(pin_config.charAt(i))==-1 && len==4){
+                        pin = pin+selected.charAt(i)+selected.charAt(i+1);
+                        i = i+1;
+                    }
                 }
-                Toast toast= Toast.makeText(getApplicationContext(),String.valueOf(count),Toast.LENGTH_SHORT);
-                toast.show();
+
+
+                btnWord[Integer.valueOf(pin)-1].setVisibility(View.VISIBLE);
+                btnWord[Integer.valueOf(pin)-1].setChecked(false);
+                btnWord[Integer.valueOf(pin)-1].setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
+                //btnWord[Integer.valueOf(pin)-1].setButtonDrawable(android.R.color.holo_green_light);
                 Target2.remove(index_r);
                 arrayAdapter2.notifyDataSetChanged();
-                RenmoveBtnClicked();
-                pin_config ="P-";
-                sendStringMessage("deleteConfig");
+                //RenmoveBtnClicked();
+                //pin_config ="P-";
+                //pin_config2 ="";
+
+
             }
         });
         // boutton change nip
@@ -443,14 +449,7 @@ public class Configuration extends AppCompatActivity {
                 //arrayAdapter.notifyDataSetChanged();
             }
         });
-        //button ok
-        btn_OK = (Button)findViewById(R.id.btn_ok);
-        btn_OK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OkBtnClicked();
-            }
-        });
+
         //ajout des radiobutton
         rbtn3 =(RadioButton)findViewById(R.id.rbtn_3);
         rbtn3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -464,7 +463,8 @@ public class Configuration extends AppCompatActivity {
                 toast2.show();
                 btnWord[2] = rbtn3;
                 BtnWord.add(rbtn3);
-                pin_config = pin_config +"3-";
+                pin_config = "P-3";
+                pin_config2 = pin_config2 +"3-";
             }
         });
         //ajout des radiobutton
@@ -475,14 +475,14 @@ public class Configuration extends AppCompatActivity {
                 Toast toast= Toast.makeText(getApplicationContext()," pin 5 selected",Toast.LENGTH_SHORT);
                 toast.show();
                 widget_s = widget_s.substring(0,4) +"1" +widget_s.substring(5) + "  "+widget_s.length();
-
                 Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
                 toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
                 toast2.show();
                 //ajout button dans btnword
                 btnWord[4] = rbtn5;
                 BtnWord.add(rbtn5);
-                pin_config = pin_config +"5-";
+                pin_config = "P-5";
+                pin_config2 = pin_config2 +"5-";
 
 
             }
@@ -501,7 +501,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[6] = rbtn7;
                 BtnWord.add(rbtn7);
-                pin_config = pin_config +"7-";
+                pin_config = "P-7";
+                pin_config2 = pin_config2 +"7-";
 
 
             }
@@ -520,7 +521,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[7] = rbtn8;
                 BtnWord.add(rbtn8);
-                pin_config = pin_config +"8-";
+                pin_config = "P-8";
+                pin_config2 = pin_config2 +"8-";
             }
         });
         //ajout des radiobutton
@@ -537,7 +539,9 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[9] = rbtn10;
                 BtnWord.add(rbtn10);
-                pin_config = pin_config +"10-";
+                pin_config = "P-10";
+                pin_config2 = pin_config2 +"10-";
+
             }
         });
         //ajout des radiobutton
@@ -553,7 +557,8 @@ public class Configuration extends AppCompatActivity {
                 toast2.show();
                 //ajout button dans btnword
                 btnWord[10] = rbtn11;
-                pin_config = pin_config +"11-";
+                pin_config = "P-11";
+                pin_config2 = pin_config2 +"11-";
             }
         });
         //ajout des radiobutton
@@ -570,7 +575,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[11] = rbtn12;
                 BtnWord.add(rbtn12);
-                pin_config = pin_config +"12-";
+                pin_config = "P-12";
+                pin_config2 = pin_config2 +"12-";
             }
         });
         //ajout des radiobutton
@@ -587,7 +593,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[12] = rbtn13;
                 BtnWord.add(rbtn13);
-                pin_config = pin_config +"13-";
+                pin_config = "P-13";
+                pin_config2 = pin_config2 +"13-";
             }
         });
         //ajout des radiobutton
@@ -604,7 +611,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[14] = rbtn15;
                 BtnWord.add(rbtn15);
-                pin_config = pin_config +"15-";
+                pin_config = "P-15";
+                pin_config2 = pin_config2 +"15-";
             }
         });
         //ajout des radiobutton
@@ -621,7 +629,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[15] = rbtn16;
                 BtnWord.add(rbtn16);
-                pin_config = pin_config +"16-";
+                pin_config = "P-16";
+                pin_config2 = pin_config2 +"16-";
             }
         });
         //ajout des radiobutton
@@ -638,7 +647,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[17] = rbtn18;
                 BtnWord.add(rbtn18);
-                pin_config = pin_config +"18-";
+                pin_config = "P-18";
+                pin_config2 = pin_config2 +"18-";
             }
         });
         //ajout des radiobutton
@@ -655,7 +665,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[18] = rbtn19;
                 BtnWord.add(rbtn19);
-                pin_config = pin_config +"19-";
+                pin_config ="P-19";
+                pin_config2 = pin_config2 +"19-";
             }
         });
         //ajout des radiobutton
@@ -672,7 +683,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[20] = rbtn21;
                 BtnWord.add(rbtn21);
-                pin_config = pin_config +"21-";
+                pin_config = "P-21";
+                pin_config2 = pin_config2 +"21-";
             }
         });
         //ajout des radiobutton
@@ -689,7 +701,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[21] = rbtn22;
                 BtnWord.add(rbtn22);
-                pin_config = pin_config +"22-";
+                pin_config = "P-22";
+                pin_config2 = pin_config2 +"22-";
             }
         });
         //ajout des radiobutton
@@ -706,7 +719,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[22] = rbtn23;
                 BtnWord.add(rbtn23);
-                pin_config = pin_config +"23-";
+                pin_config = "P-23";
+                pin_config2 = pin_config2 +"23-";
             }
         });
         //ajout des radiobutton
@@ -723,7 +737,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[23] = rbtn24;
                 BtnWord.add(rbtn24);
-                pin_config = pin_config +"24-";
+                pin_config = "P-24";
+                pin_config2 = pin_config2 +"24-";
             }
         });
         //ajout des radiobutton
@@ -740,7 +755,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[25] = rbtn26;
                 BtnWord.add(rbtn26);
-                pin_config = pin_config +"26-";
+                pin_config = "P-26";
+                pin_config2 = pin_config2 +"26-";
             }
         });
         //ajout des radiobutton
@@ -757,7 +773,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[28] = rbtn29;
                 BtnWord.add(rbtn29);
-                pin_config = pin_config +"29-";
+                pin_config = "P-29";
+                pin_config2 = pin_config2 +"29-";
             }
         });
         //ajout des radiobutton
@@ -774,7 +791,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[30] = rbtn31;
                 BtnWord.add(rbtn31);
-                pin_config = pin_config +"31-";
+                pin_config = "P-31";
+                pin_config2 = pin_config2 +"31-";
             }
         });
         //ajout des radiobutton
@@ -791,7 +809,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[31] = rbtn32;
                 BtnWord.add(rbtn32);
-                pin_config = pin_config +"32-";
+                pin_config = "P-32";
+                pin_config2 = pin_config2 +"32-";
             }
         });
         //ajout des radiobutton
@@ -808,7 +827,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[32] = rbtn33;
                 BtnWord.add(rbtn33);
-                pin_config = pin_config +"33-";
+                pin_config = "P-33";
+                pin_config2 = pin_config2 +"33-";
 
             }
         });
@@ -826,7 +846,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[34] = rbtn35;
                 BtnWord.add(rbtn35);
-                pin_config = pin_config +"35-";
+                pin_config = "P-35";
+                pin_config2 = pin_config2 +"35-";
             }
         });
         //ajout des radiobutton
@@ -843,7 +864,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[35] = rbtn36;
                 BtnWord.add(rbtn36);
-                pin_config = pin_config +"36-";
+                pin_config = "P-36";
+                pin_config2 = pin_config2 +"36-";
             }
         });
         //ajout des radiobutton
@@ -860,7 +882,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[36] = rbtn37;
                 BtnWord.add(rbtn37);
-                pin_config = pin_config +"37-";
+                pin_config = "P-37";
+                pin_config2 = pin_config2 +"37-";
             }
         });
         //ajout des radiobutton
@@ -876,7 +899,8 @@ public class Configuration extends AppCompatActivity {
                 toast2.show();
                 //ajout button dans btnword
                 btnWord[37] = rbtn38;
-                pin_config = pin_config +"38-";
+                pin_config = "P-38";
+                pin_config2 = pin_config2 +"38-";
             }
         });
         //ajout des radiobutton
@@ -893,7 +917,8 @@ public class Configuration extends AppCompatActivity {
                 //ajout button dans btnword
                 btnWord[39] = rbtn40;
                 BtnWord.add(rbtn40);
-                pin_config = pin_config +"40-";
+                pin_config = "P-40";
+                pin_config2 = pin_config2 +"40-";
             }
         });
     }
@@ -910,12 +935,8 @@ public class Configuration extends AppCompatActivity {
             AddByteRBtnClicked();
         }
     };
-    private View.OnClickListener OkBtnListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            OkBtnClicked();
-        }
-    };
+
+
 
 
     private void RenmoveBtnClicked(){
@@ -937,12 +958,18 @@ public class Configuration extends AppCompatActivity {
 
         widget_s= widget_s.replaceAll("1","P");
         String widgets = widget_s.substring(0,40);
-        inputs = widgets;
-        for(int i = 0; i< inputs.length(); i++){
-            if(inputs.charAt(i)=='P'){
+        widget_input = widgets;
+        for(int i=0;i<widget_input.length();i++){
+            if(widget_input.charAt(i)=='P'){
                 PINConfig pi = new PINConfig(false,true,i,'P',String.valueOf(i+1));
                 btnWorld2[i] = pi;
-                btnWord[i].setVisibility(View.GONE);
+                //btnWord[i].setButtonTintList("#248d51");
+                btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                //btnWord[i].setPadding(31, 0, 0, 0);
+                //btnWord[i].setVisibility(View.INVISIBLE);
+                //btnWord[i].setVisibility(View.GONE);
+                pin_config2 = "";
+
             }
         }
 
@@ -960,40 +987,39 @@ public class Configuration extends AppCompatActivity {
 
         widget_s= widget_s.replaceAll("1","P");
         String widgets = widget_s.substring(0,40);
-        outputs = widgets;
-        for(int i = 0; i< outputs.length(); i++){
-            if(outputs.charAt(i)=='P'){
+        widget_output = widgets;
+        for(int i=0;i<widget_output.length();i++){
+            if(widget_output.charAt(i)=='P'){
                 PINConfig pi = new PINConfig(false,true,i,'P',String.valueOf(i+1));
                 btnWorld2[i] = pi;
-                btnWord[i].setVisibility(View.GONE);
+                btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
             }
         }
 
     }
     private void AddByteRBtnClicked(){
-        widget_s = widget_s.substring(0,40)+"i" ;
-        int Icount=0;
-        for(int i = 0; i<widget_s.length(); i++ ){
-            if(widget_s.charAt(i) == '1'){
-                Icount=Icount+1;
-            }
+        String[] array_pin = pin_config2.split("-");
+        //widget_s = widget_s.substring(0,40)+"i" ;
+        int Icount=array_pin.length;
+        for(int i = 0; i<array_pin.length; i++ ){
+            String k = "G-"+ String.valueOf(array_pin[i]);
+            Target2.add(k);
         }
 
-        if(Icount<9){
-            Toast toast= Toast.makeText(getApplicationContext(),String.valueOf(Icount),Toast.LENGTH_SHORT);
-            toast.show();
+        if(Icount==8){
+
             widget_s= widget_s.replaceAll("1","G");
             String widgets = widget_s.substring(0,40);
-            inputs = widgets;
-            for(int i = 0; i< inputs.length(); i++){
-                if(inputs.charAt(i)=='G'){
+            widget_input = widgets;
+            for(int i=0;i<widget_input.length();i++){
+                if(widget_input.charAt(i)=='G'){
                     PINConfig pi = new PINConfig(false,true,i,'G',String.valueOf(i+1));
                     btnWorld2[i] = pi;
-                    btnWord[i].setVisibility(View.GONE);
+                    btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
                 }
             }
 
-            Target2.add(pin_config);
+            //Target2.add(pin_config);
             try {
                 saveInterne_input();
                 saveInterne_output();
@@ -1010,55 +1036,52 @@ public class Configuration extends AppCompatActivity {
     }
     private void AddByteWBtnClicked(){
         widget_s = widget_s.substring(0,40)+"o" ;
-        int Icount=0;
-        for(int i = 0; i<widget_s.length(); i++ ){
-            if(widget_s.charAt(i) == '1'){
-                Icount=Icount+1;
-            }
+        String[] array_pin = pin_config2.split("-");
+        //widget_s = widget_s.substring(0,40)+"i" ;
+        int Icount=array_pin.length;
+        for(int i = 0; i<array_pin.length; i++ ){
+            String k = "G-"+ String.valueOf(array_pin[i]);
+            Target2.add(k);
         }
 
-        if(Icount<9){
-            Toast toast= Toast.makeText(getApplicationContext(),String.valueOf(Icount),Toast.LENGTH_SHORT);
-            toast.show();
+        if(Icount==8){
+
             widget_s= widget_s.replaceAll("1","G");
             String widgets = widget_s.substring(0,40);
-            outputs = widgets;
-            Target2.add(pin_config);
+            widget_output = widgets;
+            for(int i=0;i<widget_output.length();i++){
+                if(widget_output.charAt(i)=='G'){
+                    PINConfig pi = new PINConfig(false,true,i,'G',String.valueOf(i+1));
+                    btnWorld2[i] = pi;
+                    btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                }
+            }
+
+            //Target2.add(pin_config);
             try {
                 saveInterne_input();
                 saveInterne_output();
             }catch (IOException e){
 
             }
-            for(int i = 0; i< outputs.length(); i++){
-                if(outputs.charAt(i)=='G'){
-                    PINConfig pi = new PINConfig(false,true,i,'G',String.valueOf(i+1));
-                    btnWorld2[i] = pi;
-                    btnWord[i].setVisibility(View.GONE);
-                }
-            }
+
         }
         else{
             Toast toast= Toast.makeText(getApplicationContext(),"un byte est juste de 8 bits",Toast.LENGTH_SHORT);
             toast.show();
         }
     }
-    private void OkBtnClicked(){
-        Toast toast= Toast.makeText(getApplicationContext(), inputs,Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-        toast.show();
 
-    }
 
     private void saveInterne_input() throws IOException {
         FileOutputStream outputStream = openFileOutput("input.txt",MODE_PRIVATE);
-        String numero = inputs;
+        String numero = widget_input;
         outputStream.write(numero.getBytes());
         outputStream.close();
     }
     private void saveInterne_output() throws IOException {
         FileOutputStream outputStream = openFileOutput("output.txt",MODE_PRIVATE);
-        String numero = outputs;
+        String numero = widget_output;
         outputStream.write(numero.getBytes());
         outputStream.close();
     }
@@ -1070,7 +1093,7 @@ public class Configuration extends AppCompatActivity {
         while((content = inputStream.read())!=-1){
             value = String.valueOf(Stringb.append((char)content));
         }
-        inputs = value;
+        widget_input = value;
 
     }
     private void getFromInterne_output() throws IOException{
@@ -1081,7 +1104,7 @@ public class Configuration extends AppCompatActivity {
         while((content = inputStream.read())!=-1){
             value = String.valueOf(Stringb.append((char)content));
         }
-        outputs = value;
+        widget_output = value;
     }
     private void changeNipcliked(){
         if(etat_btn_change_nip ==1){
@@ -1093,15 +1116,27 @@ public class Configuration extends AppCompatActivity {
 
     }
     private void loadbtncliked(){
-        splitString();
+
+        sendStringMessage("loadConfig");
+        sendStringMessage(selected);
+        try{
+            recieved = receiveStringMessage();
+            //widget_output = receiveStringMessage();
+        }
+        catch(IOException e){
+
+        }
+        Toast toast= Toast.makeText(getApplicationContext(),recieved,Toast.LENGTH_SHORT);
+        toast.show();
+
 
     }
     private void btnsavecliked(){
         if(etat_btn_save==1){
             sendStringMessage("saveConfig");
             sendStringMessage(config_name);
-            sendStringMessage(inputs);
-            sendStringMessage(outputs);
+            sendStringMessage(widget_input);
+            sendStringMessage(widget_output);
 
         }
 
@@ -1126,10 +1161,7 @@ public class Configuration extends AppCompatActivity {
         return b;
 
     }
-    private String splitString(){
 
-        return gm;
-    }
     public void ChangeView(Class activity) {
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);

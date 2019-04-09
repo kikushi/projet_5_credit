@@ -305,7 +305,8 @@
             android:orientation="vertical"
             android:background="@drawable/border">
 
-            <TextView
+            <EditText
+                android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -315,9 +316,9 @@
                 app:autoSizeMinTextSize="12sp"
                 app:autoSizeMaxTextSize="100sp"
                 app:autoSizeStepGranularity="2sp"
-                android:text="@string/actual_configuration"
+                android:hint="Enter ConfigName here"
                 android:background="@color/cornflower_blue">
-            </TextView>
+            </EditText>
 
             <LinearLayout
                 android:layout_width="match_parent"
