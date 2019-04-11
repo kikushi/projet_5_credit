@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +28,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
@@ -40,6 +43,7 @@ import java.util.ArrayList;
 import static proj.myapplication.Connexion.btSocket;
 
 public class Configuration extends AppCompatActivity {
+    //declaration des commandes
     private Button btn_Add_bit_R;
     private Button btn_Add_byte_R;
     private Button btn_Add_bit_W;
@@ -49,21 +53,15 @@ public class Configuration extends AppCompatActivity {
     private Button btn_load;
     private Button btn_save;
     private Button btn_del;
-    private Button btn_change_nip;
-    private Button btn_disconnect;
     private Button btn_save_and_start;
     private int etat_btn_change_nip=0;
     private int etat_btn_save =0;
-    private String nom_config;
-
-    private EditText mytext;
     private EditText myconfigname;
     private String NIP="";
     private String config_name;
     private String recieved;
 
-    private Button btn_OK;
-
+    //declaration des buttons
     private RadioButton rbtn3;
     private RadioButton rbtn5;
     private RadioButton rbtn7;
@@ -92,12 +90,11 @@ public class Configuration extends AppCompatActivity {
     private RadioButton rbtn40;
 
 
-    static String nbwidget_read;
-    static  String nbwidget_saved;
+    //declaration des variables
+    private EditText mytext;
     public static String widget_input="3303030030000300300300003033030003000030";
     public static String widget_output ="3303030030000300300300003033030003000030";
     private String widget_s="3303030030000300300300003033030003000030i";
-    private String mode = "i";
     private String pin_config ="P-";
     private String pin_config2="";
     private static String selected = "";
@@ -110,27 +107,29 @@ public class Configuration extends AppCompatActivity {
     ArrayList<Button> BtnWord = new ArrayList<Button>();
     PINConfig[] btnWorld2 = new PINConfig[40];
     public byte[] mmBuffer3;
-    public InputStream iStream;
-    private String gm = "adja/Fama/Dia";
-    public String config_names_received[] = gm.split("/");
+
+    //ArrayAdapter
+    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_2,android.R.id.text1,Target);
+    final ArrayAdapter<String> arrayAdapter2= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_2,Target2);
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,Target);
-        final ArrayAdapter<String> arrayAdapter2= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,Target2);
 
         btSocket = Connexion.btSocket;
+
+        //déclaration des lestViews
         Lv1 = (ListView)findViewById(R.id.simpleListView);
         Lv1.setAdapter(arrayAdapter);
         Lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 selected = Lv1.getItemAtPosition(position).toString();
-                Toast toast2= Toast.makeText(getApplicationContext(),selected,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 index_r=position;
             }
         });
@@ -140,9 +139,6 @@ public class Configuration extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 selected = Lv2.getItemAtPosition(position).toString();
-                Toast toast2= Toast.makeText(getApplicationContext(),selected,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 index_r=position;
             }
         });
@@ -151,7 +147,7 @@ public class Configuration extends AppCompatActivity {
         btn_load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadbtncliked();
+                btn_load_Cliked();
             }
         });
 
@@ -160,8 +156,8 @@ public class Configuration extends AppCompatActivity {
         btn_save_and_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendStringMessage("start");
-                ChangeView(Communication.class);
+                btn_Save_And_Start_Cliked();
+
             }
         });
 
@@ -170,32 +166,7 @@ public class Configuration extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-
-                                            new AlertDialog.Builder(Configuration.this)
-                                                    .setTitle("GOD MODE")
-                                                    .setMessage("voulez vous vraiment supprimer la configuration?")
-                                                    .setIcon(R.drawable.ic_launcher_foreground)
-                                                    .setPositiveButton("Oui",
-                                                            new DialogInterface.OnClickListener() {
-                                                                @TargetApi(11)
-                                                                public void onClick(DialogInterface dialog, int id) {
-                                                                    etat_btn_save = 1;
-
-                                                                    btnsavecliked();
-                                                                    dialog.cancel();
-                                                                }
-                                                            })
-                                                    .setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                                                        @TargetApi(11)
-                                                        public void onClick(DialogInterface dialog, int id) {
-                                                            etat_btn_save =0;
-
-                                                            dialog.cancel();
-                                                        }
-                                                    }).show();
-
-
-
+                                            btn_save_clicked();
                                         }
                                     }
         );
@@ -204,25 +175,7 @@ public class Configuration extends AppCompatActivity {
         btn_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(Configuration.this)
-                        .setTitle("GOD MODE")
-                        .setMessage("voulez vous vraiment supprimer la configuration?")
-                        .setIcon(R.drawable.ic_launcher_foreground)
-                        .setPositiveButton("Oui",
-                                new DialogInterface.OnClickListener() {
-                                    @TargetApi(11)
-                                    public void onClick(DialogInterface dialog, int id) {
-
-                                        dialog.cancel();
-                                    }
-                                })
-                        .setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                            @TargetApi(11)
-                            public void onClick(DialogInterface dialog, int id) {
-
-                                dialog.cancel();
-                            }
-                        }).show();
+                btn_del_Cliked();
             }
         });
 
@@ -234,9 +187,7 @@ public class Configuration extends AppCompatActivity {
         btn_Add_bit_R.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Target2.add(pin_config);
-                arrayAdapter2.notifyDataSetChanged();
-                AddBitRBtnClicked();
+                btn_AddBitR_Clicked();
 
             }
         });
@@ -245,10 +196,7 @@ public class Configuration extends AppCompatActivity {
         btn_Add_bit_W.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Target2.add(pin_config);
-                arrayAdapter2.notifyDataSetChanged();
-                AddBitwBtnClicked();
-
+                btn_AddBitw_Clicked();
             }
         });
         btn_Add_byte_W = (Button)findViewById(R.id.btn_ajouter_byte_W);
@@ -256,9 +204,7 @@ public class Configuration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                AddByteWBtnClicked();
-                arrayAdapter2.notifyDataSetChanged();
-
+                btn_AddByteW_Clicked();
             }
         });
 
@@ -333,7 +279,6 @@ public class Configuration extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
-                config_name = "toto";
             }
 
             @Override
@@ -348,15 +293,7 @@ public class Configuration extends AppCompatActivity {
         btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendStringMessage("refreshConfigs");
-                recieved = receiveStringMessage();
-                String a_b[]=recieved.split("\\r?\\n");
-                for(int i=0;i<a_b.length;i++){
-                    Target.add(a_b[i]);
-                    arrayAdapter.notifyDataSetChanged();
-                }
-
-
+                btn_refresh_cliked();
             }
         });
 
@@ -366,35 +303,7 @@ public class Configuration extends AppCompatActivity {
         btn_remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String convo ="PG-";
-                String pin ="";
-                int len = selected.length();
-
-                for(int i =0;i<len;i++){
-                    if(convo.indexOf(selected.charAt(i))==-1 && len==3){
-                        pin = pin +selected.charAt(i);
-
-                    }
-                    else if (convo.indexOf(pin_config.charAt(i))==-1 && len==4){
-                        pin = pin+selected.charAt(i)+selected.charAt(i+1);
-                        i = i+1;
-                    }
-                }
-
-
-                btnWord[Integer.valueOf(pin)-1].setVisibility(View.VISIBLE);
-                btnWord[Integer.valueOf(pin)-1].setChecked(false);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    btnWord[Integer.valueOf(pin)-1].setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
-                }
-                //btnWord[Integer.valueOf(pin)-1].setButtonDrawable(android.R.color.holo_green_light);
-                Target2.remove(index_r);
-                arrayAdapter2.notifyDataSetChanged();
-                //RenmoveBtnClicked();
-                //pin_config ="P-";
-                //pin_config2 ="";
-
-
+                btn_remove_clicked();
             }
         });
 
@@ -403,16 +312,12 @@ public class Configuration extends AppCompatActivity {
         btn_Add_byte_R.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //sendStringMessage("writeByte");
-
-                AddByteRBtnClicked();
-                arrayAdapter2.notifyDataSetChanged();
-
-                //arrayAdapter.notifyDataSetChanged();
+                btn_AddByteR_cliked();
             }
         });
 
         //ajout des radiobutton
+
         rbtn3 =(RadioButton)findViewById(R.id.rbtn_3);
         rbtn3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -421,12 +326,8 @@ public class Configuration extends AppCompatActivity {
                     rbtn3.setChecked(false);
                 }
                 else {
-                    Toast toast= Toast.makeText(getApplicationContext()," pin 3 selected",Toast.LENGTH_SHORT);
-                    toast.show();
+
                     widget_s = "331" +widget_s.substring(3);
-                    Toast toast2= Toast.makeText(getApplicationContext(),widget_s.toString(),Toast.LENGTH_SHORT);
-                    toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                    toast2.show();
                     btnWord[2] = rbtn3;
                     BtnWord.add(rbtn3);
                     pin_config = "P-3";
@@ -439,12 +340,8 @@ public class Configuration extends AppCompatActivity {
         rbtn5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 5 selected",Toast.LENGTH_SHORT);
-                toast.show();
+
                 widget_s = widget_s.substring(0,4) +"1" +widget_s.substring(5) + "  "+widget_s.length();
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[4] = rbtn5;
                 BtnWord.add(rbtn5);
@@ -459,12 +356,7 @@ public class Configuration extends AppCompatActivity {
         rbtn7.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 7 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,6) +"1" +widget_s.substring(7);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[6] = rbtn7;
                 BtnWord.add(rbtn7);
@@ -479,12 +371,7 @@ public class Configuration extends AppCompatActivity {
         rbtn8.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 8 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,7) +"1" +widget_s.substring(8);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[7] = rbtn8;
                 BtnWord.add(rbtn8);
@@ -497,12 +384,7 @@ public class Configuration extends AppCompatActivity {
         rbtn10.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 10 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,9) +"1" +widget_s.substring(10);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[9] = rbtn10;
                 BtnWord.add(rbtn10);
@@ -516,12 +398,7 @@ public class Configuration extends AppCompatActivity {
         rbtn11.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 11 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,10) +"1" +widget_s.substring(11);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[10] = rbtn11;
                 pin_config = "P-11";
@@ -533,12 +410,7 @@ public class Configuration extends AppCompatActivity {
         rbtn12.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 3 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,11) +"1" +widget_s.substring(12);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[11] = rbtn12;
                 BtnWord.add(rbtn12);
@@ -551,12 +423,7 @@ public class Configuration extends AppCompatActivity {
         rbtn13.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 13 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,12) +"1" +widget_s.substring(13);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[12] = rbtn13;
                 BtnWord.add(rbtn13);
@@ -569,12 +436,7 @@ public class Configuration extends AppCompatActivity {
         rbtn15.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 15 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,14) +"1" +widget_s.substring(15);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[14] = rbtn15;
                 BtnWord.add(rbtn15);
@@ -587,12 +449,7 @@ public class Configuration extends AppCompatActivity {
         rbtn16.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 16 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,15) +"1" +widget_s.substring(16);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[15] = rbtn16;
                 BtnWord.add(rbtn16);
@@ -605,12 +462,7 @@ public class Configuration extends AppCompatActivity {
         rbtn18.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 18 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,17) +"1" +widget_s.substring(18);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[17] = rbtn18;
                 BtnWord.add(rbtn18);
@@ -623,12 +475,7 @@ public class Configuration extends AppCompatActivity {
         rbtn19.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 19 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,18) +"1" +widget_s.substring(19);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[18] = rbtn19;
                 BtnWord.add(rbtn19);
@@ -641,12 +488,7 @@ public class Configuration extends AppCompatActivity {
         rbtn21.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 21 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,20) +"1" +widget_s.substring(21);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[20] = rbtn21;
                 BtnWord.add(rbtn21);
@@ -659,12 +501,7 @@ public class Configuration extends AppCompatActivity {
         rbtn22.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 22 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,21) +"1" +widget_s.substring(22);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[21] = rbtn22;
                 BtnWord.add(rbtn22);
@@ -677,12 +514,7 @@ public class Configuration extends AppCompatActivity {
         rbtn23.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 23 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,22) +"1" +widget_s.substring(23);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[22] = rbtn23;
                 BtnWord.add(rbtn23);
@@ -695,12 +527,7 @@ public class Configuration extends AppCompatActivity {
         rbtn24.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 24 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,23) +"1" +widget_s.substring(24);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[23] = rbtn24;
                 BtnWord.add(rbtn24);
@@ -713,12 +540,7 @@ public class Configuration extends AppCompatActivity {
         rbtn26.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 26 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,25) +"1" +widget_s.substring(26);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[25] = rbtn26;
                 BtnWord.add(rbtn26);
@@ -731,12 +553,7 @@ public class Configuration extends AppCompatActivity {
         rbtn29.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 29 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,28) +"1" +widget_s.substring(29);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[28] = rbtn29;
                 BtnWord.add(rbtn29);
@@ -749,12 +566,7 @@ public class Configuration extends AppCompatActivity {
         rbtn31.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 31 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,30) +"1" +widget_s.substring(31);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[30] = rbtn31;
                 BtnWord.add(rbtn31);
@@ -767,12 +579,7 @@ public class Configuration extends AppCompatActivity {
         rbtn32.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 32 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,31) + "1"+widget_s.substring(32);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[31] = rbtn32;
                 BtnWord.add(rbtn32);
@@ -785,12 +592,7 @@ public class Configuration extends AppCompatActivity {
         rbtn33.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 33 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,32) +"1" +widget_s.substring(33);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[32] = rbtn33;
                 BtnWord.add(rbtn33);
@@ -804,12 +606,7 @@ public class Configuration extends AppCompatActivity {
         rbtn35.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 35 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,34) +"1" +widget_s.substring(35);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[34] = rbtn35;
                 BtnWord.add(rbtn35);
@@ -822,12 +619,7 @@ public class Configuration extends AppCompatActivity {
         rbtn36.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 36 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,35) +"1" +widget_s.substring(36);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[35] = rbtn36;
                 BtnWord.add(rbtn36);
@@ -840,12 +632,7 @@ public class Configuration extends AppCompatActivity {
         rbtn37.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 37 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,36) +"1" +widget_s.substring(37);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[36] = rbtn37;
                 BtnWord.add(rbtn37);
@@ -858,12 +645,7 @@ public class Configuration extends AppCompatActivity {
         rbtn38.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 38 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,37) +"1" +widget_s.substring(38);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[37] = rbtn38;
                 pin_config = "P-38";
@@ -875,12 +657,7 @@ public class Configuration extends AppCompatActivity {
         rbtn40.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast toast= Toast.makeText(getApplicationContext()," pin 40 selected",Toast.LENGTH_SHORT);
-                toast.show();
                 widget_s = widget_s.substring(0,39) +"1" +widget_s.substring(40);
-                Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-                toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-                toast2.show();
                 //ajout button dans btnword
                 btnWord[39] = rbtn40;
                 BtnWord.add(rbtn40);
@@ -923,40 +700,63 @@ public class Configuration extends AppCompatActivity {
         }
         return false;
     }
-    private View.OnClickListener AddBitBtnListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            AddBitRBtnClicked();
-        }
-    };
-    private View.OnClickListener AddByteBtnListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            AddByteRBtnClicked();
-        }
-    };
 
 
+    private void btn_Save_And_Start_Cliked(){
+        sendStringMessage("Start");
+        ChangeView(Communication.class);
+    }
+    private void btn_save_clicked(){
+        new AlertDialog.Builder(Configuration.this)
+                .setTitle("GOD MODE")
+                .setMessage("voulez vous vraiment supprimer la configuration?")
+                .setIcon(R.drawable.ic_launcher_foreground)
+                .setPositiveButton("Oui",
+                        new DialogInterface.OnClickListener() {
+                            @TargetApi(11)
+                            public void onClick(DialogInterface dialog, int id) {
+                                etat_btn_save = 1;
 
 
-    private void RenmoveBtnClicked(){
-        Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-        toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-        toast2.show();
+                                dialog.cancel();
+                                btnsavecliked();
+                            }
+                        })
+                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                    @TargetApi(11)
+                    public void onClick(DialogInterface dialog, int id) {
+                        etat_btn_save =0;
+
+                        dialog.cancel();
+                    }
+                }).show();
 
     }
-    private void AddBitRBtnClicked(){
+    private void btn_del_Cliked(){
+        new AlertDialog.Builder(Configuration.this)
+                .setTitle("GOD MODE")
+                .setMessage("voulez vous vraiment supprimer la configuration?")
+                .setIcon(R.drawable.ic_launcher_foreground)
+                .setPositiveButton("Oui",
+                        new DialogInterface.OnClickListener() {
+                            @TargetApi(11)
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                dialog.cancel();
+                            }
+                        })
+                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                    @TargetApi(11)
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        dialog.cancel();
+                    }
+                }).show();
+    }
+    private void btn_AddBitR_Clicked(){
+        Target2.add(pin_config);
+        arrayAdapter2.notifyDataSetChanged();
         widget_s = widget_s.substring(0,40)+"i" ;
-
-
-        try {
-            saveInterne_input();
-            saveInterne_output();
-        }catch (IOException e){
-
-        }
-
         widget_s= widget_s.replaceAll("1","P");
         String widgets = widget_s.substring(0,40);
         widget_input = widgets;
@@ -964,45 +764,41 @@ public class Configuration extends AppCompatActivity {
             if(widget_input.charAt(i)=='P'){
                 PINConfig pi = new PINConfig(false,true,i,'P',String.valueOf(i+1));
                 btnWorld2[i] = pi;
-                //btnWord[i].setButtonTintList("#248d51");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                    btnWord[i].setClickable(false);
                 }
-                //btnWord[i].setPadding(31, 0, 0, 0);
-                //btnWord[i].setVisibility(View.INVISIBLE);
-                //btnWord[i].setVisibility(View.GONE);
-                pin_config2 = "";
 
             }
         }
-
+        pin_config = "";
+        widget_input.replaceAll("P","1");
 
     }
-    private void AddBitwBtnClicked(){
+    private void btn_AddBitw_Clicked(){
+        Target2.add(pin_config);
+        arrayAdapter2.notifyDataSetChanged();
         widget_s = widget_s.substring(0,40)+"0" ;
-
-        try {
-            saveInterne_input();
-            saveInterne_output();
-        }catch (IOException e){
-
-        }
 
         widget_s= widget_s.replaceAll("1","P");
         String widgets = widget_s.substring(0,40);
         widget_output = widgets;
         for(int i=0;i<widget_output.length();i++){
             if(widget_output.charAt(i)=='P'){
-                PINConfig pi = new PINConfig(false,true,i,'P',String.valueOf(i+1));
+                PINConfig pi = new PINConfig(false,false,i,'P',String.valueOf(i+1));
                 btnWorld2[i] = pi;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                    btnWord[i].setClickable(false);
+
                 }
             }
         }
+        pin_config = "";
+        widget_input.replaceAll("P","1");
 
     }
-    private void AddByteRBtnClicked(){
+    private void btn_AddByteR_cliked(){
         String[] array_pin = pin_config2.split("-");
         //widget_s = widget_s.substring(0,40)+"i" ;
         int Icount=array_pin.length;
@@ -1026,22 +822,16 @@ public class Configuration extends AppCompatActivity {
                 }
             }
 
-            //Target2.add(pin_config);
-            try {
-                saveInterne_input();
-                saveInterne_output();
-            }catch (IOException e){
 
-            }
 
         }
         else{
             Toast toast= Toast.makeText(getApplicationContext(),"un byte est juste de 8 bits",Toast.LENGTH_SHORT);
             toast.show();
         }
-
     }
-    private void AddByteWBtnClicked(){
+    private void btn_AddByteW_Clicked(){
+
         widget_s = widget_s.substring(0,40)+"o" ;
         String[] array_pin = pin_config2.split("-");
         //widget_s = widget_s.substring(0,40)+"i" ;
@@ -1066,80 +856,82 @@ public class Configuration extends AppCompatActivity {
                 }
             }
 
-            //Target2.add(pin_config);
-            try {
-                saveInterne_input();
-                saveInterne_output();
-            }catch (IOException e){
-
-            }
-
         }
         else{
             Toast toast= Toast.makeText(getApplicationContext(),"un byte est juste de 8 bits",Toast.LENGTH_SHORT);
             toast.show();
         }
+        arrayAdapter2.notifyDataSetChanged();
     }
-
-
-    private void saveInterne_input() throws IOException {
-        FileOutputStream outputStream = openFileOutput("input.txt",MODE_PRIVATE);
-        String numero = widget_input;
-        outputStream.write(numero.getBytes());
-        outputStream.close();
-    }
-    private void saveInterne_output() throws IOException {
-        FileOutputStream outputStream = openFileOutput("output.txt",MODE_PRIVATE);
-        String numero = widget_output;
-        outputStream.write(numero.getBytes());
-        outputStream.close();
-    }
-    private void getFromInterne_input() throws IOException{
-        String value = "";
-        FileInputStream inputStream = openFileInput("input.txt");
-        StringBuilder Stringb = new StringBuilder();
-        int content;
-        while((content = inputStream.read())!=-1){
-            value = String.valueOf(Stringb.append((char)content));
+    private void btn_refresh_cliked(){sendStringMessage("refreshConfigs");
+        recieved = receiveStringMessage();
+        String a_b[]=recieved.split("\\r?\\n");
+        for(int i=0;i<a_b.length;i++){
+            Target.add(a_b[i]);
+            arrayAdapter.notifyDataSetChanged();
         }
-        widget_input = value;
 
     }
-    private void getFromInterne_output() throws IOException{
-        String value = "";
-        FileInputStream inputStream = openFileInput("output.txt");
-        StringBuilder Stringb = new StringBuilder();
-        int content;
-        while((content = inputStream.read())!=-1){
-            value = String.valueOf(Stringb.append((char)content));
+    private void btn_remove_clicked(){
+        String convo ="PG-";
+        String pin ="";
+        int len = selected.length();
+
+        for(int i =0;i<len;i++){
+            if(convo.indexOf(selected.charAt(i))==-1 && len==3){
+                pin = pin +selected.charAt(i);
+
+            }
+            else if (convo.indexOf(pin_config.charAt(i))==-1 && len==4){
+                pin = pin+selected.charAt(i)+selected.charAt(i+1);
+                i = i+1;
+            }
         }
-        widget_output = value;
+
+
+        btnWord[Integer.valueOf(pin)-1].setVisibility(View.VISIBLE);
+        btnWord[Integer.valueOf(pin)-1].setChecked(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            btnWord[Integer.valueOf(pin)-1].setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
+        }
+
+        Target2.remove(index_r);
+        arrayAdapter2.notifyDataSetChanged();
+
     }
+
+
     private void changeNipcliked(){
         if(etat_btn_change_nip ==1){
             mytext.setVisibility(View.VISIBLE);
-
+            String message = mytext.getText().toString();
+            sendStringMessage("ChangeNip");
+            Log.i("Tag", "Received : "+ recieved);
+            sendStringMessage(message);
+            Log.i("Tag", "Received : "+ recieved);
         }
-        Toast toast= Toast.makeText(getApplicationContext(),NIP,Toast.LENGTH_SHORT);
-        toast.show();
 
     }
-    private void loadbtncliked(){
+    private void btn_load_Cliked(){
 
         sendStringMessage("loadConfig");
+        Log.i("Tag", "Received : "+ recieved);
         sendStringMessage(selected);
+        Log.i("Tag", "Received : "+ recieved);
         recieved = receiveStringMessage();
         Log.i("Tag", "Received : "+ recieved);
-        Toast toast= Toast.makeText(getApplicationContext(),recieved,Toast.LENGTH_SHORT);
-        toast.show();
+
     }
     private void btnsavecliked(){
         if(etat_btn_save==1){
             sendStringMessage("saveConfig");
+            Log.i("Tag", "Received : "+ recieved);
             sendStringMessage(config_name);
+            Log.i("Tag", "Received : "+ recieved);
             sendStringMessage(widget_input);
+            Log.i("Tag", "Received : "+ recieved);
             sendStringMessage(widget_output);
-
+            Log.i("Tag", "Received : "+ recieved);
         }
 
     }
@@ -1170,5 +962,59 @@ public class Configuration extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
     }
+
+
+    public void format_string_pin(String widget,int nb){
+        widget.replaceAll("3","2");
+        int count =0;
+        for(int i=0;i<widget.length();i++){
+            if(widget.charAt(i)=='G'){
+
+            }
+        }
+
+    }
+
+
+
+    /*
+    toast
+    Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
+    toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
+    toast2.show();
+     private void getFromInterne_input() throws IOException{
+        String value = "";
+        FileInputStream inputStream = openFileInput("input.txt");
+        StringBuilder Stringb = new StringBuilder();
+        int content;
+        while((content = inputStream.read())!=-1){
+            value = String.valueOf(Stringb.append((char)content));
+        }
+        widget_input = value;
+
+    }
+    private void getFromInterne_output() throws IOException{
+        String value = "";
+        FileInputStream inputStream = openFileInput("output.txt");
+        StringBuilder Stringb = new StringBuilder();
+        int content;
+        while((content = inputStream.read())!=-1){
+            value = String.valueOf(Stringb.append((char)content));
+        }
+        widget_output = value;
+    }
+    private void saveInterne_input() throws IOException {
+        FileOutputStream outputStream = openFileOutput("input.txt",MODE_PRIVATE);
+        String numero = widget_input;
+        outputStream.write(numero.getBytes());
+        outputStream.close();
+    }
+    private void saveInterne_output() throws IOException {
+        FileOutputStream outputStream = openFileOutput("output.txt",MODE_PRIVATE);
+        String numero = widget_output;
+        outputStream.write(numero.getBytes());
+        outputStream.close();
+    }
+     */
 
 }
