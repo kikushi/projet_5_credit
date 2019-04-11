@@ -107,9 +107,14 @@ public class Configuration extends AppCompatActivity {
     ArrayList<Button> BtnWord = new ArrayList<Button>();
     PINConfig[] btnWorld2 = new PINConfig[40];
     public byte[] mmBuffer3;
+    private String pin_infos[] = new String[40];
+    ArrayList<String> myList = new ArrayList<>();
+
+
+
 
     //ArrayAdapter
-    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_2,android.R.id.text1,Target);
+    private CustomAdapter arrayAdapter = new CustomAdapter(this,myList);
     final ArrayAdapter<String> arrayAdapter2= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_2,Target2);
 
 
@@ -125,7 +130,7 @@ public class Configuration extends AppCompatActivity {
 
         //déclaration des lestViews
         Lv1 = (ListView)findViewById(R.id.simpleListView);
-        Lv1.setAdapter(arrayAdapter);
+        Lv1.setAdapter(arrayAdapter2);
         Lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -134,7 +139,7 @@ public class Configuration extends AppCompatActivity {
             }
         });
         Lv2 =(ListView)findViewById(R.id.simpleListView2);
-        Lv2.setAdapter(arrayAdapter2);
+        Lv2.setAdapter(arrayAdapter);
         Lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -332,6 +337,8 @@ public class Configuration extends AppCompatActivity {
                     BtnWord.add(rbtn3);
                     pin_config = "P-3";
                     pin_config2 = pin_config2 +"3-";
+
+
                 }
             }
         });
@@ -767,6 +774,10 @@ public class Configuration extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
                     btnWord[i].setClickable(false);
+                    String info ="";
+                    info = pin_config +";"+btnWorld2[i].text;
+                    pin_infos[i] =info;
+                    arrayAdapter.notifyDataSetChanged();
                 }
 
             }
@@ -806,6 +817,9 @@ public class Configuration extends AppCompatActivity {
             String k = "G-"+ String.valueOf(array_pin[i]);
             Target2.add(k);
         }
+        myList.add("Byte : Input" +";"+"Pin # :"+pin_config2);
+        arrayAdapter.notifyDataSetChanged();
+
 
         if(Icount==8){
 
@@ -818,6 +832,7 @@ public class Configuration extends AppCompatActivity {
                     btnWorld2[i] = pi;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                        btnWord[i].setClickable(false);
                     }
                 }
             }
@@ -840,6 +855,8 @@ public class Configuration extends AppCompatActivity {
             String k = "G-"+ String.valueOf(array_pin[i]);
             Target2.add(k);
         }
+        myList.add("Byte : Input" +";"+"Pin # :"+pin_config2);
+        arrayAdapter.notifyDataSetChanged();
 
         if(Icount==8){
 
@@ -964,16 +981,7 @@ public class Configuration extends AppCompatActivity {
     }
 
 
-    public void format_string_pin(String widget,int nb){
-        widget.replaceAll("3","2");
-        int count =0;
-        for(int i=0;i<widget.length();i++){
-            if(widget.charAt(i)=='G'){
 
-            }
-        }
-
-    }
 
 
 

@@ -5,17 +5,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import proj.myapplication.PINConfig;
+import proj.myapplication.R;
 
 public class CustomAdapter extends ArrayAdapter<String> {
     private Context context;
-    private String[] pin_info = new String[40];
+    private ArrayList<String> pin_info;
 
 
-    public CustomAdapter(Context context, String[] values) {
+
+    public CustomAdapter(Context context, ArrayList<String> values) {
         super(context, -1, values);
         this.context = context;
         this.pin_info = values;
+
     }
 
     @Override
@@ -26,8 +34,8 @@ public class CustomAdapter extends ArrayAdapter<String> {
         TextView textView = (TextView) rowView.findViewById(R.id.name);
         TextView textView2 = (TextView) rowView.findViewById(R.id.name_information);
 
-        textView.setText(pin_info[position]);
-        textView2.setText(pin_info[position]);
+        textView.setText(pin_info.get(position).split(";")[0]);
+        textView2.setText(pin_info.get(position).split(";")[1]);
 
         return rowView;
     }
