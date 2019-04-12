@@ -6,13 +6,9 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.text.StringSearch;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,21 +17,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -63,6 +52,8 @@ public class Configuration extends AppCompatActivity {
     private String recieved;
     private String last_pin_added;
     private String last_byte_added;
+
+    private ArrayList<PINConfig> PINConfig_elements;
 
     //declaration des buttons
     private int[] rbtnIDs;
@@ -114,14 +105,14 @@ public class Configuration extends AppCompatActivity {
     PINConfig[] btnWorld2 = new PINConfig[40];
     public byte[] mmBuffer3;
     private String pin_infos[] = new String[40];
-    ArrayList<String> myList = new ArrayList<>();
+    ArrayList<String> configElementsList;
 
 
 
 
     //ArrayAdapter
-    public CustomAdapter arrayAdapter;
-    public ArrayAdapter<String> arrayAdapter2;
+    public CustomAdapter configElementsAdapter;
+    public ArrayAdapter<String> configNamesAdapter;
     public ArrayAdapter<String> arrayAdapter3;
 
 
@@ -132,17 +123,20 @@ public class Configuration extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
 
+
         rbtnIDs = new int[40];
         selectedPins = new boolean[40];
+        PINConfig_elements = new ArrayList<>();
+        configElementsList= new ArrayList<>();
 
         btSocket = Connexion.btSocket;
-        arrayAdapter = new CustomAdapter(this,myList);
-        arrayAdapter2= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,Target2);
+        configElementsAdapter = new CustomAdapter(this, new ArrayList<String>());
+        configNamesAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,Target2);
 
 
         //déclaration des lestViews
         Lv1 = (ListView)findViewById(R.id.simpleListView);
-        Lv1.setAdapter(arrayAdapter2);
+        Lv1.setAdapter(configNamesAdapter);
         Lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -151,7 +145,7 @@ public class Configuration extends AppCompatActivity {
             }
         });
         Lv2 =(ListView)findViewById(R.id.simpleListView2);
-        Lv2.setAdapter(arrayAdapter);
+        Lv2.setAdapter(configElementsAdapter);
         Lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -204,7 +198,7 @@ public class Configuration extends AppCompatActivity {
         btn_Add_bit_R.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_AddBitR_Clicked();
+                btn_AddBit_Clicked(true);
 
             }
         });
@@ -213,9 +207,10 @@ public class Configuration extends AppCompatActivity {
         btn_Add_bit_W.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_AddBitw_Clicked();
+                btn_AddBit_Clicked(false);
             }
         });
+
         btn_Add_byte_W = (Button)findViewById(R.id.btn_ajouter_byte_W);
         btn_Add_byte_W.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -311,7 +306,7 @@ public class Configuration extends AppCompatActivity {
         btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_refresh_cliked();
+                btn_refresh_clicked();
             }
         });
 
@@ -335,10 +330,50 @@ public class Configuration extends AppCompatActivity {
         });
 
         //ajout des radiobutton
+        rbtnIDs[0] = R.id.rbtn_1;
+        rbtnIDs[1] = R.id.rbtn_2;
+        rbtnIDs[2] = R.id.rbtn_3;
+        rbtnIDs[3] = R.id.rbtn_4;
+        rbtnIDs[4] = R.id.rbtn_5;
+        rbtnIDs[5] = R.id.rbtn_6;
+        rbtnIDs[6] = R.id.rbtn_7;
+        rbtnIDs[7] = R.id.rbtn_8;
+        rbtnIDs[8] = R.id.rbtn_9;
+        rbtnIDs[9] = R.id.rbtn_10;
+        rbtnIDs[10] = R.id.rbtn_11;
+        rbtnIDs[11] = R.id.rbtn_12;
+        rbtnIDs[12] = R.id.rbtn_13;
+        rbtnIDs[13] = R.id.rbtn_14;
+        rbtnIDs[14] = R.id.rbtn_15;
+        rbtnIDs[15] = R.id.rbtn_16;
+        rbtnIDs[16] = R.id.rbtn_17;
+        rbtnIDs[17] = R.id.rbtn_18;
+        rbtnIDs[18] = R.id.rbtn_19;
+        rbtnIDs[19] = R.id.rbtn_20;
+        rbtnIDs[20] = R.id.rbtn_21;
+        rbtnIDs[21] = R.id.rbtn_22;
+        rbtnIDs[22] = R.id.rbtn_23;
+        rbtnIDs[23] = R.id.rbtn_24;
+        rbtnIDs[24] = R.id.rbtn_25;
+        rbtnIDs[25] = R.id.rbtn_26;
+        rbtnIDs[26] = R.id.rbtn_27;
+        rbtnIDs[27] = R.id.rbtn_28;
+        rbtnIDs[28] = R.id.rbtn_29;
+        rbtnIDs[29] = R.id.rbtn_30;
+        rbtnIDs[30] = R.id.rbtn_31;
+        rbtnIDs[31] = R.id.rbtn_32;
+        rbtnIDs[32] = R.id.rbtn_33;
+        rbtnIDs[33] = R.id.rbtn_34;
+        rbtnIDs[34] = R.id.rbtn_35;
+        rbtnIDs[35] = R.id.rbtn_36;
+        rbtnIDs[36] = R.id.rbtn_37;
+        rbtnIDs[37] = R.id.rbtn_38;
+        rbtnIDs[38] = R.id.rbtn_39;
+        rbtnIDs[39] = R.id.rbtn_40;
 
         rbtnIDs[0]=R.id.rbtn_1;
         for (int i=0; i<40; i++) {
-            rbtnIDs[i] = R.id.rbtn_1 + i;
+            //rbtnIDs[i] = R.id.rbtn_1 + i;
             findViewById(rbtnIDs[i]).setOnClickListener(RadioBtnListener);
         }
     }
@@ -348,7 +383,11 @@ public class Configuration extends AppCompatActivity {
         public void onClick(View v) {
             RadioButton rbtnView = (RadioButton)v;
             int rbtnClickedId = rbtnView.getId();
-            int rbtnClickedIndex = rbtnClickedId - rbtnIDs[0];
+            int rbtnClickedIndex = getIndexofID(rbtnClickedId);
+
+
+            //int rbtnClickedIndex = rbtnClickedId - rbtnIDs[0];
+
             if (selectedPins[rbtnClickedIndex]) {
                 //Le rbtn est déja sélectionné
                 //On déselectionne le rbtn
@@ -364,6 +403,13 @@ public class Configuration extends AppCompatActivity {
         }
     };
 
+    public int getIndexofID(int rbtnClickedId) {
+        for (int i=0;i<40;i++) {
+            if (rbtnIDs[i]==rbtnClickedId)
+                return i;
+        }
+        return -1;
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_configuration, menu);
@@ -401,59 +447,58 @@ public class Configuration extends AppCompatActivity {
 
 
 
-    private void btn_AddBitR_Clicked(){
-        Target2.add(pin_config);
-        arrayAdapter2.notifyDataSetChanged();
-        widget_s = widget_s.substring(0,40)+"0" ;
-        widget_s= widget_s.replaceAll("1","P");
-        String widgets = widget_s.substring(0,40);
-        widget_output = widgets;
-        for(int i=0;i<widget_output.length();i++){
-            if(widget_output.charAt(i)=='P'){
-                PINConfig pi = new PINConfig(false,false,i,'P',String.valueOf(i+1));
-                btnWorld2[i] = pi;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
-                    btnWord[i].setClickable(false);
-                    last_pin_added =pin_config;
+    private void btn_AddBit_Clicked(boolean isInput) {
 
-                }
+        int nbOfPins = 0;
+        ArrayList<Integer> indexesOfSelectedPins = new ArrayList<>();
+        for (int i=0; i<selectedPins.length; i++) {
+            if (selectedPins[i]) {
+                //Si la pin est sélectionnée
+                indexesOfSelectedPins.add(i);
+                nbOfPins++;
             }
         }
-        pin_config = "";
-        widget_s.replaceAll("3","2");
-        widget_output.replaceAll("P","1");
-        widget_output.replaceAll("3","2");
+        for (int i=0; i<nbOfPins; i++) {
+            //Pour chaque PIN a ajouter
+
+            int pinNB = indexesOfSelectedPins.get(i)+1;
+            //Add '1' in widget_input at position (PinNB-1)
+            if (isInput) {
+                widget_input = widget_input.substring(0, pinNB-1)+'1'+widget_input.substring(pinNB);
+            }
+            else {
+                widget_output = widget_output.substring(0, pinNB-1)+'1'+widget_output.substring(pinNB);
+            }
+
+            //Cree un objet PINConfig
+            String text = "PIN#" + String.valueOf(pinNB);
+            PINConfig pi = new PINConfig(false, isInput, 'P', text);
+            pi.setPinNumber(pinNB);
+            PINConfig_elements.add(pi);
+
+            //Add l'objet créé au listview
+            configElementsList.add( pi.getText());
+            //configElementsList.add(new String[]{pi.getText(), pi.getSubText()});
+            configElementsAdapter.notifyDataSetChanged();
+
+            //Target2.add(pi.getText());
 
 
+            widget_s = widget_s.substring(0,40)+"0" ;
+
+            //Modifie le rbtn de la liste de gauche
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                RadioButton rbtnClicked = findViewById(rbtnIDs[pinNB-1]);
+                rbtnClicked.setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                rbtnClicked.setClickable(false);
+            }
+        }
     }
     private void btn_AddBitw_Clicked(){
-        Target2.add(pin_config);
-        arrayAdapter2.notifyDataSetChanged();
-        widget_s = widget_s.substring(0,40)+"0" ;
-
-        widget_s= widget_s.replaceAll("1","P");
-        String widgets = widget_s.substring(0,40);
-        widget_output = widgets;
-        for(int i=0;i<widget_output.length();i++){
-            if(widget_output.charAt(i)=='P'){
-                PINConfig pi = new PINConfig(false,false,i,'P',String.valueOf(i+1));
-                btnWorld2[i] = pi;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
-                    btnWord[i].setClickable(false);
-                    last_pin_added =pin_config;
-
-                }
-            }
-        }
-        pin_config = "";
-        widget_s.replaceAll("3","2");
-        widget_output.replaceAll("P","1");
-        widget_output.replaceAll("3","2");
 
     }
     private void btn_AddByteR_cliked(){
+        /*
         String[] array_pin = pin_config2.split("-");
         //widget_s = widget_s.substring(0,40)+"i" ;
         int Icount=array_pin.length;
@@ -465,7 +510,7 @@ public class Configuration extends AppCompatActivity {
 
         if(Icount==8){
             myList.add("Byte : Input" +";"+"Pin # :"+pin_config2);
-            arrayAdapter.notifyDataSetChanged();
+            configElementsAdapter.notifyDataSetChanged();
 
             widget_s= widget_s.replaceAll("1","G");
             String widgets = widget_s.substring(0,40);
@@ -502,9 +547,11 @@ public class Configuration extends AppCompatActivity {
             Toast toast= Toast.makeText(getApplicationContext(),"un byte est juste de 8 bits",Toast.LENGTH_SHORT);
             toast.show();
         }
+        */
     }
     private void btn_AddByteW_Clicked(){
 
+        /*
         widget_s = widget_s.substring(0,40)+"o" ;
         String[] array_pin = pin_config2.split("-");
         //widget_s = widget_s.substring(0,40)+"i" ;
@@ -514,7 +561,7 @@ public class Configuration extends AppCompatActivity {
 
         }
         myList.add("Byte : Output" +";"+"Pin # :"+pin_config2);
-        arrayAdapter.notifyDataSetChanged();
+        configElementsAdapter.notifyDataSetChanged();
 
         if(Icount==8){
 
@@ -553,11 +600,12 @@ public class Configuration extends AppCompatActivity {
             toast.show();
         }
         last_byte_added =pin_config2;
-        arrayAdapter2.notifyDataSetChanged();
+        configNamesAdapter.notifyDataSetChanged();
+        */
     }
-    private void btn_refresh_cliked(){
+    private void btn_refresh_clicked(){
         Target2.clear();
-        arrayAdapter2.notifyDataSetChanged();
+        configNamesAdapter.notifyDataSetChanged();
         sendStringMessage("refreshConfigs");
         Log.i("Tag", "Received : "+ recieved);
         recieved = receiveStringMessage();
@@ -573,7 +621,7 @@ public class Configuration extends AppCompatActivity {
             for(int i=0;i<a_b.length;i++){
                 if (a_b[i]!="null"){
                     Target2.add(a_b[i]);
-                    arrayAdapter2.notifyDataSetChanged();
+                    configNamesAdapter.notifyDataSetChanged();
                 }
             }
         }
@@ -709,7 +757,7 @@ public class Configuration extends AppCompatActivity {
     private void btn_remove_clicked(){
         String aide_="Pin#:abc-";
         String pin_="";
-        pin_=arrayAdapter.get_pin_info_name_info(index_r);
+        pin_= configElementsAdapter.get_pin_info_name_info(index_r);
         int[] tab= new int[8];
         int count=0;
 
@@ -769,8 +817,8 @@ public class Configuration extends AppCompatActivity {
         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
            // btnWord[Integer.valueOf(pin)-1].setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
         //}
-        myList.remove(index_r);
-        arrayAdapter.notifyDataSetChanged();
+        //myList.remove(index_r);
+        configElementsAdapter.notifyDataSetChanged();
 
 
 

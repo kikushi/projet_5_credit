@@ -19,10 +19,11 @@ public class CustomAdapter extends ArrayAdapter<String> {
 
 
 
-    public CustomAdapter(Context context, ArrayList<String> values) {
-        super(context, -1, values);
-        this.context = context;
-        this.pin_info = values;
+    public CustomAdapter(Context _context, ArrayList<String> values) {
+        //super(_context, -1);
+        super(_context, -1, values);
+        context = _context;
+        pin_info = values;
 
     }
 
@@ -32,18 +33,20 @@ public class CustomAdapter extends ArrayAdapter<String> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.row_item, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.name);
-        TextView textView2 = (TextView) rowView.findViewById(R.id.name_information);
+        //TextView textView2 = (TextView) rowView.findViewById(R.id.name_information);
 
-        textView.setText(pin_info.get(position).split(";")[0]);
-        textView2.setText(pin_info.get(position).split(";")[1]);
+        textView.setText(pin_info.get(position));
+        //textView2.setText(pin_info.get(position)[1]);
 
         return rowView;
     }
+
     public String get_pin_info_name(int index){
-        return pin_info.get(index).split(";")[0];
+        return pin_info.get(index);
+
     }
     public String get_pin_info_name_info(int index){
-        return pin_info.get(index).split(";")[1];
+        return pin_info.get(index);
     }
 }
 

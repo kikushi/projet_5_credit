@@ -1,31 +1,33 @@
 package proj.myapplication;
 
 public class PINConfig {
-    Boolean isByte;
-    Boolean isInput;
-    int pinNumbers[] = new int[8];
-    int pinNumber;
-    Character ID;
-    String text;
+    private boolean isByte;
+    private boolean isInput;
+    private char ID;
+    private String text;
+    private String subText;
+    private int pinNumber;
+    private int[] pinNumbers;
 
-    public PINConfig(boolean _isByte, Boolean _isInput, int _pinNumber, char _ID, String _text){
+    public PINConfig(boolean _isByte, boolean _isInput, char _ID, String _text){
         isByte = _isByte;
         isInput = _isInput;
-        pinNumber = _pinNumber;
+        ID = _ID;
         text =_text;
-    }
-    public Boolean getIsByte(){
-        if(isByte){
-            return true;
+        if (isInput) {
+            subText = "Input";
         }
-        return false;
-    }
-    public Boolean getIsInput(){
-        if(isInput){
-            return true;
+        else {
+            subText = "Output";
         }
-        return false;
 
+
+    }
+    public boolean getIsByte(){
+        return isByte;
+    }
+    public boolean getIsInput(){
+        return isInput;
     }
     public int getPinNumbers( int i){
         return pinNumbers[i];
@@ -38,5 +40,15 @@ public class PINConfig {
     }
     public String getText(){
         return text;
+    }
+    public String getSubText(){
+        return subText;
+    }
+
+    public void setPinNumber(int _pinNumber) {
+        pinNumber = _pinNumber;
+    }
+    public void setPinNumber(int[] _pinNumbers) {
+        pinNumbers = _pinNumbers;
     }
 }
