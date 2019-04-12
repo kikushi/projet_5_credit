@@ -114,9 +114,9 @@ public class Configuration extends AppCompatActivity {
 
 
     //ArrayAdapter
-    private CustomAdapter arrayAdapter = new CustomAdapter(this,myList);
-    final ArrayAdapter<String> arrayAdapter2= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_2,Target2);
-
+    public CustomAdapter arrayAdapter;
+    public ArrayAdapter<String> arrayAdapter2;
+    public ArrayAdapter<String> arrayAdapter3;
 
 
 
@@ -127,6 +127,9 @@ public class Configuration extends AppCompatActivity {
         setContentView(R.layout.activity_configuration);
 
         btSocket = Connexion.btSocket;
+        arrayAdapter = new CustomAdapter(this,myList);
+        arrayAdapter2= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,Target2);
+
 
         //déclaration des lestViews
         Lv1 = (ListView)findViewById(R.id.simpleListView);
@@ -761,8 +764,7 @@ public class Configuration extends AppCompatActivity {
                 }).show();
     }
     private void btn_AddBitR_Clicked(){
-        Target2.add(pin_config);
-        arrayAdapter2.notifyDataSetChanged();
+
         widget_s = widget_s.substring(0,40)+"i" ;
         widget_s= widget_s.replaceAll("1","P");
         String widgets = widget_s.substring(0,40);
@@ -775,9 +777,10 @@ public class Configuration extends AppCompatActivity {
                     btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
                     btnWord[i].setClickable(false);
                     String info ="";
-                    info = pin_config +";"+btnWorld2[i].text;
-                    pin_infos[i] =info;
+                    info = pin_config +";"+btnWorld2[i].getText();
+                    myList.add(info);
                     arrayAdapter.notifyDataSetChanged();
+
                 }
 
             }
@@ -817,11 +820,12 @@ public class Configuration extends AppCompatActivity {
             String k = "G-"+ String.valueOf(array_pin[i]);
             Target2.add(k);
         }
-        myList.add("Byte : Input" +";"+"Pin # :"+pin_config2);
-        arrayAdapter.notifyDataSetChanged();
+
 
 
         if(Icount==8){
+            myList.add("Byte : Input" +";"+"Pin # :"+pin_config2);
+            arrayAdapter.notifyDataSetChanged();
 
             widget_s= widget_s.replaceAll("1","G");
             String widgets = widget_s.substring(0,40);
@@ -836,6 +840,8 @@ public class Configuration extends AppCompatActivity {
                     }
                 }
             }
+            pin_config2 = "";
+            widget_input.replaceAll("3","2");
 
 
 
@@ -855,16 +861,29 @@ public class Configuration extends AppCompatActivity {
             String k = "G-"+ String.valueOf(array_pin[i]);
             Target2.add(k);
         }
-        myList.add("Byte : Input" +";"+"Pin # :"+pin_config2);
+        myList.add("Byte : Output" +";"+"Pin # :"+pin_config2);
         arrayAdapter.notifyDataSetChanged();
 
         if(Icount==8){
 
-            widget_s= widget_s.replaceAll("1","G");
+
+            //widget_s= widget_s.replaceAll("1","G");
+
             String widgets = widget_s.substring(0,40);
+
+            if(widget_output.indexOf('a')==-1){
+                widget_output.replaceAll("1","a");
+            }
+            else if(widget_output.indexOf('a')!=-1){
+                widget_output.replaceAll("1","b");
+
+            }
+            else{
+                widget_output.replaceAll("1","c");
+            }
             widget_output = widgets;
             for(int i=0;i<widget_output.length();i++){
-                if(widget_output.charAt(i)=='G'){
+                if(widget_output.charAt(i)=='a' || widget_output.charAt(i)=='b' || widget_output.charAt(i)=='c'){
                     PINConfig pi = new PINConfig(false,true,i,'G',String.valueOf(i+1));
                     btnWorld2[i] = pi;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -872,6 +891,8 @@ public class Configuration extends AppCompatActivity {
                     }
                 }
             }
+            widget_output.replaceAll("3","2");
+
 
         }
         else{
@@ -880,12 +901,14 @@ public class Configuration extends AppCompatActivity {
         }
         arrayAdapter2.notifyDataSetChanged();
     }
-    private void btn_refresh_cliked(){sendStringMessage("refreshConfigs");
+    private void btn_refresh_cliked(){
+        sendStringMessage("refreshConfigs");
+        Log.i("Tag", "Received : "+ recieved);
         recieved = receiveStringMessage();
         String a_b[]=recieved.split("\\r?\\n");
         for(int i=0;i<a_b.length;i++){
-            Target.add(a_b[i]);
-            arrayAdapter.notifyDataSetChanged();
+            Target2.add(a_b[i]);
+            arrayAdapter2.notifyDataSetChanged();
         }
 
     }
@@ -945,9 +968,9 @@ public class Configuration extends AppCompatActivity {
             Log.i("Tag", "Received : "+ recieved);
             sendStringMessage(config_name);
             Log.i("Tag", "Received : "+ recieved);
-            sendStringMessage(widget_input);
+            sendStringMessage(widget_input.replace("3","2"));
             Log.i("Tag", "Received : "+ recieved);
-            sendStringMessage(widget_output);
+            sendStringMessage(widget_output.replace("3","2"));
             Log.i("Tag", "Received : "+ recieved);
         }
 
@@ -979,7 +1002,19 @@ public class Configuration extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
     }
+    private void format_string(String a){
+        a.replaceAll("G","a");
+        int count=0;
+        for(int i=0;i<a.length();i++){
+            if(a.charAt(i)=='a'){
+                count =count+1;
+            }
+        }
+        if(count>8) {
 
+        }
+
+    }
 
 
 
