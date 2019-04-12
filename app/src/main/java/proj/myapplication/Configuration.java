@@ -719,30 +719,29 @@ public class Configuration extends AppCompatActivity {
 
 
     private void btn_AddBitR_Clicked(){
-
-        widget_s = widget_s.substring(0,40)+"i" ;
+        Target2.add(pin_config);
+        arrayAdapter2.notifyDataSetChanged();
+        widget_s = widget_s.substring(0,40)+"0" ;
         widget_s= widget_s.replaceAll("1","P");
         String widgets = widget_s.substring(0,40);
-        widget_input = widgets;
-        for(int i=0;i<widget_input.length();i++){
-            if(widget_input.charAt(i)=='P'){
-                PINConfig pi = new PINConfig(false,true,i,'P',String.valueOf(i+1));
+        widget_output = widgets;
+        for(int i=0;i<widget_output.length();i++){
+            if(widget_output.charAt(i)=='P'){
+                PINConfig pi = new PINConfig(false,false,i,'P',String.valueOf(i+1));
                 btnWorld2[i] = pi;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
                     btnWord[i].setClickable(false);
-                    String info ="";
-                    info = pin_config +";"+btnWorld2[i].getText();
                     last_pin_added =pin_config;
-                    myList.add(info);
-                    arrayAdapter.notifyDataSetChanged();
 
                 }
-
             }
         }
         pin_config = "";
-        widget_input.replaceAll("P","1");
+        widget_s.replaceAll("3","2");
+        widget_output.replaceAll("P","1");
+        widget_output.replaceAll("3","2");
+
 
     }
     private void btn_AddBitw_Clicked(){
@@ -766,7 +765,9 @@ public class Configuration extends AppCompatActivity {
             }
         }
         pin_config = "";
-        widget_input.replaceAll("P","1");
+        widget_s.replaceAll("3","2");
+        widget_output.replaceAll("P","1");
+        widget_output.replaceAll("3","2");
 
     }
     private void btn_AddByteR_cliked(){
@@ -809,6 +810,7 @@ public class Configuration extends AppCompatActivity {
             last_byte_added =pin_config2;
             pin_config2 = "";
             widget_input.replaceAll("3","2");
+
 
 
 
@@ -861,6 +863,7 @@ public class Configuration extends AppCompatActivity {
             widget_output.replaceAll("3","2");
 
 
+
         }
         else{
             Toast toast= Toast.makeText(getApplicationContext(),"un byte est juste de 8 bits",Toast.LENGTH_SHORT);
@@ -879,11 +882,16 @@ public class Configuration extends AppCompatActivity {
             //gestion erreur
 
         }
+        else if(recieved=="empty"){
+            Toast.makeText(getApplicationContext(), "There are no configurations saved!", Toast.LENGTH_SHORT).show();
+        }
         else{
             String a_b[]=recieved.split("\\r?\\n");
             for(int i=0;i<a_b.length;i++){
-                Target2.add(a_b[i]);
-                arrayAdapter2.notifyDataSetChanged();
+                if (a_b[i]!="null"){
+                    Target2.add(a_b[i]);
+                    arrayAdapter2.notifyDataSetChanged();
+                }
             }
         }
 
@@ -894,6 +902,7 @@ public class Configuration extends AppCompatActivity {
         sendStringMessage("loadConfig;"+selected+";");
 
         recieved = receiveStringMessage();
+
         if(recieved=="error"){
             //gestion erreur
 
@@ -902,7 +911,18 @@ public class Configuration extends AppCompatActivity {
             String[] splitedStr =recieved.split(";",2);
             widget_input=splitedStr[0];
             widget_output=splitedStr[1];
+
         }
+        widget_output.replaceAll("3","2");
+        widget_output.replaceAll("P","1");
+        widget_input.replaceAll("P","1");
+        widget_input.replaceAll("3","2");
+        Toast toast2= Toast.makeText(getApplicationContext(),widget_input,Toast.LENGTH_SHORT);
+        toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
+        toast2.show();
+        Toast toast3= Toast.makeText(getApplicationContext(),widget_input,Toast.LENGTH_SHORT);
+        toast3.setGravity(Gravity.TOP|Gravity.LEFT, 0, 0);
+        toast3.show();
 
     }
     private void btn_del_Cliked(){
@@ -1090,12 +1110,12 @@ public class Configuration extends AppCompatActivity {
         mmBuffer3 = new byte[1024];
         try {
             InputStream inputStream = btSocket.getInputStream();
-            inputStream.read( mmBuffer3);
+            inputStream.read(mmBuffer3);
         } catch (IOException e) {
             Log.e("Tag", "Reading failed");
         }
         String b = new String(mmBuffer3);
-        return b;
+        return b.substring(0,b.indexOf(0));
 
     }
 
