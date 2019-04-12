@@ -829,6 +829,16 @@ public class Configuration extends AppCompatActivity {
 
             widget_s= widget_s.replaceAll("1","G");
             String widgets = widget_s.substring(0,40);
+            if(widget_output.indexOf('a')==-1){
+                widgets.replaceAll("1","a");
+            }
+            else if(widget_output.indexOf('a')!=-1){
+                widgets.replaceAll("1","b");
+
+            }
+            else{
+                widgets.replaceAll("1","c");
+            }
             widget_input = widgets;
             for(int i=0;i<widget_input.length();i++){
                 if(widget_input.charAt(i)=='G'){
@@ -872,14 +882,14 @@ public class Configuration extends AppCompatActivity {
             String widgets = widget_s.substring(0,40);
 
             if(widget_output.indexOf('a')==-1){
-                widget_output.replaceAll("1","a");
+                widgets.replaceAll("1","a");
             }
             else if(widget_output.indexOf('a')!=-1){
-                widget_output.replaceAll("1","b");
+                widgets.replaceAll("1","b");
 
             }
             else{
-                widget_output.replaceAll("1","c");
+                widgets.replaceAll("1","c");
             }
             widget_output = widgets;
             for(int i=0;i<widget_output.length();i++){
