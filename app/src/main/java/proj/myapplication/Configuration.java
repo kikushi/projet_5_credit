@@ -60,6 +60,8 @@ public class Configuration extends AppCompatActivity {
     private String NIP="";
     private String config_name;
     private String recieved;
+    private String last_pin_added;
+    private String last_byte_added;
 
     //declaration des buttons
     private RadioButton rbtn3;
@@ -689,7 +691,7 @@ public class Configuration extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_comm_changeNip:
                 etat_btn_change_nip =1;
-                changeNipcliked();
+                btn_changeNip_cliked();
                 sendStringMessage("changeNIP");
                 return true;
 
@@ -752,8 +754,8 @@ public class Configuration extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @TargetApi(11)
                             public void onClick(DialogInterface dialog, int id) {
-                                sendStringMessage("delete");
-                                sendStringMessage(selected);
+                                sendStringMessage("delete;");
+                                sendStringMessage(selected+";");
                                 dialog.cancel();
                             }
                         })
@@ -780,6 +782,7 @@ public class Configuration extends AppCompatActivity {
                     btnWord[i].setClickable(false);
                     String info ="";
                     info = pin_config +";"+btnWorld2[i].getText();
+                    last_pin_added =pin_config;
                     myList.add(info);
                     arrayAdapter.notifyDataSetChanged();
 
@@ -806,6 +809,7 @@ public class Configuration extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     btnWord[i].setButtonTintList(ColorStateList.valueOf(Color.GRAY));
                     btnWord[i].setClickable(false);
+                    last_pin_added =pin_config;
 
                 }
             }
@@ -851,6 +855,7 @@ public class Configuration extends AppCompatActivity {
                     }
                 }
             }
+            last_byte_added =pin_config2;
             pin_config2 = "";
             widget_input.replaceAll("3","2");
 
@@ -910,6 +915,7 @@ public class Configuration extends AppCompatActivity {
             Toast toast= Toast.makeText(getApplicationContext(),"un byte est juste de 8 bits",Toast.LENGTH_SHORT);
             toast.show();
         }
+        last_byte_added =pin_config2;
         arrayAdapter2.notifyDataSetChanged();
     }
     private void btn_refresh_cliked(){
@@ -924,8 +930,47 @@ public class Configuration extends AppCompatActivity {
 
     }
     private void btn_remove_clicked(){
-        String convo ="PG-";
-        String pin ="";
+        String aide_="Pin#:abc-";
+        String pin_="";
+        pin_=arrayAdapter.get_pin_info_name_info(index_r);
+        int[] tab= new int[8];
+        int count=0;
+
+        if(pin_.length()==1){
+            btnWord[Integer.valueOf(pin_)-1].setVisibility(View.VISIBLE);
+            btnWord[Integer.valueOf(pin_)-1].setChecked(false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+             btnWord[Integer.valueOf(pin_)-1].setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
+            }
+
+
+        }
+        else{
+            // recuperation de la liste de pin a supprimer
+            for(int i=0;i<pin_.length();i++){
+                if(aide_.indexOf(pin_.charAt(i))==-1){
+                    if(aide_.indexOf(pin_.charAt(i+1))!=-1){
+                        String valeur="";
+                        valeur = valeur+pin_.charAt(i);
+                        tab[count]=Integer.valueOf(valeur);
+                        count = count+1;
+                    }
+                    else if(aide_.indexOf(pin_.charAt(i))==-1){
+                        String valeur="";
+                        valeur = valeur+pin_.charAt(i)+pin_.charAt(i+1);
+                        tab[count]=Integer.valueOf(valeur);
+                        count = count+1;
+                        i=i+1;
+
+                    }
+                }
+
+            }
+
+
+        }
+
+
 
 
         /*
@@ -955,7 +1000,7 @@ public class Configuration extends AppCompatActivity {
     }
 
 
-    private void changeNipcliked(){
+    private void btn_changeNip_cliked(){
         if(etat_btn_change_nip ==1){
             mytext.setVisibility(View.VISIBLE);
             String message = mytext.getText().toString();
