@@ -4,17 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/space_8">
+    android:padding="10dp">
+
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:padding="@dimen/space_8"
-        android:text="@string/label_report"
+        android:layout_height="14dp"
+        android:text="Enter your nip"
+        app:layout_constraintBottom_toTopOf="@+id/edt_comment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,12 +21,7 @@
         android:id="@+id/edt_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:hint="@string/label_type_your_comment"
         android:inputType="textMultiLine|text"
-        android:padding="@dimen/space_8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -37,9 +30,6 @@
         android:id="@+id/buttonSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
         android:text="Ok"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,9 +39,6 @@
         android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

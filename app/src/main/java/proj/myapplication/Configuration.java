@@ -56,7 +56,7 @@ public class Configuration extends AppCompatActivity {
     private Button btn_del;
     private Button btn_save_and_start;
     private int etat_btn_change_nip=0;
-    private int etat_btn_save =0;
+
     private EditText myconfigname;
     private String NIP="";
     private String config_name;
@@ -693,7 +693,6 @@ public class Configuration extends AppCompatActivity {
             case R.id.menu_comm_changeNip:
                 etat_btn_change_nip =1;
                 btn_changeNip_cliked();
-                sendStringMessage("changeNIP");
                 return true;
 
             case R.id.menu_comm_disconnect:
@@ -716,58 +715,9 @@ public class Configuration extends AppCompatActivity {
     }
 
 
-    private void btn_Save_And_Start_Cliked(){
-        sendStringMessage("Start");
-        ChangeView(Communication.class);
-    }
-    private void btn_save_clicked(){
-        new AlertDialog.Builder(Configuration.this)
-                .setTitle("GOD MODE")
-                .setMessage("voulez vous vraiment supprimer la configuration?")
-                .setIcon(R.drawable.ic_launcher_foreground)
-                .setPositiveButton("Oui",
-                        new DialogInterface.OnClickListener() {
-                            @TargetApi(11)
-                            public void onClick(DialogInterface dialog, int id) {
-                                etat_btn_save = 1;
 
 
-                                dialog.cancel();
-                                btnsavecliked();
-                            }
-                        })
-                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                    @TargetApi(11)
-                    public void onClick(DialogInterface dialog, int id) {
-                        etat_btn_save =0;
 
-                        dialog.cancel();
-                    }
-                }).show();
-
-    }
-    private void btn_del_Cliked(){
-        new AlertDialog.Builder(Configuration.this)
-                .setTitle("GOD MODE")
-                .setMessage("voulez vous vraiment supprimer la configuration?")
-                .setIcon(R.drawable.ic_launcher_foreground)
-                .setPositiveButton("Oui",
-                        new DialogInterface.OnClickListener() {
-                            @TargetApi(11)
-                            public void onClick(DialogInterface dialog, int id) {
-                                sendStringMessage("delete;");
-                                sendStringMessage(selected+";");
-                                dialog.cancel();
-                            }
-                        })
-                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                    @TargetApi(11)
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        dialog.cancel();
-                    }
-                }).show();
-    }
     private void btn_AddBitR_Clicked(){
 
         widget_s = widget_s.substring(0,40)+"i" ;
@@ -920,13 +870,136 @@ public class Configuration extends AppCompatActivity {
         arrayAdapter2.notifyDataSetChanged();
     }
     private void btn_refresh_cliked(){
+        Target2.clear();
+        arrayAdapter2.notifyDataSetChanged();
         sendStringMessage("refreshConfigs");
         Log.i("Tag", "Received : "+ recieved);
         recieved = receiveStringMessage();
-        String a_b[]=recieved.split("\\r?\\n");
-        for(int i=0;i<a_b.length;i++){
-            Target2.add(a_b[i]);
-            arrayAdapter2.notifyDataSetChanged();
+        if(recieved=="error"){
+            //gestion erreur
+
+        }
+        else{
+            String a_b[]=recieved.split("\\r?\\n");
+            for(int i=0;i<a_b.length;i++){
+                Target2.add(a_b[i]);
+                arrayAdapter2.notifyDataSetChanged();
+            }
+        }
+
+
+    }
+    private void btn_load_Cliked(){
+
+        sendStringMessage("loadConfig;"+selected+";");
+
+        recieved = receiveStringMessage();
+        if(recieved=="error"){
+            //gestion erreur
+
+        }
+        else {
+            String[] splitedStr =recieved.split(";",2);
+            widget_input=splitedStr[0];
+            widget_output=splitedStr[1];
+        }
+
+    }
+    private void btn_del_Cliked(){
+        new AlertDialog.Builder(Configuration.this)
+                .setTitle("GOD MODE")
+                .setMessage("voulez vous vraiment supprimer la configuration?")
+                .setIcon(R.drawable.ic_launcher_foreground)
+                .setPositiveButton("Oui",
+                        new DialogInterface.OnClickListener() {
+                            @TargetApi(11)
+                            public void onClick(DialogInterface dialog, int id) {
+                                sendStringMessage("delete;");
+                                sendStringMessage(selected+";");
+                                recieved=receiveStringMessage();
+                                if (recieved=="error"){
+                                    //gestion error
+                                }
+                                dialog.cancel();
+                            }
+                        })
+                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                    @TargetApi(11)
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        dialog.cancel();
+                    }
+                }).show();
+    }
+    private void btn_save_clicked(){
+        new AlertDialog.Builder(Configuration.this)
+                .setTitle("GOD MODE")
+                .setMessage("voulez vous vraiment sauvegarder la configuration?")
+                .setIcon(R.drawable.ic_launcher_foreground)
+                .setPositiveButton("Oui",
+                        new DialogInterface.OnClickListener() {
+                            @TargetApi(11)
+                            public void onClick(DialogInterface dialog, int id) {
+                                    sendStringMessage("saveConfig;"+config_name+";"+widget_input+";"+widget_output+";");
+                                    recieved = receiveStringMessage();
+                                    if(recieved=="error"){
+                                        //gestion erreur
+
+                                    }
+                                dialog.cancel();
+                            }
+                        })
+                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                    @TargetApi(11)
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).show();
+
+    }
+    private void btn_Save_And_Start_Cliked(){
+        sendStringMessage("start;"+config_name+";"+widget_input+";"+widget_output+";");
+        recieved = receiveStringMessage();
+        if(recieved=="error"){
+            //gestion error
+
+        }else {
+            ChangeView(Communication.class);
+        }
+
+    }
+    private void btn_changeNip_cliked(){
+        if(etat_btn_change_nip ==1){
+            final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
+            LayoutInflater inflater = this.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.alert_layout, null);
+
+            final EditText editText = (EditText) dialogView.findViewById(R.id.edt_comment);
+            Button button1 = (Button) dialogView.findViewById(R.id.buttonSubmit);
+            Button button2 = (Button) dialogView.findViewById(R.id.buttonCancel);
+
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialogBuilder.dismiss();
+                }
+            });
+            button1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // DO SOMETHINGS
+                    sendStringMessage("changeNip;"+editText.getText().toString()+";");
+                    recieved=receiveStringMessage();
+                    if(recieved=="error"){
+                        //gestion erreur
+
+                    }
+                    dialogBuilder.dismiss();
+                }
+            });
+
+            dialogBuilder.setView(dialogView);
+            dialogBuilder.show();
         }
 
     }
@@ -1001,60 +1074,8 @@ public class Configuration extends AppCompatActivity {
     }
 
 
-    private void btn_changeNip_cliked(){
-        if(etat_btn_change_nip ==1){
-            final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
-            LayoutInflater inflater = this.getLayoutInflater();
-            View dialogView = inflater.inflate(R.layout.alert_layout, null);
 
-            final EditText editText = (EditText) dialogView.findViewById(R.id.edt_comment);
-            Button button1 = (Button) dialogView.findViewById(R.id.buttonSubmit);
-            Button button2 = (Button) dialogView.findViewById(R.id.buttonCancel);
 
-            button2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialogBuilder.dismiss();
-                }
-            });
-            button1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // DO SOMETHINGS
-                    sendStringMessage("changeNip;"+editText.getText().toString()+";");
-                    recieved=receiveStringMessage();
-                    dialogBuilder.dismiss();
-                }
-            });
-
-            dialogBuilder.setView(dialogView);
-            dialogBuilder.show();
-        }
-
-    }
-    private void btn_load_Cliked(){
-
-        sendStringMessage("loadConfig");
-        Log.i("Tag", "Received : "+ recieved);
-        sendStringMessage(selected);
-        Log.i("Tag", "Received : "+ recieved);
-        recieved = receiveStringMessage();
-        Log.i("Tag", "Received : "+ recieved);
-
-    }
-    private void btnsavecliked(){
-        if(etat_btn_save==1){
-            sendStringMessage("saveConfig");
-            Log.i("Tag", "Received : "+ recieved);
-            sendStringMessage(config_name);
-            Log.i("Tag", "Received : "+ recieved);
-            sendStringMessage(widget_input.replace("3","2"));
-            Log.i("Tag", "Received : "+ recieved);
-            sendStringMessage(widget_output.replace("3","2"));
-            Log.i("Tag", "Received : "+ recieved);
-        }
-
-    }
     private void sendStringMessage(String mot){
         try {
             OutputStream btOutputStream = Connexion.btSocket.getOutputStream();
