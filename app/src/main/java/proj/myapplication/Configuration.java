@@ -253,6 +253,7 @@ public class Configuration extends AppCompatActivity {
                 //code de validation
                 int count =0;
                 String audi = myconfigname.getText().toString();
+                // ajouter le "" aux commandes interdites
                 Character op[] = {'/','<','>','|',':','?','*','.','%'};
                 for(int i=0;i<9;i++){
                     if(audi.indexOf(op[i])!=-1){
@@ -751,7 +752,8 @@ public class Configuration extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @TargetApi(11)
                             public void onClick(DialogInterface dialog, int id) {
-
+                                sendStringMessage("delete");
+                                sendStringMessage(selected);
                                 dialog.cancel();
                             }
                         })
@@ -818,7 +820,6 @@ public class Configuration extends AppCompatActivity {
         int Icount=array_pin.length;
         for(int i = 0; i<array_pin.length; i++ ){
             String k = "G-"+ String.valueOf(array_pin[i]);
-            Target2.add(k);
         }
 
 
@@ -869,7 +870,7 @@ public class Configuration extends AppCompatActivity {
         int Icount=array_pin.length;
         for(int i = 0; i<array_pin.length; i++ ){
             String k = "G-"+ String.valueOf(array_pin[i]);
-            Target2.add(k);
+
         }
         myList.add("Byte : Output" +";"+"Pin # :"+pin_config2);
         arrayAdapter.notifyDataSetChanged();
@@ -925,7 +926,9 @@ public class Configuration extends AppCompatActivity {
     private void btn_remove_clicked(){
         String convo ="PG-";
         String pin ="";
-        int len = selected.length();
+
+
+        /*
 
         for(int i =0;i<len;i++){
             if(convo.indexOf(selected.charAt(i))==-1 && len==3){
@@ -937,16 +940,17 @@ public class Configuration extends AppCompatActivity {
                 i = i+1;
             }
         }
+        */
+
+        //btnWord[Integer.valueOf(pin)-1].setVisibility(View.VISIBLE);
+        ////btnWord[Integer.valueOf(pin)-1].setChecked(false);
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+           // btnWord[Integer.valueOf(pin)-1].setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
+        //}
+        myList.remove(index_r);
+        arrayAdapter.notifyDataSetChanged();
 
 
-        btnWord[Integer.valueOf(pin)-1].setVisibility(View.VISIBLE);
-        btnWord[Integer.valueOf(pin)-1].setChecked(false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            btnWord[Integer.valueOf(pin)-1].setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
-        }
-
-        Target2.remove(index_r);
-        arrayAdapter2.notifyDataSetChanged();
 
     }
 
@@ -989,7 +993,7 @@ public class Configuration extends AppCompatActivity {
         try {
             OutputStream btOutputStream = Connexion.btSocket.getOutputStream();
             btOutputStream.write(mot.getBytes());
-            //btSocket.close();
+
         }
         catch (IOException e) {
             Log.e("Tag", "Writing failed. Tried to write : "+ mot);
@@ -1012,19 +1016,7 @@ public class Configuration extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
     }
-    private void format_string(String a){
-        a.replaceAll("G","a");
-        int count=0;
-        for(int i=0;i<a.length();i++){
-            if(a.charAt(i)=='a'){
-                count =count+1;
-            }
-        }
-        if(count>8) {
 
-        }
-
-    }
 
 
 

@@ -39,6 +39,12 @@ public class CustomAdapter extends ArrayAdapter<String> {
 
         return rowView;
     }
+    public String get_pin_info_name(int index){
+        return pin_info.get(index).split(";")[0];
+    }
+    public String get_pin_info_name_info(int index){
+        return pin_info.get(index).split(";")[1];
+    }
 }
 
 
