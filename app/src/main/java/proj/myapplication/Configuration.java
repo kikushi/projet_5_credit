@@ -65,6 +65,8 @@ public class Configuration extends AppCompatActivity {
     private String last_byte_added;
 
     //declaration des buttons
+    private int[] rbtnIDs;
+
     private RadioButton rbtn3;
     private RadioButton rbtn5;
     private RadioButton rbtn7;
@@ -98,6 +100,7 @@ public class Configuration extends AppCompatActivity {
     public static String widget_input="3303030030000300300300003033030003000030";
     public static String widget_output ="3303030030000300300300003033030003000030";
     private String widget_s="3303030030000300300300003033030003000030i";
+    private boolean[] selectedPins;
     private String pin_config ="P-";
     private String pin_config2="";
     private static String selected = "";
@@ -128,6 +131,9 @@ public class Configuration extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
+
+        rbtnIDs = new int[40];
+        selectedPins = new boolean[40];
 
         btSocket = Connexion.btSocket;
         arrayAdapter = new CustomAdapter(this,myList);
@@ -330,356 +336,33 @@ public class Configuration extends AppCompatActivity {
 
         //ajout des radiobutton
 
-        rbtn3 =(RadioButton)findViewById(R.id.rbtn_3);
-        rbtn3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked) {
-                    rbtn3.setChecked(false);
-                }
-                else {
-
-                    widget_s = "331" +widget_s.substring(3);
-                    btnWord[2] = rbtn3;
-                    BtnWord.add(rbtn3);
-                    pin_config = "P-3";
-                    pin_config2 = pin_config2 +"3-";
-
-
-                }
-            }
-        });
-        //ajout des radiobutton
-        rbtn5 =(RadioButton)findViewById(R.id.rbtn_5);
-        rbtn5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                widget_s = widget_s.substring(0,4) +"1" +widget_s.substring(5) + "  "+widget_s.length();
-                //ajout button dans btnword
-                btnWord[4] = rbtn5;
-                BtnWord.add(rbtn5);
-                pin_config = "P-5";
-                pin_config2 = pin_config2 +"5-";
-
-
-            }
-        });
-        //ajout des radiobutton
-        rbtn7 =(RadioButton)findViewById(R.id.rbtn_7);
-        rbtn7.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,6) +"1" +widget_s.substring(7);
-                //ajout button dans btnword
-                btnWord[6] = rbtn7;
-                BtnWord.add(rbtn7);
-                pin_config = "P-7";
-                pin_config2 = pin_config2 +"7-";
-
-
-            }
-        });
-        //ajout des radiobutton
-        rbtn8 =(RadioButton)findViewById(R.id.rbtn_8);
-        rbtn8.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,7) +"1" +widget_s.substring(8);
-                //ajout button dans btnword
-                btnWord[7] = rbtn8;
-                BtnWord.add(rbtn8);
-                pin_config = "P-8";
-                pin_config2 = pin_config2 +"8-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn10 =(RadioButton)findViewById(R.id.rbtn_10);
-        rbtn10.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,9) +"1" +widget_s.substring(10);
-                //ajout button dans btnword
-                btnWord[9] = rbtn10;
-                BtnWord.add(rbtn10);
-                pin_config = "P-10";
-                pin_config2 = pin_config2 +"10-";
-
-            }
-        });
-        //ajout des radiobutton
-        rbtn11 =(RadioButton)findViewById(R.id.rbtn_11);
-        rbtn11.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,10) +"1" +widget_s.substring(11);
-                //ajout button dans btnword
-                btnWord[10] = rbtn11;
-                pin_config = "P-11";
-                pin_config2 = pin_config2 +"11-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn12 =(RadioButton)findViewById(R.id.rbtn_12);
-        rbtn12.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,11) +"1" +widget_s.substring(12);
-                //ajout button dans btnword
-                btnWord[11] = rbtn12;
-                BtnWord.add(rbtn12);
-                pin_config = "P-12";
-                pin_config2 = pin_config2 +"12-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn13 =(RadioButton)findViewById(R.id.rbtn_13);
-        rbtn13.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,12) +"1" +widget_s.substring(13);
-                //ajout button dans btnword
-                btnWord[12] = rbtn13;
-                BtnWord.add(rbtn13);
-                pin_config = "P-13";
-                pin_config2 = pin_config2 +"13-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn15 =(RadioButton)findViewById(R.id.rbtn_15);
-        rbtn15.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,14) +"1" +widget_s.substring(15);
-                //ajout button dans btnword
-                btnWord[14] = rbtn15;
-                BtnWord.add(rbtn15);
-                pin_config = "P-15";
-                pin_config2 = pin_config2 +"15-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn16 =(RadioButton)findViewById(R.id.rbtn_16);
-        rbtn16.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,15) +"1" +widget_s.substring(16);
-                //ajout button dans btnword
-                btnWord[15] = rbtn16;
-                BtnWord.add(rbtn16);
-                pin_config = "P-16";
-                pin_config2 = pin_config2 +"16-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn18 =(RadioButton)findViewById(R.id.rbtn_18);
-        rbtn18.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,17) +"1" +widget_s.substring(18);
-                //ajout button dans btnword
-                btnWord[17] = rbtn18;
-                BtnWord.add(rbtn18);
-                pin_config = "P-18";
-                pin_config2 = pin_config2 +"18-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn19 =(RadioButton)findViewById(R.id.rbtn_19);
-        rbtn19.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,18) +"1" +widget_s.substring(19);
-                //ajout button dans btnword
-                btnWord[18] = rbtn19;
-                BtnWord.add(rbtn19);
-                pin_config ="P-19";
-                pin_config2 = pin_config2 +"19-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn21 =(RadioButton)findViewById(R.id.rbtn_21);
-        rbtn21.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,20) +"1" +widget_s.substring(21);
-                //ajout button dans btnword
-                btnWord[20] = rbtn21;
-                BtnWord.add(rbtn21);
-                pin_config = "P-21";
-                pin_config2 = pin_config2 +"21-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn22 =(RadioButton)findViewById(R.id.rbtn_22);
-        rbtn22.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,21) +"1" +widget_s.substring(22);
-                //ajout button dans btnword
-                btnWord[21] = rbtn22;
-                BtnWord.add(rbtn22);
-                pin_config = "P-22";
-                pin_config2 = pin_config2 +"22-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn23 =(RadioButton)findViewById(R.id.rbtn_23);
-        rbtn23.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,22) +"1" +widget_s.substring(23);
-                //ajout button dans btnword
-                btnWord[22] = rbtn23;
-                BtnWord.add(rbtn23);
-                pin_config = "P-23";
-                pin_config2 = pin_config2 +"23-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn24 =(RadioButton)findViewById(R.id.rbtn_24);
-        rbtn24.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,23) +"1" +widget_s.substring(24);
-                //ajout button dans btnword
-                btnWord[23] = rbtn24;
-                BtnWord.add(rbtn24);
-                pin_config = "P-24";
-                pin_config2 = pin_config2 +"24-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn26 =(RadioButton)findViewById(R.id.rbtn_26);
-        rbtn26.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,25) +"1" +widget_s.substring(26);
-                //ajout button dans btnword
-                btnWord[25] = rbtn26;
-                BtnWord.add(rbtn26);
-                pin_config = "P-26";
-                pin_config2 = pin_config2 +"26-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn29 =(RadioButton)findViewById(R.id.rbtn_29);
-        rbtn29.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,28) +"1" +widget_s.substring(29);
-                //ajout button dans btnword
-                btnWord[28] = rbtn29;
-                BtnWord.add(rbtn29);
-                pin_config = "P-29";
-                pin_config2 = pin_config2 +"29-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn31 =(RadioButton)findViewById(R.id.rbtn_31);
-        rbtn31.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,30) +"1" +widget_s.substring(31);
-                //ajout button dans btnword
-                btnWord[30] = rbtn31;
-                BtnWord.add(rbtn31);
-                pin_config = "P-31";
-                pin_config2 = pin_config2 +"31-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn32 =(RadioButton)findViewById(R.id.rbtn_32);
-        rbtn32.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,31) + "1"+widget_s.substring(32);
-                //ajout button dans btnword
-                btnWord[31] = rbtn32;
-                BtnWord.add(rbtn32);
-                pin_config = "P-32";
-                pin_config2 = pin_config2 +"32-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn33 =(RadioButton)findViewById(R.id.rbtn_33);
-        rbtn33.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,32) +"1" +widget_s.substring(33);
-                //ajout button dans btnword
-                btnWord[32] = rbtn33;
-                BtnWord.add(rbtn33);
-                pin_config = "P-33";
-                pin_config2 = pin_config2 +"33-";
-
-            }
-        });
-        //ajout des radiobutton
-        rbtn35 =(RadioButton)findViewById(R.id.rbtn_35);
-        rbtn35.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,34) +"1" +widget_s.substring(35);
-                //ajout button dans btnword
-                btnWord[34] = rbtn35;
-                BtnWord.add(rbtn35);
-                pin_config = "P-35";
-                pin_config2 = pin_config2 +"35-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn36 =(RadioButton)findViewById(R.id.rbtn_36);
-        rbtn36.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,35) +"1" +widget_s.substring(36);
-                //ajout button dans btnword
-                btnWord[35] = rbtn36;
-                BtnWord.add(rbtn36);
-                pin_config = "P-36";
-                pin_config2 = pin_config2 +"36-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn37 =(RadioButton)findViewById(R.id.rbtn_37);
-        rbtn37.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,36) +"1" +widget_s.substring(37);
-                //ajout button dans btnword
-                btnWord[36] = rbtn37;
-                BtnWord.add(rbtn37);
-                pin_config = "P-37";
-                pin_config2 = pin_config2 +"37-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn38 =(RadioButton)findViewById(R.id.rbtn_38);
-        rbtn38.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,37) +"1" +widget_s.substring(38);
-                //ajout button dans btnword
-                btnWord[37] = rbtn38;
-                pin_config = "P-38";
-                pin_config2 = pin_config2 +"38-";
-            }
-        });
-        //ajout des radiobutton
-        rbtn40 =(RadioButton)findViewById(R.id.rbtn_40);
-        rbtn40.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                widget_s = widget_s.substring(0,39) +"1" +widget_s.substring(40);
-                //ajout button dans btnword
-                btnWord[39] = rbtn40;
-                BtnWord.add(rbtn40);
-                pin_config = "P-40";
-                pin_config2 = pin_config2 +"40-";
-            }
-        });
+        rbtnIDs[0]=R.id.rbtn_1;
+        for (int i=0; i<40; i++) {
+            rbtnIDs[i] = R.id.rbtn_1 + i;
+            findViewById(rbtnIDs[i]).setOnClickListener(RadioBtnListener);
+        }
     }
+
+    private View.OnClickListener RadioBtnListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            RadioButton rbtnView = (RadioButton)v;
+            int rbtnClickedId = rbtnView.getId();
+            int rbtnClickedIndex = rbtnClickedId - rbtnIDs[0];
+            if (selectedPins[rbtnClickedIndex]) {
+                //Le rbtn est déja sélectionné
+                //On déselectionne le rbtn
+                rbtnView.setChecked(false);
+                selectedPins[rbtnClickedIndex] = false;
+            }
+            else {
+                //Le rbtn n'est pas sélectionné
+                //On Sélectionne le rbtn
+                rbtnView.setChecked(true);
+                selectedPins[rbtnClickedIndex] = true;
+            }
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
