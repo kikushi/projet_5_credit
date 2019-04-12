@@ -17,6 +17,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -1002,12 +1003,32 @@ public class Configuration extends AppCompatActivity {
 
     private void btn_changeNip_cliked(){
         if(etat_btn_change_nip ==1){
-            mytext.setVisibility(View.VISIBLE);
-            String message = mytext.getText().toString();
-            sendStringMessage("ChangeNip");
-            Log.i("Tag", "Received : "+ recieved);
-            sendStringMessage(message);
-            Log.i("Tag", "Received : "+ recieved);
+            final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
+            LayoutInflater inflater = this.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.alert_layout, null);
+
+            final EditText editText = (EditText) dialogView.findViewById(R.id.edt_comment);
+            Button button1 = (Button) dialogView.findViewById(R.id.buttonSubmit);
+            Button button2 = (Button) dialogView.findViewById(R.id.buttonCancel);
+
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialogBuilder.dismiss();
+                }
+            });
+            button1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // DO SOMETHINGS
+                    sendStringMessage("changeNip;"+editText.getText().toString()+";");
+                    recieved=receiveStringMessage();
+                    dialogBuilder.dismiss();
+                }
+            });
+
+            dialogBuilder.setView(dialogView);
+            dialogBuilder.show();
         }
 
     }
