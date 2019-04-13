@@ -48,5 +48,7 @@
     <string name="close_app">Close App</string>
     <string name="change_config">Change Config</string>
     <string name="enter_configname_here">Enter ConfigName here</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
 
 </resources>

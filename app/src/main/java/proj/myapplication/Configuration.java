@@ -95,8 +95,8 @@ public class Configuration extends AppCompatActivity {
     private String pin_config2="";
     private PINConfig selectedElement;
     private String selected;
-    public int index_selected_element;
-    ListView Lv1;
+
+    ListView configNamesListView;
     public ListView configElementsListView;
     ArrayList<String> Target = new ArrayList<String>();
     ArrayList<String> Target2 = new ArrayList<>();
@@ -106,6 +106,8 @@ public class Configuration extends AppCompatActivity {
     public byte[] mmBuffer3;
     private String pin_infos[] = new String[40];
 
+    public int index_selected_element;
+    public String selected_configname;
 
     public static String widget_input;
     public static String widget_output;
@@ -119,9 +121,6 @@ public class Configuration extends AppCompatActivity {
     //ArrayAdapter
     public CustomAdapter configElementsAdapter;
     public ArrayAdapter<String> configNamesAdapter;
-    public ArrayAdapter<String> arrayAdapter3;
-
-
 
 
     @Override
@@ -140,6 +139,7 @@ public class Configuration extends AppCompatActivity {
         selectedPins = new boolean[40];
 
         index_selected_element = -1;
+        selected_configname = "";
         btSocket = Connexion.btSocket;
 
         configElementsList= new ArrayList<>();
@@ -192,13 +192,13 @@ public class Configuration extends AppCompatActivity {
 
 
         //déclaration des listViews
-        Lv1 = (ListView)findViewById(R.id.listview_confignames);
-        Lv1.setAdapter(configNamesAdapter);
-        Lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        configNamesListView = (ListView)findViewById(R.id.listview_confignames);
+        configNamesListView.setAdapter(configNamesAdapter);
+        configNamesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                selected = Lv1.getItemAtPosition(position).toString();
-                index_selected_element =position;
+                selected_configname = configNamesAdapter.getItem(position);
+                configNamesListView.setSelector(R.color.lime_green);
             }
         });
         configElementsListView =(ListView)findViewById(R.id.listview_elements);
@@ -430,7 +430,6 @@ public class Configuration extends AppCompatActivity {
         rbtnIDs[38] = R.id.rbtn_39;
         rbtnIDs[39] = R.id.rbtn_40;
 
-        rbtnIDs[0]=R.id.rbtn_1;
         for (int i=0; i<40; i++) {
             //rbtnIDs[i] = R.id.rbtn_1 + i;
             if (PINIsAvailable[i]) {
@@ -652,123 +651,106 @@ public class Configuration extends AppCompatActivity {
     }
 
     private void btn_refresh_clicked(){
-        Target2.clear();
+        configNamesAdapter.clear();
         configNamesAdapter.notifyDataSetChanged();
         sendStringMessage("refreshConfigs");
         Log.i("Tag", "Received : "+ recieved);
         recieved = receiveStringMessage();
-        if(recieved=="error"){
-            //gestion erreur
 
-        }
-        else if(recieved=="empty"){
+        if(recieved.equals("empty")) {
             Toast.makeText(getApplicationContext(), "There are no configurations saved!", Toast.LENGTH_SHORT).show();
         }
-        else{
-            String a_b[]=recieved.split("\\r?\\n");
-            for(int i=0;i<a_b.length;i++){
-                if (a_b[i]!="null"){
-                    Target2.add(a_b[i]);
+        else if(!recieved.equals("error")) {
+            String splittedStr[]=recieved.split("\\r?\\n");
+
+            for(int i=0;i<splittedStr.length;i++){
+                if (splittedStr[i]!="null"){
+                    configNamesAdapter.add(splittedStr[i]);
                     configNamesAdapter.notifyDataSetChanged();
                 }
             }
         }
-
-
     }
+
     private void btn_load_Cliked(){
 
         sendStringMessage("loadConfig;"+selected+";");
 
         recieved = receiveStringMessage();
 
-        if(recieved=="error"){
-            //gestion erreur
-
+        if(recieved.equals("error")) {
+            Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
         }
         else {
-            String[] splitedStr =recieved.split(";",2);
-            widget_input=splitedStr[0];
-            widget_output=splitedStr[1];
+            String[] splittedStr = recieved.split(";",2);
+            widget_input = splittedStr[0];
+            widget_output = splittedStr[1];
 
         }
-        widget_output.replaceAll("3","2");
-        widget_output.replaceAll("P","1");
-        widget_input.replaceAll("P","1");
-        widget_input.replaceAll("3","2");
-        Toast toast2= Toast.makeText(getApplicationContext(),widget_input,Toast.LENGTH_SHORT);
-        toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-        toast2.show();
-        Toast toast3= Toast.makeText(getApplicationContext(),widget_input,Toast.LENGTH_SHORT);
-        toast3.setGravity(Gravity.TOP|Gravity.LEFT, 0, 0);
-        toast3.show();
-
+        //Faire load
     }
+
     private void btn_del_Cliked(){
-        new AlertDialog.Builder(Configuration.this)
-                .setTitle("GOD MODE")
-                .setMessage("voulez vous vraiment supprimer la configuration?")
-                .setIcon(R.drawable.ic_launcher_foreground)
-                .setPositiveButton("Oui",
-                        new DialogInterface.OnClickListener() {
-                            @TargetApi(11)
-                            public void onClick(DialogInterface dialog, int id) {
-                                sendStringMessage("delete;");
-                                sendStringMessage(selected+";");
-                                recieved=receiveStringMessage();
-                                if (recieved=="error"){
-                                    //gestion error
-                                }
-                                dialog.cancel();
-                            }
-                        })
-                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                    @TargetApi(11)
-                    public void onClick(DialogInterface dialog, int id) {
+        if (!selected_configname.equals("")) {
+            new AlertDialog.Builder(Configuration.this)
+                    .setTitle("Warning !")
+                    .setMessage("Voulez vous vraiment supprimer la configuration?")
+                    .setIcon(R.drawable.warning_icon)
+                    .setPositiveButton(R.string.Yes,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //Remove l'element de la listview
+                                    configNamesAdapter.remove(selected_configname);
+                                    configNamesListView.setSelector(android.R.color.transparent);
+                                    configNamesAdapter.notifyDataSetChanged();
 
-                        dialog.cancel();
-                    }
-                }).show();
+                                    sendStringMessage("deleteConfig;"+ selected_configname +";");
+                                    recieved=receiveStringMessage();
+
+                                    if (recieved.equals("error")){
+                                        Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
+                                    }
+                                    selected_configname = "";
+                                }
+                            })
+                    .setNegativeButton(R.string.No,  null)
+                    .show();
+        }
+
     }
+
     private void btn_save_clicked(){
         new AlertDialog.Builder(Configuration.this)
-                .setTitle("GOD MODE")
-                .setMessage("voulez vous vraiment sauvegarder la configuration?")
-                .setIcon(R.drawable.ic_launcher_foreground)
-                .setPositiveButton("Oui",
+                .setTitle("Warning !")
+                .setMessage("Saving will overwrite any existing configuration with the same name already on the Raspberry Pi\nConfiguration Name chosen : "+ config_name +"\nContinue ?")
+                .setIcon(R.drawable.warning_icon)
+                .setPositiveButton(R.string.Yes,
                         new DialogInterface.OnClickListener() {
-                            @TargetApi(11)
                             public void onClick(DialogInterface dialog, int id) {
                                     sendStringMessage("saveConfig;"+config_name+";"+widget_input+";"+widget_output+";");
                                     recieved = receiveStringMessage();
-                                    if(recieved=="error"){
-                                        //gestion erreur
 
-                                    }
-                                dialog.cancel();
+                                    if (recieved.equals("error")){
+                                    Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         })
-                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                    @TargetApi(11)
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                }).show();
-
+                .setNegativeButton(R.string.No,  null)
+                .show();
     }
+
     private void btn_Save_And_Start_Cliked(){
         sendStringMessage("start;"+config_name+";"+widget_input+";"+widget_output+";");
         recieved = receiveStringMessage();
-        if(recieved=="error"){
-            //gestion error
-
-        }else {
+        if (recieved.equals("error")) {
+            Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
+        } else {
             ChangeView(Communication.class);
         }
-
     }
+
     private void btn_changeNip_cliked(){
-        if(etat_btn_change_nip ==1){
+        if (etat_btn_change_nip ==1) {
             final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
             LayoutInflater inflater = this.getLayoutInflater();
             View dialogView = inflater.inflate(R.layout.alert_layout, null);
@@ -852,6 +834,7 @@ public class Configuration extends AppCompatActivity {
             Log.e("Tag", "Writing failed. Tried to write : "+ mot);
         }
     }
+
     private String receiveStringMessage() {
         mmBuffer3 = new byte[1024];
         try {
@@ -869,50 +852,4 @@ public class Configuration extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
     }
-
-
-
-
-
-
-    /*
-    toast
-    Toast toast2= Toast.makeText(getApplicationContext(),widget_s,Toast.LENGTH_SHORT);
-    toast2.setGravity(Gravity.TOP|Gravity.RIGHT, 0, 0);
-    toast2.show();
-     private void getFromInterne_input() throws IOException{
-        String value = "";
-        FileInputStream inputStream = openFileInput("input.txt");
-        StringBuilder Stringb = new StringBuilder();
-        int content;
-        while((content = inputStream.read())!=-1){
-            value = String.valueOf(Stringb.append((char)content));
-        }
-        widget_input = value;
-
-    }
-    private void getFromInterne_output() throws IOException{
-        String value = "";
-        FileInputStream inputStream = openFileInput("output.txt");
-        StringBuilder Stringb = new StringBuilder();
-        int content;
-        while((content = inputStream.read())!=-1){
-            value = String.valueOf(Stringb.append((char)content));
-        }
-        widget_output = value;
-    }
-    private void saveInterne_input() throws IOException {
-        FileOutputStream outputStream = openFileOutput("input.txt",MODE_PRIVATE);
-        String numero = widget_input;
-        outputStream.write(numero.getBytes());
-        outputStream.close();
-    }
-    private void saveInterne_output() throws IOException {
-        FileOutputStream outputStream = openFileOutput("output.txt",MODE_PRIVATE);
-        String numero = widget_output;
-        outputStream.write(numero.getBytes());
-        outputStream.close();
-    }
-     */
-
 }

@@ -304,6 +304,7 @@ public class Connexion extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        Log.i("Tag", "onStop() - Connexion");
         super.onStop();
         try {
             unregisterReceiver(mReceiverActionFound);
@@ -319,6 +320,7 @@ public class Connexion extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        Log.i("Tag", "onDestroy() - Connexion");
         super.onDestroy();
         try {
             unregisterReceiver(mReceiverActionAclDisconnected);
