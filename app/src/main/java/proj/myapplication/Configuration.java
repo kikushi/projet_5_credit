@@ -94,10 +94,11 @@ public class Configuration extends AppCompatActivity {
     private boolean[] selectedPins;
     private String pin_config ="P-";
     private String pin_config2="";
-    private static String selected = "";
-    private int index_r=0;
+    private PINConfig selectedElement;
+    private String selected;
+    public int index_selected_element;
     ListView Lv1;
-    ListView Lv2;
+    public ListView configElementsListView;
     ArrayList<String> Target = new ArrayList<String>();
     ArrayList<String> Target2 = new ArrayList<>();
     RadioButton[] btnWord = new RadioButton[40];
@@ -105,7 +106,8 @@ public class Configuration extends AppCompatActivity {
     PINConfig[] btnWorld2 = new PINConfig[40];
     public byte[] mmBuffer3;
     private String pin_infos[] = new String[40];
-    ArrayList<String> configElementsList;
+
+    ArrayList<PINConfig> configElementsList;
 
 
 
@@ -126,31 +128,34 @@ public class Configuration extends AppCompatActivity {
 
         rbtnIDs = new int[40];
         selectedPins = new boolean[40];
-        PINConfig_elements = new ArrayList<>();
-        configElementsList= new ArrayList<>();
 
+        index_selected_element = -1;
         btSocket = Connexion.btSocket;
-        configElementsAdapter = new CustomAdapter(this, new ArrayList<String>());
+
+        configElementsList= new ArrayList<>();
+        configElementsAdapter = new CustomAdapter(this, configElementsList);
+
         configNamesAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,Target2);
 
 
-        //déclaration des lestViews
-        Lv1 = (ListView)findViewById(R.id.simpleListView);
+        //déclaration des listViews
+        Lv1 = (ListView)findViewById(R.id.listview_confignames);
         Lv1.setAdapter(configNamesAdapter);
         Lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 selected = Lv1.getItemAtPosition(position).toString();
-                index_r=position;
+                index_selected_element =position;
             }
         });
-        Lv2 =(ListView)findViewById(R.id.simpleListView2);
-        Lv2.setAdapter(configElementsAdapter);
-        Lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        configElementsListView =(ListView)findViewById(R.id.listview_elements);
+        configElementsListView.setAdapter(configElementsAdapter);
+        configElementsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                selected = Lv2.getItemAtPosition(position).toString();
-                index_r=position;
+                index_selected_element = position;
+                configElementsListView.setSelector(R.color.lime_green);
+                //selected = configElementsListView.getItemAtPosition(position).toString();
             }
         });
         // button load
@@ -456,6 +461,7 @@ public class Configuration extends AppCompatActivity {
                 //Si la pin est sélectionnée
                 indexesOfSelectedPins.add(i);
                 nbOfPins++;
+                selectedPins[i] = false;
             }
         }
         for (int i=0; i<nbOfPins; i++) {
@@ -474,12 +480,13 @@ public class Configuration extends AppCompatActivity {
             String text = "PIN#" + String.valueOf(pinNB);
             PINConfig pi = new PINConfig(false, isInput, 'P', text);
             pi.setPinNumber(pinNB);
-            PINConfig_elements.add(pi);
 
             //Add l'objet créé au listview
-            configElementsList.add( pi.getText());
-            //configElementsList.add(new String[]{pi.getText(), pi.getSubText()});
+            //configElementsList.add(pi.getText().toString());
+            configElementsList.add(pi);
             configElementsAdapter.notifyDataSetChanged();
+            //configElementsList.add(new String[]{pi.getText(), pi.getSubText()});
+
 
             //Target2.add(pi.getText());
 
@@ -754,78 +761,45 @@ public class Configuration extends AppCompatActivity {
         }
 
     }
-    private void btn_remove_clicked(){
-        String aide_="Pin#:abc-";
-        String pin_="";
-        pin_= configElementsAdapter.get_pin_info_name_info(index_r);
-        int[] tab= new int[8];
-        int count=0;
 
-        if(pin_.length()==1){
-            btnWord[Integer.valueOf(pin_)-1].setVisibility(View.VISIBLE);
-            btnWord[Integer.valueOf(pin_)-1].setChecked(false);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-             btnWord[Integer.valueOf(pin_)-1].setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
+    private void btn_remove_clicked() {
+
+        PINConfig pinConfig= configElementsAdapter.get_element(index_selected_element);
+        if (pinConfig != null) {
+            RadioButton rbtn;
+
+            //Remove l'element de la listview
+            configElementsList.remove(index_selected_element);
+            index_selected_element = -1;
+            configElementsListView.setSelector(android.R.color.transparent);
+            configElementsAdapter.notifyDataSetChanged();
+
+
+            //
+            if(!pinConfig.getIsByte()){
+                //Bit
+                //Remettre le rbtn disponible
+                rbtn = (RadioButton)findViewById(rbtnIDs[pinConfig.getPinNumber()-1]);
+                rbtn.setClickable(true);
+                rbtn.setChecked(false);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    rbtn.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
+                }
             }
-
-
-        }
-        else{
-            // recuperation de la liste de pin a supprimer
-            for(int i=0;i<pin_.length();i++){
-                if(aide_.indexOf(pin_.charAt(i))==-1){
-                    if(aide_.indexOf(pin_.charAt(i+1))!=-1){
-                        String valeur="";
-                        valeur = valeur+pin_.charAt(i);
-                        tab[count]=Integer.valueOf(valeur);
-                        count = count+1;
-                    }
-                    else if(aide_.indexOf(pin_.charAt(i))==-1){
-                        String valeur="";
-                        valeur = valeur+pin_.charAt(i)+pin_.charAt(i+1);
-                        tab[count]=Integer.valueOf(valeur);
-                        count = count+1;
-                        i=i+1;
-
+            else {
+                //Byte
+                //Remettre les rbtns disponibles
+                for (int i=0; i<8;i++) {
+                    rbtn = (RadioButton)findViewById(rbtnIDs[pinConfig.getPinNumbers(i)-1]);
+                    rbtn.setClickable(true);
+                    rbtn.setChecked(false);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        rbtn.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
                     }
                 }
-
-            }
-
-
-        }
-
-
-
-
-        /*
-
-        for(int i =0;i<len;i++){
-            if(convo.indexOf(selected.charAt(i))==-1 && len==3){
-                pin = pin +selected.charAt(i);
-
-            }
-            else if (convo.indexOf(pin_config.charAt(i))==-1 && len==4){
-                pin = pin+selected.charAt(i)+selected.charAt(i+1);
-                i = i+1;
             }
         }
-        */
-
-        //btnWord[Integer.valueOf(pin)-1].setVisibility(View.VISIBLE);
-        ////btnWord[Integer.valueOf(pin)-1].setChecked(false);
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-           // btnWord[Integer.valueOf(pin)-1].setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
-        //}
-        //myList.remove(index_r);
-        configElementsAdapter.notifyDataSetChanged();
-
-
-
     }
-
-
-
 
     private void sendStringMessage(String mot){
         try {

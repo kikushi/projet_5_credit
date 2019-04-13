@@ -370,13 +370,13 @@
             </LinearLayout>
 
             <ListView
-                android:id="@+id/simpleListView2"
+                android:id="@+id/listview_elements"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="4"
                 android:divider="#000"
                 android:dividerHeight="1dp"
-                android:listSelector="#0f0"
+                android:listSelector="@color/lime_green"
                 android:background="@drawable/border">
             </ListView>
 
@@ -412,7 +412,7 @@
             </TextView>
 
             <ListView
-                android:id="@+id/simpleListView"
+                android:id="@+id/listview_confignames"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="2"
