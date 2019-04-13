@@ -20,9 +20,8 @@ public class PINConfig {
         else {
             subText = "Output";
         }
-
-
     }
+
     public boolean getIsByte(){
         return isByte;
     }
@@ -48,7 +47,7 @@ public class PINConfig {
     public void setPinNumber(int _pinNumber) {
         pinNumber = _pinNumber;
     }
-    public void setPinNumber(int[] _pinNumbers) {
+    public void setPinNumbers(int[] _pinNumbers) {
         pinNumbers = _pinNumbers;
     }
 }
