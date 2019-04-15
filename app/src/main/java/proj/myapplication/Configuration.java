@@ -5,12 +5,11 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -44,9 +43,8 @@ public class Configuration extends AppCompatActivity {
     private Button btn_save;
     private Button btn_del;
     private Button btn_save_and_start;
-    private int etat_btn_change_nip=0;
 
-    private EditText myconfigname;
+
     private String NIP="";
     private String config_name;
     private String recieved;
@@ -86,8 +84,18 @@ public class Configuration extends AppCompatActivity {
     private RadioButton rbtn40;
 
 
-    //declaration des variables
-    private EditText mytext;
+    //EditText ConfigName
+    private EditText configNameET;
+    private String blockCharacterSet = "/<>|:?*.%'\\~#^$&!\";";
+    private InputFilter filter = new InputFilter() {
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            if (source != null && blockCharacterSet.contains(("" + source))) {
+                return "";
+            }
+            return null;
+        }
+    };
 
     private String widget_s="3303030030000300300300003033030003000030i";
     private boolean[] selectedPins;
@@ -95,6 +103,7 @@ public class Configuration extends AppCompatActivity {
     private String pin_config2="";
     private PINConfig selectedElement;
     private String selected;
+    boolean ok;
 
     ListView configNamesListView;
     public ListView configElementsListView;
@@ -211,6 +220,7 @@ public class Configuration extends AppCompatActivity {
                 //selected = configElementsListView.getItemAtPosition(position).toString();
             }
         });
+
         // button load
         btn_load = (Button)findViewById(R.id.btn_load);
         btn_load.setOnClickListener(new View.OnClickListener() {
@@ -226,20 +236,19 @@ public class Configuration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 btn_Save_And_Start_Cliked();
-
             }
         });
 
         // button save
         btn_save = (Button)findViewById(R.id.btn_save);
         btn_save.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            btn_save_clicked();
-                                        }
-                                    }
-        );
-        // button del
+            @Override
+            public void onClick(View v) {
+                btn_save_clicked();
+            }
+        });
+
+        // button delete
         btn_del = (Button)findViewById(R.id.btn_delete);
         btn_del.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,10 +257,7 @@ public class Configuration extends AppCompatActivity {
             }
         });
 
-
-
-
-        // button ajouter bit R
+        // button addbitIn
         btn_Add_bit_R = (Button)findViewById(R.id.btn_ajouter_bit_R);
         btn_Add_bit_R.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,7 +266,8 @@ public class Configuration extends AppCompatActivity {
 
             }
         });
-        // button ajouter bit W
+
+        // button addBitOut
         btn_Add_bit_W = (Button)findViewById(R.id.btn_ajouter_bit_W);
         btn_Add_bit_W.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,7 +276,7 @@ public class Configuration extends AppCompatActivity {
             }
         });
 
-        // Button ajouter Byte
+        // button addByteIn
         btn_Add_byte_R = (Button)findViewById(R.id.btn_ajouter_byte_R);
         btn_Add_byte_R.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,65 +285,39 @@ public class Configuration extends AppCompatActivity {
             }
         });
 
-
+        // button addByteOut
         btn_Add_byte_W = (Button)findViewById(R.id.btn_ajouter_byte_W);
         btn_Add_byte_W.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 btn_AddByte_Clicked(false);
             }
         });
 
- /*
-        // Edittext
-        mytext = (EditText)findViewById(R.id.editText);
-        mytext.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                NIP = mytext.getText().toString();
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-
-            }
-        });
-
-*/
+        // EditText Configname
 
 
-        // edittext2
+        configNameET = (EditText)findViewById(R.id.editText);
+        configNameET.setFilters(new InputFilter[]{filter});
 
-
-        myconfigname = (EditText)findViewById(R.id.editText);
-        myconfigname.addTextChangedListener(new TextWatcher() {
+        //Effacer ici
+        /*
+        configNameET.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
                 //code de validation
                 int count =0;
-                String audi = myconfigname.getText().toString();
+                String audi = configNameET.getText().toString();
                 // ajouter le "" aux commandes interdites
-                Character op[] = {'/','<','>','|',':','?','*','.','%'};
+                Character op[] = {'/','<','>','|',':','?','*','.','%','"','\\'};
                 for(int i=0;i<9;i++){
                     if(audi.indexOf(op[i])!=-1){
                         count = count+1;
-
                     }
                 }
                 if(count ==0){
-                    config_name = myconfigname.getText().toString();
-
-
+                    config_name = configNameET.getText().toString();
                 }
 
                 if(count!=0){
@@ -346,29 +327,14 @@ public class Configuration extends AppCompatActivity {
                             .setIcon(R.drawable.ic_launcher_foreground)
                             .setPositiveButton("Oui",
                                     new DialogInterface.OnClickListener() {
-                                        @TargetApi(11)
                                         public void onClick(DialogInterface dialog, int id) {
-
                                             dialog.cancel();
                                         }
                                     }).show();
-
-
                 }
             }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-
-            }
         });
-
+*/
         // button refresh
         btn_refresh = (Button)findViewById(R.id.btn_refresh);
         btn_refresh.setOnClickListener(new View.OnClickListener() {
@@ -480,7 +446,6 @@ public class Configuration extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_comm_changeNip:
-                etat_btn_change_nip =1;
                 btn_changeNip_cliked();
                 return true;
 
@@ -526,7 +491,7 @@ public class Configuration extends AppCompatActivity {
 
         if (nbBit+nbOfPins > 10) {
             Toast toast = Toast.makeText(getApplicationContext(),
-                    "A maximum of 10 input pins and 10 output pins is allowed per configuration.\nYou already have "+ nbBit +"pins in your configuration.",
+                    "A maximum of 10 input pins and 10 output pins is allowed per configuration.\nYou already have "+ nbBit +" pins in your configuration.",
                     Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP|Gravity.END, 0, 0);
             toast.show();
@@ -560,10 +525,10 @@ public class Configuration extends AppCompatActivity {
                 configElementsAdapter.notifyDataSetChanged();
 
                 //Modifie le rbtn de la liste de gauche
+                RadioButton rbtnClicked = findViewById(rbtnIDs[pinNB-1]);
+                rbtnClicked.setClickable(false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    RadioButton rbtnClicked = findViewById(rbtnIDs[pinNB-1]);
                     rbtnClicked.setButtonTintList(ColorStateList.valueOf(Color.GRAY));
-                    rbtnClicked.setClickable(false);
                 }
             }
         }
@@ -603,11 +568,12 @@ public class Configuration extends AppCompatActivity {
                     //Add 'a', 'b' or 'c' in widget_input or widget_output at positions
                     widget_input = widget_input.substring(0, pinNBs[i]-1)+letter+widget_input.substring(pinNBs[i]);
                     strBuilder.append(String.valueOf(pinNBs[i])).append('-');
+
                     //Modifie les rbtns de la liste de gauche
+                    RadioButton rbtnClicked = findViewById(rbtnIDs[pinNBs[i]-1]);
+                    rbtnClicked.setClickable(false);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        RadioButton rbtnClicked = findViewById(rbtnIDs[pinNBs[i]-1]);
                         rbtnClicked.setButtonTintList(ColorStateList.valueOf(Color.GRAY));
-                        rbtnClicked.setClickable(false);
                     }
                 }
             }
@@ -620,10 +586,10 @@ public class Configuration extends AppCompatActivity {
                     widget_output = widget_output.substring(0, pinNBs[i]-1)+letter+widget_output.substring(pinNBs[i]);
                     strBuilder.append(String.valueOf(pinNBs[i])).append('-');
                     //Modifie les rbtns de la liste de gauche
+                    RadioButton rbtnClicked = findViewById(rbtnIDs[pinNBs[i]-1]);
+                    rbtnClicked.setClickable(false);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        RadioButton rbtnClicked = findViewById(rbtnIDs[pinNBs[i]-1]);
                         rbtnClicked.setButtonTintList(ColorStateList.valueOf(Color.GRAY));
-                        rbtnClicked.setClickable(false);
                     }
                 }
             }
@@ -650,7 +616,7 @@ public class Configuration extends AppCompatActivity {
         return 'c';
     }
 
-    private void btn_refresh_clicked(){
+    private void btn_refresh_clicked() {
         configNamesAdapter.clear();
         configNamesAdapter.notifyDataSetChanged();
         sendStringMessage("refreshConfigs");
@@ -672,7 +638,7 @@ public class Configuration extends AppCompatActivity {
         }
     }
 
-    private void btn_load_Cliked(){
+    private void btn_load_Cliked() {
 
         sendStringMessage("loadConfig;"+selected+";");
 
@@ -690,11 +656,11 @@ public class Configuration extends AppCompatActivity {
         //Faire load
     }
 
-    private void btn_del_Cliked(){
+    private void btn_del_Cliked() {
         if (!selected_configname.equals("")) {
             new AlertDialog.Builder(Configuration.this)
                     .setTitle("Warning !")
-                    .setMessage("Voulez vous vraiment supprimer la configuration?")
+                    .setMessage("Voulez vous vraiment supprimer la configuration \""+selected_configname+"\" ?")
                     .setIcon(R.drawable.warning_icon)
                     .setPositiveButton(R.string.Yes,
                             new DialogInterface.OnClickListener() {
@@ -719,70 +685,91 @@ public class Configuration extends AppCompatActivity {
 
     }
 
-    private void btn_save_clicked(){
-        new AlertDialog.Builder(Configuration.this)
-                .setTitle("Warning !")
-                .setMessage("Saving will overwrite any existing configuration with the same name already on the Raspberry Pi\nConfiguration Name chosen : "+ config_name +"\nContinue ?")
-                .setIcon(R.drawable.warning_icon)
-                .setPositiveButton(R.string.Yes,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                    sendStringMessage("saveConfig;"+config_name+";"+widget_input+";"+widget_output+";");
+    private void btn_save_clicked() {
+        String configName = configNameET.getText().toString();
+        if (configName.equals("")) {
+            Toast.makeText(getApplicationContext(), "Error : You must pick a configuration name before saving it", Toast.LENGTH_LONG).show();
+        }
+        else if (blockCharacterSet.contains(("" + configName))) {
+            Toast.makeText(getApplicationContext(), "Error : Configuration name contains prohibited characters", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            new AlertDialog.Builder(Configuration.this)
+                    .setTitle("Warning !")
+                    .setMessage("Saving will overwrite any existing configuration with the same name already on the Raspberry Pi\n\nConfiguration Name chosen : " + configName + "\n\nContinue ?")
+                    .setIcon(R.drawable.warning_icon)
+                    .setPositiveButton(R.string.Yes,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    ok = true;
+                                    sendStringMessage("saveConfig;" + configNameET.getText().toString() + ";" + widget_input + ";" + widget_output + ";");
                                     recieved = receiveStringMessage();
-
-                                    if (recieved.equals("error")){
-                                    Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
+                                    if (recieved.equals("error")) {
+                                        Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        })
-                .setNegativeButton(R.string.No,  null)
-                .show();
-    }
-
-    private void btn_Save_And_Start_Cliked(){
-        sendStringMessage("start;"+config_name+";"+widget_input+";"+widget_output+";");
-        recieved = receiveStringMessage();
-        if (recieved.equals("error")) {
-            Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
-        } else {
-            ChangeView(Communication.class);
+                            })
+                    .setNegativeButton(R.string.No,  null)
+                    .show();
         }
     }
 
-    private void btn_changeNip_cliked(){
-        if (etat_btn_change_nip ==1) {
-            final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
-            LayoutInflater inflater = this.getLayoutInflater();
-            View dialogView = inflater.inflate(R.layout.alert_layout, null);
+    private void btn_Save_And_Start_Cliked() {
 
-            final EditText editText = (EditText) dialogView.findViewById(R.id.edt_comment);
-            Button button1 = (Button) dialogView.findViewById(R.id.buttonSubmit);
-            Button button2 = (Button) dialogView.findViewById(R.id.buttonCancel);
-
-            button2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialogBuilder.dismiss();
-                }
-            });
-            button1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // DO SOMETHINGS
-                    sendStringMessage("changeNip;"+editText.getText().toString()+";");
-                    recieved=receiveStringMessage();
-                    if(recieved=="error"){
-                        //gestion erreur
-
-                    }
-                    dialogBuilder.dismiss();
-                }
-            });
-
-            dialogBuilder.setView(dialogView);
-            dialogBuilder.show();
+        String configName = configNameET.getText().toString();
+        if (configName.equals("")) {
+            Toast.makeText(getApplicationContext(), "Error : You must pick a configuration name before saving it", Toast.LENGTH_LONG).show();
         }
+        else if (blockCharacterSet.contains(("" + configName))) {
+            Toast.makeText(getApplicationContext(), "Error : Configuration name contains prohibited characters", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            new AlertDialog.Builder(Configuration.this)
+                    .setTitle("Warning !")
+                    .setMessage("Saving will overwrite any existing configuration with the same name already on the Raspberry Pi\n\nConfiguration Name chosen : " + configName + "\n\nContinue ?")
+                    .setIcon(R.drawable.warning_icon)
+                    .setPositiveButton(R.string.Yes,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    ok = true;
+                                    sendStringMessage("start;" + configNameET.getText().toString() + ";" + widget_input + ";" + widget_output + ";");
+                                    recieved = receiveStringMessage();
+                                    if (recieved.equals("error")) {
+                                        Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else {
+                                        ChangeView(Communication.class);
+                                    }
+                                }
+                            })
+                    .setNegativeButton(R.string.No,  null)
+                    .show();
+        }
+    }
 
+    private void btn_changeNip_cliked() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final EditText edittext = new EditText(this);
+        alert.setIcon(R.drawable.warning_icon);
+        alert.setMessage("Enter your chosen Nip");
+        alert.setTitle("Warning !");
+
+        alert.setView(edittext);
+
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //What ever you want to do with the value
+                NIP = edittext.getText().toString();
+                sendStringMessage("changeNIP;"+NIP+";");
+            }
+        });
+
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // what ever you want to do with No option.
+            }
+        });
+        alert.show();
     }
 
     private void btn_remove_clicked() {
@@ -805,6 +792,10 @@ public class Configuration extends AppCompatActivity {
                 rbtn = (RadioButton)findViewById(rbtnIDs[pinConfig.getPinNumber()-1]);
                 rbtn.setClickable(true);
                 rbtn.setChecked(false);
+                if (pinConfig.getIsInput())
+                    nbInputBit--;
+                else
+                    nbOutputBit--;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     rbtn.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
                 }

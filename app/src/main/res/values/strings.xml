@@ -18,10 +18,10 @@
     <string name="update_paired_devices">Update paired devices</string>
     <string name="connexion_failed">Connexion has failed</string>
     <string name="save_and_start">Save and Start</string>
-    <string name="add_bit_R">AddBitR</string>
-    <string name="add_byte_R">AddByteR</string>
-    <string name="add_bit_W">AddBitW</string>
-    <string name="add_byte_W">AddByteW</string>
+    <string name="add_bit_R">AddBitIn</string>
+    <string name="add_byte_R">AddByteIn</string>
+    <string name="add_bit_W">AddBitOut</string>
+    <string name="add_byte_W">AddByteOut</string>
     <string name="k_remove">remove</string>
     <string name="k_del">Del</string>
     <string name="k_load">load</string>
