@@ -4,8 +4,10 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +29,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import static proj.myapplication.Connexion.btSocket;
+
 public class Communication extends AppCompatActivity {
 
     private OutputStream btOutputStream;
@@ -36,6 +40,8 @@ public class Communication extends AppCompatActivity {
     private ArrayList<Integer> outBitPins;
     private ArrayList<ArrayList<Integer>> inBytePins;
     private ArrayList<ArrayList<Integer>> outBytePins;
+
+    private String received;
 
     private Button showHideHintBtn;
     private boolean hintVisible;
@@ -70,6 +76,7 @@ public class Communication extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("Tag", "onCreate - Communication");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_communication);
 
@@ -79,6 +86,7 @@ public class Communication extends AppCompatActivity {
             btInputStream = Connexion.btSocket.getInputStream();
         } catch (IOException e) {
             Log.e("Tag", "socket's getOutputStream() method failed", e);
+            ChangeView(Connexion.class);
         }
 
         //Saving ID of first of each widget for future use
@@ -103,6 +111,7 @@ public class Communication extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.i("Tag", "onStart - Communication");
 
         //Init config Arrays
         //Initiate inputs and outputs array
@@ -180,7 +189,6 @@ public class Communication extends AppCompatActivity {
             outBytesBtn.get(i).setVisibility(View.VISIBLE);
             outBytesBtn.get(i).setOnClickListener(OutBytesBtnListener);
         }
-        registerReceiver(mReceiverActionAclDisconnected, new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED));
     }
 
     @Override
@@ -197,14 +205,16 @@ public class Communication extends AppCompatActivity {
                 return true;
 
             case R.id.menu_comm_changeNip:
-                //Call fct ChangeNIP
+                btn_changeNip_clicked();
                 return true;
 
             case R.id.menu_comm_disconnect:
+                sendStringMessage("disconnect");
                 ChangeView(Connexion.class);
                 return true;
 
             case R.id.menu_comm_close_app:
+                sendStringMessage("disconnect");
                 this.finishAffinity();
                 return true;
         }
@@ -237,20 +247,26 @@ public class Communication extends AppCompatActivity {
             else {
          //Send the pinNBs to get the data from and get the data in "data"
                  String data = UpdateInputs(strBuilder.toString());
-         //Apply received data to widgets
-                //Bits
-                for (int i=0; i<numberOfBitElements; i++) {
-                    inBitsSw.get(i).setChecked(data.charAt(i) == '1');
-                }
-                //Bytes
-                for (int i=0; i<numberOfByteElements; i++) {
-                    //Get substring of 8 binary numbers
-                    String subString = data.substring(8*i +numberOfBitElements, 8*i + numberOfBitElements + 8);
-                    //Convert substring in decimal
-                    int decimalValue = Integer.parseInt(subString, 2);
-                    //Set text of TextView to decimal value that was read
-                    inBytesValTv.get(i).setText(String.valueOf(decimalValue));
-                }
+                 if (data.equals("error")) {
+                     Toast.makeText(getApplicationContext(), "Reading ", Toast.LENGTH_SHORT).show();
+                 }
+                 else {
+                     //Apply received data to widgets
+                     //Bits
+                     for (int i=0; i<numberOfBitElements; i++) {
+                         inBitsSw.get(i).setChecked(data.charAt(i) == '1');
+                     }
+                     //Bytes
+                     for (int i=0; i<numberOfByteElements; i++) {
+                         //Get substring of 8 binary numbers
+                         String subString = data.substring(8*i +numberOfBitElements, 8*i + numberOfBitElements + 8);
+                         //Convert substring in decimal
+                         int decimalValue = Integer.parseInt(subString, 2);
+                         //Set text of TextView to decimal value that was read
+                         inBytesValTv.get(i).setText(String.valueOf(decimalValue));
+                     }
+                 }
+
             }
         }
     };
@@ -275,23 +291,9 @@ public class Communication extends AppCompatActivity {
     }
 
     private String UpdateInputs(String pinNBs) {
-        //Send pin numbers
-        try {
-            btOutputStream.write("updateInputs".getBytes());
-            btOutputStream.write(pinNBs.getBytes());
-        } catch (IOException e) {
-            Toast.makeText(this, "Could not send data, socket has a problem",Toast.LENGTH_SHORT).show();
-            return "error";
-        }
-        //Receive data
-        byte[] buffer = new byte[1024];
-        try {
-            btInputStream.read(buffer);
-        } catch (IOException e) {
-            Toast.makeText(this, "Could not receive data, socket has a problem",Toast.LENGTH_SHORT).show();
-            return "error";
-        }
-        return new String(buffer);
+        sendStringMessage("updateInputs;" + pinNBs);
+        received = receiveStringMessage();
+        return received;
     }
 
     private View.OnClickListener ShowHideHintBtnListener = new View.OnClickListener() {
@@ -330,13 +332,8 @@ public class Communication extends AppCompatActivity {
     };
 
     private void WriteBit(int pinNB, int data) {
-        try {
-            btOutputStream.write("writeBit".getBytes());
-            btOutputStream.write(String.valueOf(pinNB).getBytes());
-            btOutputStream.write(String.valueOf(data).getBytes());
-        } catch (IOException e) {
-            Toast.makeText(this, "Could not send data, socket has a problem",Toast.LENGTH_SHORT).show();
-        }
+        sendStringMessage("writeBit;" + String.valueOf(pinNB) + ';' + String.valueOf(data) + ';');
+        received = receiveStringMessage();
     }
 
     private View.OnClickListener OutBytesTvListener = new View.OnClickListener() {
@@ -382,13 +379,8 @@ public class Communication extends AppCompatActivity {
     }
 
     private void WriteByte(String pinNBs, String data) {
-        try {
-            btOutputStream.write("writeByte".getBytes());
-            btOutputStream.write(pinNBs.getBytes());
-            btOutputStream.write(data.getBytes());
-        } catch (IOException e) {
-            Toast.makeText(this, "Could not send data, socket has a problem",Toast.LENGTH_SHORT).show();
-        }
+        sendStringMessage("writeByte;" + pinNBs + ';' + data + ';');
+        received = receiveStringMessage();
     }
 
 
@@ -459,45 +451,61 @@ public class Communication extends AppCompatActivity {
         return tmpPinList;
     }
 
-    @Override
-    public void onBackPressed() {
-        ChangeView(Connexion.class);
+    private void btn_changeNip_clicked() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final EditText edittext = new EditText(this);
+        alert.setIcon(R.drawable.warning_icon);
+        alert.setMessage("Enter your chosen Nip");
+        alert.setTitle("Warning !");
+
+        alert.setView(edittext);
+
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //What ever you want to do with the value
+                String NIP = edittext.getText().toString();
+                sendStringMessage("changeNIP;"+NIP+";");
+                received = receiveStringMessage();
+            }
+        });
+
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // what ever you want to do with No option.
+            }
+        });
+        alert.show();
     }
 
-    // Create a BroadcastReceiver for Bluetooth.ACTION_ACL_DISCONNECTED
-    private final BroadcastReceiver mReceiverActionAclDisconnected = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
-                //Device disconnected
-                Log.i("TAG", "Disconnected");
-                if (Connexion.btSocket != null) {
-                    try {
-                        Connexion.btSocket.close();
-                        Connexion.btSocket = null;
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                //Retour a la page de connexion
-                ChangeView(Connexion.class);
-            }
+    private void sendStringMessage(String mot){
+        try {
+            btOutputStream.write(mot.getBytes());
+
         }
-    };
+        catch (IOException e) {
+            Log.e("Tag", "Writing failed. Tried to write : "+ mot);
+        }
+    }
+
+    private String receiveStringMessage() {
+        byte [] mmBuffer3 = new byte[1024];
+        try {
+            btInputStream.read(mmBuffer3);
+        } catch (IOException e) {
+            Log.e("Tag", "Reading failed");
+        }
+        String b = new String(mmBuffer3);
+        return b.substring(0,b.indexOf(0));
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        ChangeView(Configuration.class);
+    }
 
     private void ChangeView(Class activity) {
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        try {
-            unregisterReceiver(mReceiverActionAclDisconnected);
-        } catch(IllegalArgumentException e) {
-            Log.e("Tag", "Unregistering receiver mReceiverActionAclDisconnected failed", e);
-        }
     }
 }

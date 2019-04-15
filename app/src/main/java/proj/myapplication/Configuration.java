@@ -12,7 +12,6 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +32,9 @@ import static proj.myapplication.Connexion.btSocket;
 
 public class Configuration extends AppCompatActivity {
     //declaration des commandes
+
+    private OutputStream btOutputStream;
+    private InputStream btInputStream;
     private Button btn_Add_bit_R;
     private Button btn_Add_byte_R;
     private Button btn_Add_bit_W;
@@ -44,10 +46,8 @@ public class Configuration extends AppCompatActivity {
     private Button btn_del;
     private Button btn_save_and_start;
 
-
-    private String NIP="";
     private String config_name;
-    private String recieved;
+    private String received;
     private String last_pin_added;
     private String last_byte_added;
 
@@ -134,8 +134,18 @@ public class Configuration extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("Tag", "onCreate - Configuration");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
+
+        //Bluetooth
+        try {
+            btOutputStream = Connexion.btSocket.getOutputStream();
+            btInputStream = Connexion.btSocket.getInputStream();
+        } catch (IOException e) {
+            Log.e("Tag", "socket's getOutputStream() method failed", e);
+            ChangeView(Connexion.class);
+        }
 
         widget_input="2202020020000200200200002022020002000020";
         widget_output ="2202020020000200200200002022020002000020";
@@ -149,7 +159,6 @@ public class Configuration extends AppCompatActivity {
 
         index_selected_element = -1;
         selected_configname = "";
-        btSocket = Connexion.btSocket;
 
         configElementsList= new ArrayList<>();
         configElementsAdapter = new CustomAdapter(this, configElementsList);
@@ -226,7 +235,7 @@ public class Configuration extends AppCompatActivity {
         btn_load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_load_Cliked();
+                btn_Load_Clicked();
             }
         });
 
@@ -235,7 +244,7 @@ public class Configuration extends AppCompatActivity {
         btn_save_and_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_Save_And_Start_Cliked();
+                btn_Save_And_Start_Clicked();
             }
         });
 
@@ -244,7 +253,7 @@ public class Configuration extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_save_clicked();
+                btn_Save_Clicked();
             }
         });
 
@@ -253,7 +262,7 @@ public class Configuration extends AppCompatActivity {
         btn_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_del_Cliked();
+                btn_Del_Clicked();
             }
         });
 
@@ -300,50 +309,14 @@ public class Configuration extends AppCompatActivity {
         configNameET = (EditText)findViewById(R.id.editText);
         configNameET.setFilters(new InputFilter[]{filter});
 
-        //Effacer ici
-        /*
-        configNameET.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //code de validation
-                int count =0;
-                String audi = configNameET.getText().toString();
-                // ajouter le "" aux commandes interdites
-                Character op[] = {'/','<','>','|',':','?','*','.','%','"','\\'};
-                for(int i=0;i<9;i++){
-                    if(audi.indexOf(op[i])!=-1){
-                        count = count+1;
-                    }
-                }
-                if(count ==0){
-                    config_name = configNameET.getText().toString();
-                }
-
-                if(count!=0){
-                    new AlertDialog.Builder(Configuration.this)
-                            .setTitle("GOD MODE")
-                            .setMessage("Impossible d'enregistrer la configuration. Nom invalide")
-                            .setIcon(R.drawable.ic_launcher_foreground)
-                            .setPositiveButton("Oui",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    }).show();
-                }
-            }
-        });
-*/
         // button refresh
         btn_refresh = (Button)findViewById(R.id.btn_refresh);
         btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_refresh_clicked();
+                btn_Refresh_Clicked();
             }
         });
-
 
         // button remove
         btn_remove= (Button)findViewById(R.id.btn_remove);
@@ -446,22 +419,17 @@ public class Configuration extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_comm_changeNip:
-                btn_changeNip_cliked();
+                btn_changeNip_clicked();
                 return true;
 
             case R.id.menu_comm_disconnect:
                 //disconnect
                 sendStringMessage("disconnect");
-                try{
-                    Connexion.btSocket.close();
-                }
-                catch(IOException e){
-                    Log.e("Tag", "btsocket's close() method failed", e);
-                }
                 ChangeView(Connexion.class);
                 return true;
 
             case R.id.menu_comm_close_app:
+                sendStringMessage("disconnect");
                 this.finishAffinity();
                 return true;
         }
@@ -616,18 +584,18 @@ public class Configuration extends AppCompatActivity {
         return 'c';
     }
 
-    private void btn_refresh_clicked() {
+    private void btn_Refresh_Clicked() {
         configNamesAdapter.clear();
         configNamesAdapter.notifyDataSetChanged();
         sendStringMessage("refreshConfigs");
-        Log.i("Tag", "Received : "+ recieved);
-        recieved = receiveStringMessage();
+        Log.i("Tag", "Received : "+ received);
+        received = receiveStringMessage();
 
-        if(recieved.equals("empty")) {
+        if(received.equals("empty")) {
             Toast.makeText(getApplicationContext(), "There are no configurations saved!", Toast.LENGTH_SHORT).show();
         }
-        else if(!recieved.equals("error")) {
-            String splittedStr[]=recieved.split("\\r?\\n");
+        else if(!received.equals("error")) {
+            String splittedStr[]= received.split("\\r?\\n");
 
             for(int i=0;i<splittedStr.length;i++){
                 if (splittedStr[i]!="null"){
@@ -638,17 +606,17 @@ public class Configuration extends AppCompatActivity {
         }
     }
 
-    private void btn_load_Cliked() {
+    private void btn_Load_Clicked() {
 
         sendStringMessage("loadConfig;"+selected+";");
 
-        recieved = receiveStringMessage();
+        received = receiveStringMessage();
 
-        if(recieved.equals("error")) {
+        if(received.equals("error")) {
             Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
         }
         else {
-            String[] splittedStr = recieved.split(";",2);
+            String[] splittedStr = received.split(";",2);
             widget_input = splittedStr[0];
             widget_output = splittedStr[1];
 
@@ -656,7 +624,7 @@ public class Configuration extends AppCompatActivity {
         //Faire load
     }
 
-    private void btn_del_Cliked() {
+    private void btn_Del_Clicked() {
         if (!selected_configname.equals("")) {
             new AlertDialog.Builder(Configuration.this)
                     .setTitle("Warning !")
@@ -671,9 +639,9 @@ public class Configuration extends AppCompatActivity {
                                     configNamesAdapter.notifyDataSetChanged();
 
                                     sendStringMessage("deleteConfig;"+ selected_configname +";");
-                                    recieved=receiveStringMessage();
+                                    received =receiveStringMessage();
 
-                                    if (recieved.equals("error")){
+                                    if (received.equals("error")){
                                         Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
                                     }
                                     selected_configname = "";
@@ -685,7 +653,7 @@ public class Configuration extends AppCompatActivity {
 
     }
 
-    private void btn_save_clicked() {
+    private void btn_Save_Clicked() {
         String configName = configNameET.getText().toString();
         if (configName.equals("")) {
             Toast.makeText(getApplicationContext(), "Error : You must pick a configuration name before saving it", Toast.LENGTH_LONG).show();
@@ -703,8 +671,8 @@ public class Configuration extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int id) {
                                     ok = true;
                                     sendStringMessage("saveConfig;" + configNameET.getText().toString() + ";" + widget_input + ";" + widget_output + ";");
-                                    recieved = receiveStringMessage();
-                                    if (recieved.equals("error")) {
+                                    received = receiveStringMessage();
+                                    if (received.equals("error")) {
                                         Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -714,7 +682,7 @@ public class Configuration extends AppCompatActivity {
         }
     }
 
-    private void btn_Save_And_Start_Cliked() {
+    private void btn_Save_And_Start_Clicked() {
 
         String configName = configNameET.getText().toString();
         if (configName.equals("")) {
@@ -733,8 +701,8 @@ public class Configuration extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int id) {
                                     ok = true;
                                     sendStringMessage("start;" + configNameET.getText().toString() + ";" + widget_input + ";" + widget_output + ";");
-                                    recieved = receiveStringMessage();
-                                    if (recieved.equals("error")) {
+                                    received = receiveStringMessage();
+                                    if (received.equals("error")) {
                                         Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
                                     }
                                     else {
@@ -747,7 +715,7 @@ public class Configuration extends AppCompatActivity {
         }
     }
 
-    private void btn_changeNip_cliked() {
+    private void btn_changeNip_clicked() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final EditText edittext = new EditText(this);
         alert.setIcon(R.drawable.warning_icon);
@@ -759,8 +727,9 @@ public class Configuration extends AppCompatActivity {
         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 //What ever you want to do with the value
-                NIP = edittext.getText().toString();
+                String NIP = edittext.getText().toString();
                 sendStringMessage("changeNIP;"+NIP+";");
+                received = receiveStringMessage();
             }
         });
 
@@ -817,7 +786,6 @@ public class Configuration extends AppCompatActivity {
 
     private void sendStringMessage(String mot){
         try {
-            OutputStream btOutputStream = Connexion.btSocket.getOutputStream();
             btOutputStream.write(mot.getBytes());
 
         }
@@ -827,10 +795,9 @@ public class Configuration extends AppCompatActivity {
     }
 
     private String receiveStringMessage() {
-        mmBuffer3 = new byte[1024];
+        byte [] mmBuffer3 = new byte[1024];
         try {
-            InputStream inputStream = btSocket.getInputStream();
-            inputStream.read(mmBuffer3);
+            btInputStream.read(mmBuffer3);
         } catch (IOException e) {
             Log.e("Tag", "Reading failed");
         }
@@ -842,5 +809,11 @@ public class Configuration extends AppCompatActivity {
     public void ChangeView(Class activity) {
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        sendStringMessage("disconnect");
+        ChangeView(Connexion.class);
     }
 }

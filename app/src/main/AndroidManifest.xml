@@ -22,7 +22,8 @@
 
         <activity
             android:name=".Communication"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>
 
         <activity

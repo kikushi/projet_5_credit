@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -27,7 +26,6 @@ import java.util.UUID;
 public class Connexion extends AppCompatActivity {
 
     private UUID uuid;
-
     private Button getPairedBtn;
     private Spinner pairedSpinner;
     private Button connectPairedBtn;
@@ -49,6 +47,7 @@ public class Connexion extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("Tag", "onCreate - Connexion");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connexion);
 
@@ -102,7 +101,32 @@ public class Connexion extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        Log.i("Tag", "onStart");
+        Log.i("Tag", "onStart - Connexion");
+
+        if (btSocket != null) {
+            try {
+                btSocket.getInputStream().close();
+            } catch (IOException e) {
+                Log.e("Tag", "InputStream's close() method failed");
+            } catch (NullPointerException e) {
+                Log.e("Tag", "tried to access InputStream while it was null");
+            }
+
+            try {
+                btSocket.getOutputStream().close();
+            } catch (IOException e) {
+                Log.e("Tag", "OutputStream's close() method failed");
+            } catch (NullPointerException e) {
+                Log.e("Tag", "tried to access OutputStream while it was null");
+            }
+            try {
+                btSocket.close();
+            } catch (IOException e) {
+                Log.e("Tag", "Socket's close() method failed");
+            } catch (NullPointerException e) {
+                Log.e("Tag", "tried to access btSocket while it was null");
+            }
+        }
         btSocket = null;
 
         registerReceiver(mReceiverActionFound, filter_found);
@@ -300,6 +324,11 @@ public class Connexion extends AppCompatActivity {
     public void ChangeView(Class activity) {
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.finishAffinity();
     }
 
     @Override
