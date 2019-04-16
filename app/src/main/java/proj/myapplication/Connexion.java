@@ -70,7 +70,7 @@ public class Connexion extends AppCompatActivity {
             myBtAdapter.enable();
         }
 
-        uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
+        uuid = UUID.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee"); //Standard SerialPortService ID
 
         filter_found = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         filter_discoveryFinished = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);

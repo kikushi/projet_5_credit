@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import static proj.myapplication.Connexion.btSocket;
 
@@ -104,6 +105,14 @@ public class Configuration extends AppCompatActivity {
     private PINConfig selectedElement;
     private String selected;
     boolean ok;
+
+    ArrayList<Integer> inBitPins= new ArrayList<>();
+    ArrayList<Integer> outBitPins= new ArrayList<>();
+    ArrayList<ArrayList<Integer>> inBytePins= new ArrayList<>();
+    ArrayList<ArrayList<Integer>> outBytePins= new ArrayList<>();
+
+
+
 
     ListView configNamesListView;
     public ListView configElementsListView;
@@ -607,21 +616,46 @@ public class Configuration extends AppCompatActivity {
     }
 
     private void btn_Load_Clicked() {
+        //Remove les elements de la listview
+        for (Iterator<PINConfig> it = configElementsList.iterator(); it.hasNext();) {
+            PINConfig item = it.next();
+            Remove(true, item);
+            it.remove();
+        }
+        //Remove les boutons déjà checked
+        for (int i=0; i<40; i++) {
+            if (selectedPins[i]) {
+                //Le rbtn est sélectionné
+                //On déselectionne le rbtn
+                ((RadioButton)findViewById(rbtnIDs[i])).setChecked(false);
+                selectedPins[i] = false;
+            }
+        }
+        //Set le edittext avec le configname
+        configNameET.setText(selected_configname);
 
-        sendStringMessage("loadConfig;"+selected+";");
+        //Load la config
+        inBitPins= new ArrayList<>();
+        outBitPins= new ArrayList<>();
+        inBytePins= new ArrayList<>();
+        outBytePins= new ArrayList<>();
+
+        sendStringMessage("loadConfig;"+selected_configname+";");
 
         received = receiveStringMessage();
+        String[] splittedStr = received.split(";",2);
+        widget_input = splittedStr[0];
+        widget_output = splittedStr[1];
 
-        if(received.equals("error")) {
+        if(widget_input.equals("error")|| widget_output.equals("error")) {
             Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
         }
         else {
-            String[] splittedStr = received.split(";",2);
-            widget_input = splittedStr[0];
-            widget_output = splittedStr[1];
-
+            init(new String[]{widget_input,widget_output});
+            addbit();
+            addbyte();
         }
-        //Faire load
+
     }
 
     private void btn_Del_Clicked() {
@@ -742,13 +776,19 @@ public class Configuration extends AppCompatActivity {
     }
 
     private void btn_remove_clicked() {
+        Remove(false, configElementsAdapter.get_element(index_selected_element));
+    }
 
-        PINConfig pinConfig= configElementsAdapter.get_element(index_selected_element);
+    private void Remove(boolean calledByLoad, PINConfig pinConfig) {
+
+
         if (pinConfig != null) {
             RadioButton rbtn;
 
             //Remove l'element de la listview
-            configElementsList.remove(index_selected_element);
+            if (!calledByLoad) {
+                configElementsList.remove(index_selected_element);
+            }
             index_selected_element = -1;
             configElementsListView.setSelector(android.R.color.transparent);
             configElementsAdapter.notifyDataSetChanged();
@@ -815,5 +855,169 @@ public class Configuration extends AppCompatActivity {
     public void onBackPressed() {
         sendStringMessage("disconnect");
         ChangeView(Connexion.class);
+    }
+    public void addbit(){
+        for(Integer i:inBitPins){
+            //Cree un objet PINConfig
+            String text = "PIN # " + String.valueOf(i);
+            PINConfig pi = new PINConfig(false, true, 'P', text);
+            pi.setPinNumber(i);
+
+            //Add l'objet créé au listview
+            configElementsList.add(pi);
+            configElementsAdapter.notifyDataSetChanged();
+
+            //Modifie le rbtn de la liste de gauche
+            RadioButton rbtnClicked = findViewById(rbtnIDs[i-1]);
+            rbtnClicked.setClickable(false);
+            rbtnClicked.setChecked(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                rbtnClicked.setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+            }
+
+        }
+        for(Integer i:outBitPins){
+            //Cree un objet PINConfig
+            String text = "PIN # " + String.valueOf(i);
+            PINConfig pi = new PINConfig(false, false, 'P', text);
+            pi.setPinNumber(i);
+
+            //Add l'objet créé au listview
+            configElementsList.add(pi);
+            configElementsAdapter.notifyDataSetChanged();
+
+            //Modifie le rbtn de la liste de gauche
+            RadioButton rbtnClicked = findViewById(rbtnIDs[i-1]);
+            rbtnClicked.setClickable(false);
+            rbtnClicked.setChecked(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                rbtnClicked.setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+            }
+
+        }
+
+
+
+
+
+
+
+    }
+    public void addbyte(){
+
+        StringBuilder strBuilder = new StringBuilder("PINS # ");
+
+        for(ArrayList<Integer> byteGroup:inBytePins){
+            int [] PinNumbers = new int[8];
+            for (int i=0; i<8; i++) {
+                //
+                PinNumbers[i] = byteGroup.get(i);
+
+                //Add 'a', 'b' or 'c' in widget_input or widget_output at positions
+                strBuilder.append(String.valueOf(byteGroup.get(i))).append('-');
+
+
+                //Modifie les rbtns de la liste de gauche
+                RadioButton rbtnClicked = findViewById(rbtnIDs[byteGroup.get(i)-1]);
+                rbtnClicked.setClickable(false);
+                rbtnClicked.setChecked(true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    rbtnClicked.setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                }
+            }
+            //Remove last '-'
+            String text = new String(strBuilder).substring(0, strBuilder.length()-1);
+            //Cree un objet PINConfig
+            PINConfig pi = new PINConfig(true, true,'G', text);
+            pi.setPinNumbers(PinNumbers);
+
+            //Add l'objet créé au listview
+            configElementsList.add(pi);
+            configElementsAdapter.notifyDataSetChanged();
+        }
+        strBuilder = new StringBuilder("PINS # ");
+
+        for(ArrayList<Integer> byteGroup:outBytePins){
+            int [] PinNumbers = new int[8];
+            for (int i=0; i<8; i++) {
+                //
+                PinNumbers[i] = byteGroup.get(i);
+
+                //Add 'a', 'b' or 'c' in widget_input or widget_output at positions
+                strBuilder.append(String.valueOf(byteGroup.get(i))).append('-');
+
+
+                //Modifie les rbtns de la liste de gauche
+                RadioButton rbtnClicked = findViewById(rbtnIDs[byteGroup.get(i)-1]);
+                rbtnClicked.setClickable(false);
+                rbtnClicked.setChecked(true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    rbtnClicked.setButtonTintList(ColorStateList.valueOf(Color.GRAY));
+                }
+            }
+            //Remove last '-'
+            String text = new String(strBuilder).substring(0, strBuilder.length()-1);
+            //Cree un objet PINConfig
+            PINConfig pi = new PINConfig(true, false,'G', text);
+            pi.setPinNumbers(PinNumbers);
+
+            //Add l'objet créé au listview
+            configElementsList.add(pi);
+            configElementsAdapter.notifyDataSetChanged();
+        }
+
+
+
+    }
+    private void init( String [] inputsOutputs) {
+
+        for (int i = 0; i < 2; i++) {
+            if (i == 0) {
+                //Inputs
+
+                //Bits
+                inBitPins = GetCharPositions(inputsOutputs[i], '1');
+
+                //Bytes
+                if (inputsOutputs[i].contains("a")) {
+                    inBytePins.add(GetCharPositions(inputsOutputs[i], 'a'));
+                }
+                if (inputsOutputs[i].contains("b")) {
+                    inBytePins.add(GetCharPositions(inputsOutputs[i], 'b'));
+                }
+                if (inputsOutputs[i].contains("c")) {
+                    inBytePins.add(GetCharPositions(inputsOutputs[i], 'c'));
+                }
+            }
+            else {
+                //Outputs
+
+                //Bits
+                outBitPins = GetCharPositions(inputsOutputs[i], '1');
+
+                //Bytes
+                if (inputsOutputs[i].contains("a")) {
+                    outBytePins.add(GetCharPositions(inputsOutputs[i], 'a'));
+                }
+                if (inputsOutputs[i].contains("b")) {
+                    outBytePins.add(GetCharPositions(inputsOutputs[i], 'b'));
+                }
+                if (inputsOutputs[i].contains("c")) {
+                    outBytePins.add(GetCharPositions(inputsOutputs[i], 'c'));
+                }
+            }
+        }
+    }
+    private ArrayList<Integer> GetCharPositions(String myString, char myChar) {
+        ArrayList<Integer> tmpPinList = new ArrayList<>(0);
+        int pinNB = 1;
+
+        for (char ch : myString.toCharArray()) {
+            if (ch == myChar) {
+                tmpPinList.add(pinNB);
+            }
+            pinNB++;
+        }
+        return tmpPinList;
     }
 }
