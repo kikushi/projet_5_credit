@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -204,8 +205,12 @@ public class Connexion extends AppCompatActivity {
                 Log.i("Tag", "Device Found");
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 otherDevices.add(device);
-                if (!Contains(otherAdapter, device.getName())) {
-                    otherAdapter.add(device.getName());
+                String name = device.getName();
+                if (name == null) {
+                    name = device.getAddress();
+                }
+                if (!Contains(otherAdapter, name)) {
+                    otherAdapter.add(name);
                 }
             }
         }
@@ -311,14 +316,19 @@ public class Connexion extends AppCompatActivity {
     }
 
     private boolean Contains(ArrayAdapter<String> theAdapter, String element) {
-        if (!theAdapter.isEmpty()) {
-            for (int i = 0; i < theAdapter.getCount(); i++) {
-                if (theAdapter.getItem(i).equals(element)) {
-                    return true;
+        try {
+            if (!theAdapter.isEmpty()) {
+                for (int i = 0; i < theAdapter.getCount(); i++) {
+                    if (Objects.requireNonNull(theAdapter.getItem(i)).equals(element)) {
+                        return true;
+                    }
                 }
             }
+            return false;
+        } catch (NullPointerException e) {
+            Log.e("Tag", "Nullptr");
+            return true;
         }
-        return false;
     }
 
     public void ChangeView(Class activity) {

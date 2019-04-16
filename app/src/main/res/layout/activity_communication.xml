@@ -8,7 +8,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="10"
         android:background="@drawable/border">
 
         <Button
@@ -31,7 +32,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="90"
         android:orientation="vertical"
         android:background="@drawable/border">
 
@@ -65,7 +66,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="70">
+                    android:layout_weight="50">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -147,9 +148,8 @@
                                     android:layout_weight="1">
 
                                     <Switch
-                                        style="@style/AppTheme.widget.switch.readonly"
                                         android:id="@+id/sw_I1"
-                                        />
+                                        style="@style/AppTheme.widget.switch.readonly" />
                                 </LinearLayout>
 
                             </LinearLayout>
@@ -177,9 +177,8 @@
                                     android:layout_weight="1">
 
                                     <Switch
-                                        style="@style/AppTheme.widget.switch.readonly"
                                         android:id="@+id/sw_I2"
-                                        />
+                                        style="@style/AppTheme.widget.switch.readonly" />
                                 </LinearLayout>
 
                             </LinearLayout>
@@ -214,6 +213,16 @@
 
                             </LinearLayout>
 
+
+
+                        </TableLayout>
+
+                        <TableLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="50"
+                            android:background="@drawable/border">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
@@ -243,14 +252,6 @@
                                 </LinearLayout>
 
                             </LinearLayout>
-
-                        </TableLayout>
-
-                        <TableLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="50"
-                            android:background="@drawable/border">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -342,65 +343,6 @@
 
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1">
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:gravity="center">
-
-                                    <TextView
-                                        android:id="@+id/tv_pinnbI8"
-                                        style="@style/AppTheme.widget"
-                                        android:text="@string/pin_nb" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1">
-
-                                    <Switch
-                                        style="@style/AppTheme.widget.switch.readonly"
-                                        android:id="@+id/sw_I8"
-                                        />
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1">
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:gravity="center">
-
-                                    <TextView
-                                        android:id="@+id/tv_pinnbI9"
-                                        style="@style/AppTheme.widget"
-                                        android:text="@string/pin_nb" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1">
-
-                                    <Switch
-                                        style="@style/AppTheme.widget.switch.readonly"
-                                        android:id="@+id/sw_I9"
-                                        />
-                                </LinearLayout>
-
-                            </LinearLayout>
 
                         </TableLayout>
 
@@ -410,7 +352,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="30"
+                    android:layout_weight="50"
                     android:background="@drawable/border">
 
                     <LinearLayout
@@ -533,7 +475,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="70">
+                    android:layout_weight="50">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -681,6 +623,16 @@
 
                             </LinearLayout>
 
+
+
+                        </TableLayout>
+
+                        <TableLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="50"
+                            android:background="@drawable/border">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
@@ -710,14 +662,6 @@
                                 </LinearLayout>
 
                             </LinearLayout>
-
-                        </TableLayout>
-
-                        <TableLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="50"
-                            android:background="@drawable/border">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -809,65 +753,7 @@
 
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1">
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:gravity="center">
-
-                                    <TextView
-                                        android:id="@+id/tv_pinnbO8"
-                                        style="@style/AppTheme.widget"
-                                        android:text="@string/pin_nb" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1">
-
-                                    <Switch
-                                        style="@style/AppTheme.widget.switch"
-                                        android:id="@+id/sw_O8"
-                                        />
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1">
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:gravity="center">
-
-                                    <TextView
-                                        android:id="@+id/tv_pinnbO9"
-                                        style="@style/AppTheme.widget"
-                                        android:text="@string/pin_nb" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1">
-
-                                    <Switch
-                                        style="@style/AppTheme.widget.switch"
-                                        android:id="@+id/sw_O9"
-                                        />
-                                </LinearLayout>
-
-                            </LinearLayout>
 
                         </TableLayout>
 
@@ -877,7 +763,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="30"
+                    android:layout_weight="50"
                     android:background="@drawable/border">
 
                     <LinearLayout

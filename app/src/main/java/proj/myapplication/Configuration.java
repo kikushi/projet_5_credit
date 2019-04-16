@@ -464,11 +464,11 @@ public class Configuration extends AppCompatActivity {
                 nbOfPins++;
             }
         }
-        //Verifier que le nombre de bits total <= 10
+        //Verifier que le nombre de bits total <= 8
 
-        if (nbBit+nbOfPins > 10) {
+        if (nbBit+nbOfPins > 8) {
             Toast toast = Toast.makeText(getApplicationContext(),
-                    "A maximum of 10 input pins and 10 output pins is allowed per configuration.\nYou already have "+ nbBit +" pins in your configuration.",
+                    "A maximum of 8 input pins and 8 output pins is allowed per configuration.\nYou already have "+ nbBit +" pins in your configuration.",
                     Toast.LENGTH_LONG);
             toast.setGravity(Gravity.TOP|Gravity.END, 0, 0);
             toast.show();
@@ -616,46 +616,51 @@ public class Configuration extends AppCompatActivity {
     }
 
     private void btn_Load_Clicked() {
-        //Remove les elements de la listview
-        for (Iterator<PINConfig> it = configElementsList.iterator(); it.hasNext();) {
-            PINConfig item = it.next();
-            Remove(true, item);
-            it.remove();
-        }
-        //Remove les boutons déjà checked
-        for (int i=0; i<40; i++) {
-            if (selectedPins[i]) {
-                //Le rbtn est sélectionné
-                //On déselectionne le rbtn
-                ((RadioButton)findViewById(rbtnIDs[i])).setChecked(false);
-                selectedPins[i] = false;
-            }
-        }
-        //Set le edittext avec le configname
-        configNameET.setText(selected_configname);
-
-        //Load la config
-        inBitPins= new ArrayList<>();
-        outBitPins= new ArrayList<>();
-        inBytePins= new ArrayList<>();
-        outBytePins= new ArrayList<>();
-
-        sendStringMessage("loadConfig;"+selected_configname+";");
-
-        received = receiveStringMessage();
-        String[] splittedStr = received.split(";",2);
-        widget_input = splittedStr[0];
-        widget_output = splittedStr[1];
-
-        if(widget_input.equals("error")|| widget_output.equals("error")) {
-            Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
+        if (selected_configname.equals("")) {
+            Toast.makeText(getApplicationContext(), "You must select a configuration before loading it", Toast.LENGTH_SHORT).show();
         }
         else {
-            init(new String[]{widget_input,widget_output});
-            addbit();
-            addbyte();
-        }
+            //Remove les elements de la listview
+            for (Iterator<PINConfig> it = configElementsList.iterator(); it.hasNext();) {
+                PINConfig item = it.next();
+                Remove(true, item);
+                it.remove();
+            }
+            //Remove les boutons déjà checked
+            for (int i=0; i<40; i++) {
+                if (selectedPins[i]) {
+                    //Le rbtn est sélectionné
+                    //On déselectionne le rbtn
+                    ((RadioButton)findViewById(rbtnIDs[i])).setChecked(false);
+                    selectedPins[i] = false;
+                }
+            }
+            //Set le edittext avec le configname
+            configNameET.setText(selected_configname);
 
+            //Load la config
+            inBitPins= new ArrayList<>();
+            outBitPins= new ArrayList<>();
+            inBytePins= new ArrayList<>();
+            outBytePins= new ArrayList<>();
+
+
+            sendStringMessage("loadConfig;"+selected_configname+";");
+
+            received = receiveStringMessage();
+            String[] splittedStr = received.split(";",2);
+            widget_input = splittedStr[0];
+            widget_output = splittedStr[1];
+
+            if(widget_input.equals("error")|| widget_output.equals("error")) {
+                Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                init(new String[]{widget_input,widget_output});
+                addbit();
+                addbyte();
+            }
+        }
     }
 
     private void btn_Del_Clicked() {

@@ -312,6 +312,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textStyle="bold"
+                android:text="@string/my_default"
                 android:hint="@string/enter_configname_here"
                 android:longClickable="false"
                 android:background="@color/cornflower_blue">

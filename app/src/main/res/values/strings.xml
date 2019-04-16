@@ -6,7 +6,7 @@
     <string name="connexion_success">Connexion successful with&#160;</string>
     <string name="paired_devices">Known Devices</string>
     <string name="other_devices">Other Devices</string>
-    <string name="connexion_with_host_ended">Connexion with host has ended</string>
+    <string name="connexion_with_host_ended">Connexion with Raspberry Pi has ended</string>
     <string name="device_discovery_finished">Device discovery finished</string>
     <string name="looking_for_nearby_devices">Looking for nearby devices …</string>
     <string name="no_device_selected">No device selected</string>
@@ -50,5 +50,6 @@
     <string name="enter_configname_here">Enter ConfigName here</string>
     <string name="Yes">Yes</string>
     <string name="No">No</string>
+    <string name="my_default">default</string>
 
 </resources>

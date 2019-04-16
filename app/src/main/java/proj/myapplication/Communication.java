@@ -47,7 +47,6 @@ public class Communication extends AppCompatActivity {
     private boolean hintVisible;
     //Inputs
     private Button updateInputsBtn;
-
     //Bits
     private ArrayList<TextView> inBitsTv;
     private ArrayList<Switch> inBitsSw;
