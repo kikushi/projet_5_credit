@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    tools:ignore="NestedWeights, ButtonStyle, TooDeepLayout, TooManyViews"
     tools:context=".Communication">
 
     <LinearLayout
@@ -24,8 +25,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="30"
-            android:text="@string/show_gpio_hint"
-            />
+            android:text="@string/show_gpio_hint" />
 
     </LinearLayout>
 
@@ -40,7 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="50"
-            android:background="@color/cornflower_blue">
+            android:background="@color/cornflower_blue"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -66,7 +67,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="50">
+                    android:layout_weight="50"
+                    android:baselineAligned="false">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -87,7 +89,8 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="88"
-                        android:background="@drawable/border">
+                        android:background="@drawable/border"
+                        android:baselineAligned="false">
 
                         <TableLayout
                             android:layout_width="0dp"
@@ -98,7 +101,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -128,7 +132,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -157,7 +162,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -186,7 +192,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -226,7 +233,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -256,7 +264,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -286,7 +295,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -316,7 +326,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -353,7 +364,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="50"
-                    android:background="@drawable/border">
+                    android:background="@drawable/border"
+                    android:baselineAligned="false">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -374,7 +386,8 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="88"
-                        android:background="@drawable/border">
+                        android:background="@drawable/border"
+                        android:baselineAligned="false">
 
                         <TableLayout
                             android:layout_width="0dp"
@@ -449,7 +462,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="50"
-            android:background="@color/yellow4">
+            android:background="@color/yellow4"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -475,7 +489,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="50">
+                    android:layout_weight="50"
+                    android:baselineAligned="false">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -495,7 +510,8 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="88">
+                        android:layout_weight="88"
+                        android:baselineAligned="false">
 
                         <TableLayout
                             android:layout_width="0dp"
@@ -506,7 +522,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -536,7 +553,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -566,7 +584,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -596,7 +615,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -636,7 +656,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -666,7 +687,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -696,7 +718,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -726,7 +749,8 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:baselineAligned="false">
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -764,7 +788,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="50"
-                    android:background="@drawable/border">
+                    android:background="@drawable/border"
+                    android:baselineAligned="false">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -785,7 +810,8 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="88"
-                        android:background="@drawable/border">
+                        android:background="@drawable/border"
+                        android:baselineAligned="false">
 
                         <TableLayout
                             android:layout_width="0dp"

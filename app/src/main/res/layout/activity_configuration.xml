@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Configuration">
+    tools:ignore="NestedWeights,TooManyViews"
+    tools:context=".Configuration"
+    android:baselineAligned="false">
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -17,13 +19,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_1"
-                style="@style/AppTheme.radiobutton.red"
-                android:text="1" />
+                android:id="@+id/rbtn01"
+                style="@style/AppTheme.radiobutton.red"/>
             <RadioButton
-                android:id="@+id/rbtn_2"
-                style ="@style/AppTheme.radiobutton.red"
-                android:text="2"/>
+                android:id="@+id/rbtn02"
+                style ="@style/AppTheme.radiobutton.red"/>
         </LinearLayout>
 
         <LinearLayout
@@ -31,13 +31,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_3"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="3" />
+                android:id="@+id/rbtn03"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_4"
-                style ="@style/AppTheme.radiobutton.red"
-                android:text="4"/>
+                android:id="@+id/rbtn04"
+                style ="@style/AppTheme.radiobutton.red"/>
         </LinearLayout>
 
         <LinearLayout
@@ -45,13 +43,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_5"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="5" />
+                android:id="@+id/rbtn05"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_6"
-                style ="@style/AppTheme.radiobutton.red"
-                android:text="6"/>
+                android:id="@+id/rbtn06"
+                style ="@style/AppTheme.radiobutton.red"/>
         </LinearLayout>
 
         <LinearLayout
@@ -59,26 +55,22 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_7"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="7" />
+                android:id="@+id/rbtn07"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_8"
-                style ="@style/AppTheme.radiobutton.green"
-                android:text="8"/>
+                android:id="@+id/rbtn08"
+                style ="@style/AppTheme.radiobutton.green"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_9"
-                style="@style/AppTheme.radiobutton.red"
-                android:text="9" />
+                android:id="@+id/rbtn09"
+                style="@style/AppTheme.radiobutton.red"/>
             <RadioButton
-                android:id="@+id/rbtn_10"
-                style ="@style/AppTheme.radiobutton.green"
-                android:text="10"/>
+                android:id="@+id/rbtn10"
+                style ="@style/AppTheme.radiobutton.green"/>
         </LinearLayout>
 
         <LinearLayout
@@ -86,13 +78,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_11"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="11" />
+                android:id="@+id/rbtn11"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_12"
-                style ="@style/AppTheme.radiobutton.green"
-                android:text="12"/>
+                android:id="@+id/rbtn12"
+                style ="@style/AppTheme.radiobutton.green"/>
         </LinearLayout>
 
         <LinearLayout
@@ -100,13 +90,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_13"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="13" />
+                android:id="@+id/rbtn13"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_14"
-                style ="@style/AppTheme.radiobutton.red"
-                android:text="14"/>
+                android:id="@+id/rbtn14"
+                style ="@style/AppTheme.radiobutton.red"/>
         </LinearLayout>
 
         <LinearLayout
@@ -114,13 +102,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_15"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="15" />
+                android:id="@+id/rbtn15"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_16"
-                style ="@style/AppTheme.radiobutton.green"
-                android:text="16"/>
+                android:id="@+id/rbtn16"
+                style ="@style/AppTheme.radiobutton.green"/>
         </LinearLayout>
 
         <LinearLayout
@@ -128,13 +114,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_17"
-                style="@style/AppTheme.radiobutton.red"
-                android:text="17" />
+                android:id="@+id/rbtn17"
+                style="@style/AppTheme.radiobutton.red"/>
             <RadioButton
-                android:id="@+id/rbtn_18"
-                style ="@style/AppTheme.radiobutton.green"
-                android:text="18"/>
+                android:id="@+id/rbtn18"
+                style ="@style/AppTheme.radiobutton.green"/>
         </LinearLayout>
 
         <LinearLayout
@@ -142,13 +126,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_19"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="19" />
+                android:id="@+id/rbtn19"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_20"
-                style ="@style/AppTheme.radiobutton.red"
-                android:text="20"/>
+                android:id="@+id/rbtn20"
+                style ="@style/AppTheme.radiobutton.red"/>
         </LinearLayout>
 
         <LinearLayout
@@ -156,13 +138,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_21"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="21" />
+                android:id="@+id/rbtn21"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_22"
-                style ="@style/AppTheme.radiobutton.green"
-                android:text="22"/>
+                android:id="@+id/rbtn22"
+                style ="@style/AppTheme.radiobutton.green"/>
         </LinearLayout>
 
         <LinearLayout
@@ -170,13 +150,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_23"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="23" />
+                android:id="@+id/rbtn23"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_24"
-                style ="@style/AppTheme.radiobutton.green"
-                android:text="24"/>
+                android:id="@+id/rbtn24"
+                style ="@style/AppTheme.radiobutton.green"/>
         </LinearLayout>
 
         <LinearLayout
@@ -184,13 +162,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_25"
-                style="@style/AppTheme.radiobutton.red"
-                android:text="25" />
+                android:id="@+id/rbtn25"
+                style="@style/AppTheme.radiobutton.red"/>
             <RadioButton
-                android:id="@+id/rbtn_26"
-                style ="@style/AppTheme.radiobutton.green"
-                android:text="26"/>
+                android:id="@+id/rbtn26"
+                style ="@style/AppTheme.radiobutton.green"/>
         </LinearLayout>
 
         <LinearLayout
@@ -198,13 +174,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_27"
-                style="@style/AppTheme.radiobutton.red"
-                android:text="27" />
+                android:id="@+id/rbtn27"
+                style="@style/AppTheme.radiobutton.red"/>
             <RadioButton
-                android:id="@+id/rbtn_28"
-                style ="@style/AppTheme.radiobutton.red"
-                android:text="28"/>
+                android:id="@+id/rbtn28"
+                style ="@style/AppTheme.radiobutton.red"/>
         </LinearLayout>
 
         <LinearLayout
@@ -212,13 +186,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_29"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="29" />
+                android:id="@+id/rbtn29"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_30"
-                style ="@style/AppTheme.radiobutton.red"
-                android:text="30"/>
+                android:id="@+id/rbtn30"
+                style ="@style/AppTheme.radiobutton.red"/>
         </LinearLayout>
 
         <LinearLayout
@@ -226,13 +198,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_31"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="31" />
+                android:id="@+id/rbtn31"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_32"
-                style ="@style/AppTheme.radiobutton.green"
-                android:text="32"/>
+                android:id="@+id/rbtn32"
+                style ="@style/AppTheme.radiobutton.green"/>
         </LinearLayout>
 
         <LinearLayout
@@ -240,13 +210,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_33"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="33" />
+                android:id="@+id/rbtn33"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_34"
-                style ="@style/AppTheme.radiobutton.red"
-                android:text="34"/>
+                android:id="@+id/rbtn34"
+                style ="@style/AppTheme.radiobutton.red"/>
         </LinearLayout>
 
         <LinearLayout
@@ -254,13 +222,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_35"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="35" />
+                android:id="@+id/rbtn35"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_36"
-                style ="@style/AppTheme.radiobutton.green"
-                android:text="36"/>
+                android:id="@+id/rbtn36"
+                style ="@style/AppTheme.radiobutton.green"/>
         </LinearLayout>
 
         <LinearLayout
@@ -268,13 +234,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_37"
-                style="@style/AppTheme.radiobutton.green"
-                android:text="37" />
+                android:id="@+id/rbtn37"
+                style="@style/AppTheme.radiobutton.green"/>
             <RadioButton
-                android:id="@+id/rbtn_38"
-                style ="@style/AppTheme.radiobutton.green"
-                android:text="38"/>
+                android:id="@+id/rbtn38"
+                style ="@style/AppTheme.radiobutton.green"/>
         </LinearLayout>
 
         <LinearLayout
@@ -282,13 +246,11 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <RadioButton
-                android:id="@+id/rbtn_39"
-                style="@style/AppTheme.radiobutton.red"
-                android:text="39" />
+                android:id="@+id/rbtn39"
+                style="@style/AppTheme.radiobutton.red" />
             <RadioButton
-                android:id="@+id/rbtn_40"
-                style ="@style/AppTheme.radiobutton.green"
-                android:text="40"/>
+                android:id="@+id/rbtn40"
+                style ="@style/AppTheme.radiobutton.green" />
         </LinearLayout>
     </LinearLayout>
 
@@ -312,7 +274,6 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textStyle="bold"
-                android:text="@string/my_default"
                 android:hint="@string/enter_configname_here"
                 android:longClickable="false"
                 android:background="@color/cornflower_blue">
@@ -321,7 +282,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2">
+                android:layout_weight="2"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -432,7 +394,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="70">
+                    android:layout_weight="70"
+                    android:baselineAligned="false">
 
                     <LinearLayout
                         android:layout_width="0dp"

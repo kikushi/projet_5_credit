@@ -1,12 +1,7 @@
 package proj.myapplication;
 
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,15 +16,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-
-import static proj.myapplication.Connexion.btSocket;
 
 public class Communication extends AppCompatActivity {
 
@@ -45,29 +35,16 @@ public class Communication extends AppCompatActivity {
 
     private Button showHideHintBtn;
     private boolean hintVisible;
-    //Inputs
-    private Button updateInputsBtn;
-    //Bits
-    private ArrayList<TextView> inBitsTv;
     private ArrayList<Switch> inBitsSw;
     private int inBitsTvId;
     private int inBitsSwId;
-    //Bytes
-    private ArrayList<TextView> inBytesTv;
     private ArrayList<TextView> inBytesValTv;
     private int inBytesTvId;
     private int inBytesValTvId;
 
-    //Outputs
-    //Bit
-    private ArrayList<TextView> outBitsTv;
-    private ArrayList<Switch> outBitsSw;
     private int outBitsTvId;
     private int outBitsSwId;
-    //Bytes
-    private ArrayList<TextView> outBytesTv;
     private ArrayList<EditText> outBytesEt;
-    private ArrayList<Button> outBytesBtn;
     private int outBytesTvId;
     private int outBytesEtId;
     private int outBytesBtnId;
@@ -99,10 +76,11 @@ public class Communication extends AppCompatActivity {
         outBytesEtId = R.id.et_ByteO0;
         outBytesBtnId = R.id.btn_ByteO0;
 
-        updateInputsBtn = (Button) findViewById(R.id.btn_UpdateAllInputs);
+        //Inputs
+        Button updateInputsBtn = findViewById(R.id.btn_UpdateAllInputs);
         updateInputsBtn.setOnClickListener(UpdateAllInputsBtnListener);
 
-        showHideHintBtn = (Button) findViewById(R.id.btn_ShowHideHint);
+        showHideHintBtn = findViewById(R.id.btn_ShowHideHint);
         showHideHintBtn.setOnClickListener(ShowHideHintBtnListener);
         hintVisible = false;
     }
@@ -127,17 +105,22 @@ public class Communication extends AppCompatActivity {
         outBytePins = new ArrayList<>(0);
 
         //Input widgets initiation
-        inBitsTv = new ArrayList<>(0);
+        //Bits
+        ArrayList<TextView> inBitsTv = new ArrayList<>(0);
         inBitsSw = new ArrayList<>(0);
-        inBytesTv = new ArrayList<>(0);
+        //Bytes
+        ArrayList<TextView> inBytesTv = new ArrayList<>(0);
         inBytesValTv = new ArrayList<>(0);
 
         //Output widgets initiation
-        outBitsTv = new ArrayList<>(0);
-        outBitsSw = new ArrayList<>(0);
-        outBytesTv = new ArrayList<>(0);
+        //Outputs
+        //Bit
+        ArrayList<TextView> outBitsTv = new ArrayList<>(0);
+        ArrayList<Switch> outBitsSw = new ArrayList<>(0);
+        //Bytes
+        ArrayList<TextView> outBytesTv = new ArrayList<>(0);
         outBytesEt = new ArrayList<>(0);
-        outBytesBtn = new ArrayList<>(0);
+        ArrayList<Button> outBytesBtn = new ArrayList<>(0);
 
         init();
 

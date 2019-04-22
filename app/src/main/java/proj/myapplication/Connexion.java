@@ -27,10 +27,7 @@ import java.util.UUID;
 public class Connexion extends AppCompatActivity {
 
     private UUID uuid;
-    private Button getPairedBtn;
     private Spinner pairedSpinner;
-    private Button connectPairedBtn;
-    private Button searchOtherBtn;
     private Button connectOtherBtn;
     private Spinner otherSpinner;
 
@@ -52,13 +49,13 @@ public class Connexion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connexion);
 
-        pairedAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, R.id.tv_spinner);
+        pairedAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, R.id.tv_spinner);
         pairedAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        otherAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, R.id.tv_spinner);
+        otherAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, R.id.tv_spinner);
         otherAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
-        pairedDevices = new HashSet<BluetoothDevice>();
-        otherDevices = new HashSet<BluetoothDevice>();
+        pairedDevices = new HashSet<>();
+        otherDevices = new HashSet<>();
 
         //Bluetooth
         myBtAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -78,24 +75,24 @@ public class Connexion extends AppCompatActivity {
         filter_disconnected = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 
         //Widgets
-        getPairedBtn = (Button)findViewById(R.id.button_get_paired);
+        Button getPairedBtn = findViewById(R.id.button_get_paired);
         getPairedBtn.setOnClickListener(getPairedBtnListener);
 
-        searchOtherBtn = (Button)findViewById(R.id.button_search_other);
+        Button searchOtherBtn = findViewById(R.id.button_search_other);
         searchOtherBtn.setOnClickListener(searchOtherBtnListener);
 
-        pairedSpinner = (Spinner)findViewById(R.id.spinner_paired);
+        pairedSpinner = findViewById(R.id.spinner_paired);
         pairedSpinner.setAdapter(pairedAdapter);
         pairedSpinner.setDropDownVerticalOffset(30);
 
-        otherSpinner = (Spinner)findViewById(R.id.spinner_other);
+        otherSpinner = findViewById(R.id.spinner_other);
         otherSpinner.setDropDownVerticalOffset(30);
         otherSpinner.setAdapter(otherAdapter);
 
-        connectPairedBtn = (Button)findViewById(R.id.button_connectPaired);
+        Button connectPairedBtn = findViewById(R.id.button_connectPaired);
         connectPairedBtn.setOnClickListener(connectBtnListener);
 
-        connectOtherBtn = (Button)findViewById(R.id.button_connectOther);
+        connectOtherBtn = findViewById(R.id.button_connectOther);
         connectOtherBtn.setOnClickListener(connectBtnListener);
 
     }
