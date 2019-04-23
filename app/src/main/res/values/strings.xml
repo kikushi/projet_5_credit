@@ -51,5 +51,7 @@
     <string name="Yes">Yes</string>
     <string name="No">No</string>
     <string name="my_default">default</string>
+    <string name="Ok">OK</string>
+    <string name="Cancel">Cancel</string>
 
 </resources>

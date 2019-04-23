@@ -9,9 +9,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,8 +33,8 @@ import java.util.Iterator;
 
 public class Configuration extends AppCompatActivity {
 
-    public static String widget_input;
-    public static String widget_output;
+    public static String inputPins;
+    public static String outputPins;
     private int nbInputBit, nbOutputBit;
 
     //Communication
@@ -92,8 +94,8 @@ public class Configuration extends AppCompatActivity {
         }
 
         //Variables initialisations
-        widget_input="2202020020000200200200002022020002000020";
-        widget_output ="2202020020000200200200002022020002000020";
+        inputPins ="2202020020000200200200002022020002000020";
+        outputPins ="2202020020000200200200002022020002000020";
         nbInputBit = 0;
         nbOutputBit = 0;
         rbtnIDs = new int[40];
@@ -364,23 +366,23 @@ public class Configuration extends AppCompatActivity {
 
                 int pinNB = indexesOfSelectedPins.get(i)+1;
 
-                //Add '1' in widget_input at position (PinNB-1)
+                //Add '1' in inputPins at position (PinNB-1)
                 if (isInput) {
-                    widget_input = widget_input.substring(0, pinNB-1)+'1'+widget_input.substring(pinNB);
+                    inputPins = inputPins.substring(0, pinNB-1)+'1'+ inputPins.substring(pinNB);
                     nbInputBit++;
                 }
                 else {
-                    widget_output = widget_output.substring(0, pinNB-1)+'1'+widget_output.substring(pinNB);
+                    outputPins = outputPins.substring(0, pinNB-1)+'1'+ outputPins.substring(pinNB);
                     nbOutputBit++;
                 }
 
                 //Cree un objet PINConfig
                 String text = "PIN # " + String.valueOf(pinNB);
-                PINConfig pi = new PINConfig(false, isInput, 'P', text);
-                pi.setPinNumber(pinNB);
+                PINConfig pc = new PINConfig(false, isInput, 'P', text);
+                pc.setPinNumber(pinNB);
 
                 //Add l'objet créé au listview
-                configElementsList.add(pi);
+                configElementsList.add(pc);
                 configElementsAdapter.notifyDataSetChanged();
 
                 //Modifie le rbtn de la liste de gauche
@@ -421,11 +423,11 @@ public class Configuration extends AppCompatActivity {
 
             if (isInput) {
                 //Determiner quelle lettre est disponible
-                letter = GetFirstCharAvailable(widget_input);
+                letter = GetFirstCharAvailable(inputPins);
                 for (int i=0; i<8; i++) {
                     pinNBs[i] = indexesOfSelectedPins.get(i)+1;
-                    //Add 'a', 'b' or 'c' in widget_input or widget_output at positions
-                    widget_input = widget_input.substring(0, pinNBs[i]-1)+letter+widget_input.substring(pinNBs[i]);
+                    //Add 'a', 'b' or 'c' in inputPins or outputPins at positions
+                    inputPins = inputPins.substring(0, pinNBs[i]-1)+letter+ inputPins.substring(pinNBs[i]);
                     strBuilder.append(String.valueOf(pinNBs[i])).append('-');
 
                     //Modifie les rbtns de la liste de gauche
@@ -438,11 +440,11 @@ public class Configuration extends AppCompatActivity {
             }
             else {
                 //Determiner quelle lettre est disponible
-                letter = GetFirstCharAvailable(widget_output);
+                letter = GetFirstCharAvailable(outputPins);
                 for (int i=0; i<8; i++) {
                     pinNBs[i] = indexesOfSelectedPins.get(i)+1;
-                    //Add 'a', 'b' or 'c' in widget_input or widget_output at positions
-                    widget_output = widget_output.substring(0, pinNBs[i]-1)+letter+widget_output.substring(pinNBs[i]);
+                    //Add 'a', 'b' or 'c' in inputPins or outputPins at positions
+                    outputPins = outputPins.substring(0, pinNBs[i]-1)+letter+ outputPins.substring(pinNBs[i]);
                     strBuilder.append(String.valueOf(pinNBs[i])).append('-');
                     //Modifie les rbtns de la liste de gauche
                     RadioButton rbtnClicked = findViewById(rbtnIDs[pinNBs[i]-1]);
@@ -455,11 +457,11 @@ public class Configuration extends AppCompatActivity {
             //Remove last '-'
             String text = new String(strBuilder).substring(0, strBuilder.length()-1);
             //Cree un objet PINConfig
-            PINConfig pi = new PINConfig(true, isInput, letter, text);
-            pi.setPinNumbers(pinNBs);
+            PINConfig pc = new PINConfig(true, isInput, letter, text);
+            pc.setPinNumbers(pinNBs);
 
             //Add l'objet créé au listview
-            configElementsList.add(pi);
+            configElementsList.add(pc);
             configElementsAdapter.notifyDataSetChanged();
         }
     }
@@ -476,8 +478,6 @@ public class Configuration extends AppCompatActivity {
     }
 
     private void Btn_Refresh_Clicked() {
-        configNamesAdapter.clear();
-        configNamesAdapter.notifyDataSetChanged();
         SendStringCommand("refreshConfigs");
         Log.i("Tag", "Received : "+ received);
         received = ReceiveStringMessage();
@@ -488,6 +488,7 @@ public class Configuration extends AppCompatActivity {
         else if(!received.equals("error")) {
             String splittedStr[]= received.split("\\r?\\n");
 
+            configNamesAdapter.clear();
             for (String aSplittedStr : splittedStr) {
                 if (!aSplittedStr.equals("null")) {
                     configNamesAdapter.add(aSplittedStr);
@@ -555,7 +556,7 @@ public class Configuration extends AppCompatActivity {
                     .setPositiveButton(R.string.Yes,
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    SendStringCommand("saveConfig;" + configNameET.getText().toString() + ";" + widget_input + ";" + widget_output + ";");
+                                    SendStringCommand("saveConfig;" + configNameET.getText().toString() + ";" + inputPins + ";" + outputPins + ";");
                                     received = ReceiveStringMessage();
                                     if (received.equals("error")) {
                                         Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
@@ -584,7 +585,7 @@ public class Configuration extends AppCompatActivity {
                     .setPositiveButton(R.string.Yes,
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    SendStringCommand("start;" + configNameET.getText().toString() + ";" + widget_input + ";" + widget_output + ";");
+                                    SendStringCommand("start;" + configNameET.getText().toString() + ";" + inputPins + ";" + outputPins + ";");
                                     received = ReceiveStringMessage();
                                     if (received.equals("error")) {
                                         Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
@@ -600,28 +601,28 @@ public class Configuration extends AppCompatActivity {
     }
 
     private void Btn_ChangeNip_Clicked() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        int maximumChars = 8;
         final EditText edittext = new EditText(this);
-        alert.setIcon(R.drawable.warning_icon);
-        alert.setMessage("Enter your chosen Nip");
-        alert.setTitle("Warning !");
+        edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
+        edittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maximumChars)});
 
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage("Enter your new NIP.\nYour NIP must have a maximum of 8 characters");
+        alert.setTitle("Change NIP");
         alert.setView(edittext);
-
-        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                //What ever you want to do with the value
                 String NIP = edittext.getText().toString();
-                SendStringCommand("changeNIP;"+NIP+";");
-                received = ReceiveStringMessage();
+                if (!NIP.equals("")) {
+                    SendStringCommand("changeNIP;" + NIP + ";");
+                    received = ReceiveStringMessage();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "You must enter a NIP before pressing OK.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // what ever you want to do with No option.
-            }
-        });
+        alert.setNegativeButton(R.string.Cancel, null);
         alert.show();
     }
 
@@ -703,14 +704,14 @@ public class Configuration extends AppCompatActivity {
 
             received = ReceiveStringMessage();
             String[] splittedStr = received.split(";",2);
-            widget_input = splittedStr[0];
-            widget_output = splittedStr[1];
+            inputPins = splittedStr[0];
+            outputPins = splittedStr[1];
 
-            if(widget_input.equals("error")|| widget_output.equals("error")) {
+            if(inputPins.equals("error")|| outputPins.equals("error")) {
                 Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
             }
             else {
-                InitArraysWithConfig(new String[]{widget_input,widget_output});
+                InitArraysWithConfig(new String[]{inputPins, outputPins});
                 AddBitsWithLoad();
                 AddBytesWithLoad();
             }
@@ -767,7 +768,7 @@ public class Configuration extends AppCompatActivity {
                 //
                 PinNumbers[i] = byteGroup.get(i);
 
-                //Add 'a', 'b' or 'c' in widget_input or widget_output at positions
+                //Add 'a', 'b' or 'c' in inputPins or outputPins at positions
                 strBuilder.append(String.valueOf(byteGroup.get(i))).append('-');
 
                 //Modifie les rbtns de la liste de gauche
@@ -781,11 +782,11 @@ public class Configuration extends AppCompatActivity {
             //Remove last '-'
             String text = new String(strBuilder).substring(0, strBuilder.length()-1);
             //Cree un objet PINConfig
-            PINConfig pi = new PINConfig(true, true,'G', text);
-            pi.setPinNumbers(PinNumbers);
+            PINConfig pc = new PINConfig(true, true,'G', text);
+            pc.setPinNumbers(PinNumbers);
 
             //Add l'objet créé au listview
-            configElementsList.add(pi);
+            configElementsList.add(pc);
             configElementsAdapter.notifyDataSetChanged();
         }
         strBuilder = new StringBuilder("PINS # ");
@@ -796,7 +797,7 @@ public class Configuration extends AppCompatActivity {
                 //
                 PinNumbers[i] = byteGroup.get(i);
 
-                //Add 'a', 'b' or 'c' in widget_input or widget_output at positions
+                //Add 'a', 'b' or 'c' in inputPins or outputPins at positions
                 strBuilder.append(String.valueOf(byteGroup.get(i))).append('-');
 
                 //Modifie les rbtns de la liste de gauche
@@ -810,11 +811,11 @@ public class Configuration extends AppCompatActivity {
             //Remove last '-'
             String text = new String(strBuilder).substring(0, strBuilder.length()-1);
             //Cree un objet PINConfig
-            PINConfig pi = new PINConfig(true, false,'G', text);
-            pi.setPinNumbers(PinNumbers);
+            PINConfig pc = new PINConfig(true, false,'G', text);
+            pc.setPinNumbers(PinNumbers);
 
             //Add l'objet créé au listview
-            configElementsList.add(pi);
+            configElementsList.add(pc);
             configElementsAdapter.notifyDataSetChanged();
         }
     }
@@ -880,6 +881,15 @@ public class Configuration extends AppCompatActivity {
     public void ChangeView(Class activity) {
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

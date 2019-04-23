@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,8 +96,8 @@ public class Communication extends AppCompatActivity {
         //Init config Arrays
         //Initiate inputs and outputs array
         inputsOutputs = new String[] {
-                Configuration.widget_input, //Inputs
-                Configuration.widget_output  //Outputs
+                Configuration.inputPins, //Inputs
+                Configuration.outputPins  //Outputs
         };
         //2202020020000200200200002022020002000020
 
@@ -187,16 +190,16 @@ public class Communication extends AppCompatActivity {
                 return true;
 
             case R.id.menu_comm_changeNip:
-                btn_changeNip_clicked();
+                Btn_ChangeNip_Clicked();
                 return true;
 
             case R.id.menu_comm_disconnect:
-                sendStringMessage("disconnect");
+                SendStringCommand("disconnect");
                 ChangeView(Connexion.class);
                 return true;
 
             case R.id.menu_comm_close_app:
-                sendStringMessage("disconnect");
+                SendStringCommand("disconnect");
                 this.finishAffinity();
                 return true;
         }
@@ -273,8 +276,8 @@ public class Communication extends AppCompatActivity {
     }
 
     private String UpdateInputs(String pinNBs) {
-        sendStringMessage("updateInputs;" + pinNBs);
-        received = receiveStringMessage();
+        SendStringCommand("updateInputs;" + pinNBs);
+        received = ReceiveStringMessage();
         return received;
     }
 
@@ -314,8 +317,8 @@ public class Communication extends AppCompatActivity {
     };
 
     private void WriteBit(int pinNB, int data) {
-        sendStringMessage("writeBit;" + String.valueOf(pinNB) + ';' + String.valueOf(data) + ';');
-        received = receiveStringMessage();
+        SendStringCommand("writeBit;" + String.valueOf(pinNB) + ';' + String.valueOf(data) + ';');
+        received = ReceiveStringMessage();
     }
 
     private View.OnClickListener OutBytesTvListener = new View.OnClickListener() {
@@ -361,8 +364,8 @@ public class Communication extends AppCompatActivity {
     }
 
     private void WriteByte(String pinNBs, String data) {
-        sendStringMessage("writeByte;" + pinNBs + ';' + data + ';');
-        received = receiveStringMessage();
+        SendStringCommand("writeByte;" + pinNBs + ';' + data + ';');
+        received = ReceiveStringMessage();
     }
 
 
@@ -433,33 +436,33 @@ public class Communication extends AppCompatActivity {
         return tmpPinList;
     }
 
-    private void btn_changeNip_clicked() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    private void Btn_ChangeNip_Clicked() {
+        int maximumChars = 8;
         final EditText edittext = new EditText(this);
-        alert.setIcon(R.drawable.warning_icon);
-        alert.setMessage("Enter your chosen Nip");
-        alert.setTitle("Warning !");
+        edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
+        edittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maximumChars)});
 
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage("Enter your new NIP.\nYour NIP must have a maximum of 8 characters");
+        alert.setTitle("Change NIP");
         alert.setView(edittext);
-
-        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                //What ever you want to do with the value
                 String NIP = edittext.getText().toString();
-                sendStringMessage("changeNIP;"+NIP+";");
-                received = receiveStringMessage();
+                if (!NIP.equals("")) {
+                    SendStringCommand("changeNIP;" + NIP + ";");
+                    received = ReceiveStringMessage();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "You must enter a NIP before pressing OK.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // what ever you want to do with No option.
-            }
-        });
+        alert.setNegativeButton(R.string.Cancel, null);
         alert.show();
     }
 
-    private void sendStringMessage(String mot){
+    private void SendStringCommand(String mot){
         try {
             btOutputStream.write(mot.getBytes());
 
@@ -469,7 +472,7 @@ public class Communication extends AppCompatActivity {
         }
     }
 
-    private String receiveStringMessage() {
+    private String ReceiveStringMessage() {
         byte [] mmBuffer3 = new byte[1024];
         try {
             btInputStream.read(mmBuffer3);
@@ -479,6 +482,15 @@ public class Communication extends AppCompatActivity {
         String b = new String(mmBuffer3);
         return b.substring(0,b.indexOf(0));
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
