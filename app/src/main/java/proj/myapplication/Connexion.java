@@ -5,10 +5,14 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -16,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -24,6 +29,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+
+import static proj.myapplication.Configuration.ReceiveStringMessage;
+import static proj.myapplication.Configuration.SendStringCommand;
 
 public class Connexion extends AppCompatActivity {
 
@@ -43,6 +51,9 @@ public class Connexion extends AppCompatActivity {
     public IntentFilter filter_found;
     public IntentFilter filter_discoveryFinished;
     public IntentFilter filter_disconnected;
+
+    //variable
+    public String recieved_="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +196,13 @@ public class Connexion extends AppCompatActivity {
             }
             if (success) {
                 registerReceiver(mReceiverActionAclDisconnected, filter_disconnected);
-                ChangeView(Configuration.class);
+                if(recieved_.equals("valid")){
+                    ChangeView(Configuration.class);
+                }
+                else if(recieved_.equals("invalid")){
+                    Toast.makeText(getApplicationContext(),"Connexion has failed : Wrong NIP", Toast.LENGTH_LONG).show();
+                }
+
             }
             else {
                 btSocket = null;
@@ -332,6 +349,33 @@ public class Connexion extends AppCompatActivity {
     public void ChangeView(Class activity) {
         Intent intent = new Intent(getApplicationContext(), activity);
         startActivity(intent);
+    }
+    public void verifieNip(){
+
+        int maximumChars = 8;
+        final EditText edittext = new EditText(this);
+        edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
+        edittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maximumChars)});
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage("Enter your NIP.\nYour NIP must have a maximum of 8 characters");
+        alert.setTitle("Verifie NIP");
+        alert.setView(edittext);
+        alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String NIP = edittext.getText().toString();
+                if (!NIP.equals("")) {
+                    SendStringCommand("verifyNIP;" + NIP + ";");
+                    recieved_ = ReceiveStringMessage();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "You must enter a NIP before pressing OK.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        alert.setNegativeButton(R.string.Cancel, null);
+        alert.show();
+
+        
     }
 
     @Override

@@ -38,8 +38,8 @@ public class Configuration extends AppCompatActivity {
     private int nbInputBit, nbOutputBit;
 
     //Communication
-    private OutputStream btOutputStream;
-    private InputStream btInputStream;
+    private static OutputStream btOutputStream;
+    private static InputStream btInputStream;
     private String received;
 
     //RadioButtons
@@ -858,7 +858,7 @@ public class Configuration extends AppCompatActivity {
         }
     }
 
-    private void SendStringCommand(String command){
+    public static void SendStringCommand(String command){
         try {
             btOutputStream.write(command.getBytes());
         }
@@ -867,7 +867,7 @@ public class Configuration extends AppCompatActivity {
         }
     }
 
-    private String ReceiveStringMessage() {
+    public static String ReceiveStringMessage() {
         byte [] buffer = new byte[1024];
         try {
             btInputStream.read(buffer);
