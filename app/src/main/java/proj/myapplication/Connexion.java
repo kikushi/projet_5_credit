@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,9 +28,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-
-import static proj.myapplication.Configuration.ReceiveStringMessage;
-import static proj.myapplication.Configuration.SendStringCommand;
 
 public class Connexion extends AppCompatActivity {
 
@@ -53,7 +49,7 @@ public class Connexion extends AppCompatActivity {
     public IntentFilter filter_disconnected;
 
     //variable
-    public String recieved_="";
+    public String received ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +160,7 @@ public class Connexion extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_comm_close_app:
-                this.finishAffinity();
+                finishAffinity();
                 return true;
         }
         return false;
@@ -195,14 +191,7 @@ public class Connexion extends AppCompatActivity {
                 success = Connect(false);
             }
             if (success) {
-                registerReceiver(mReceiverActionAclDisconnected, filter_disconnected);
-                if(recieved_.equals("valid")){
-                    ChangeView(Configuration.class);
-                }
-                else if(recieved_.equals("invalid")){
-                    Toast.makeText(getApplicationContext(),"Connexion has failed : Wrong NIP", Toast.LENGTH_LONG).show();
-                }
-
+                verifyNip();
             }
             else {
                 btSocket = null;
@@ -254,7 +243,9 @@ public class Connexion extends AppCompatActivity {
                 Log.i("Tag", "Disconnected");
                 //Retour a la page de connexion
                 if (getApplicationContext() != Connexion.this) {
-                    ChangeView(Connexion.class);
+                    Intent mintent = new Intent(Connexion.this, Connexion.class);
+                    mintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(mintent);
                 }
                 Toast.makeText(Connexion.this, R.string.connexion_with_host_ended, Toast.LENGTH_SHORT).show();
             }
@@ -346,50 +337,80 @@ public class Connexion extends AppCompatActivity {
         }
     }
 
-    public void ChangeView(Class activity) {
-        Intent intent = new Intent(getApplicationContext(), activity);
-        startActivity(intent);
-    }
-    public void verifieNip(){
+    public void verifyNip(){
 
         int maximumChars = 8;
         final EditText edittext = new EditText(this);
         edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
         edittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maximumChars)});
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setMessage("Enter your NIP.\nYour NIP must have a maximum of 8 characters");
-        alert.setTitle("Verifie NIP");
-        alert.setView(edittext);
-        alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String NIP = edittext.getText().toString();
-                if (!NIP.equals("")) {
-                    SendStringCommand("verifyNIP;" + NIP + ";");
-                    recieved_ = ReceiveStringMessage();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "You must enter a NIP before pressing OK.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        alert.setNegativeButton(R.string.Cancel, null);
-        alert.show();
 
-        
+        AlertDialog alertdialog = new AlertDialog.Builder(this)
+                .setMessage("Enter your NIP.\nYour NIP must have a maximum of 8 characters")
+                .setTitle("Verifie NIP")
+                .setView(edittext)
+                .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String NIP = edittext.getText().toString();
+                        if (!NIP.equals("")) {
+                            SendStringCommand("verifyNIP;" + NIP + ";");
+                            received = ReceiveStringMessage();
+                            if(received.equals("valid")){
+                                registerReceiver(mReceiverActionAclDisconnected, filter_disconnected);
+                                //Start Configuration activity
+                                Intent intent = new Intent(getApplicationContext(), Configuration.class);
+                                startActivity(intent);
+                            }
+                            else if(received.equals("invalid")){
+                                Toast.makeText(getApplicationContext(),"Connexion has failed : NIP is invalid", Toast.LENGTH_LONG).show();
+                                try {
+                                    btSocket.close();
+                                } catch (IOException e) {
+                                    Log.e("Tag", "Socket's close() method failed");
+                                } catch (NullPointerException e) {
+                                    Log.e("Tag", "tried to access btSocket while it was null");
+                                }
+                                btSocket = null;
+                            }
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "You must enter a NIP before pressing OK.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                try {
+                                    btSocket.close();
+                                } catch (IOException e) {
+                                    Log.e("Tag", "Socket's close() method failed");
+                                } catch (NullPointerException e) {
+                                    Log.e("Tag", "tried to access btSocket while it was null");
+                                }
+                                btSocket = null;
+                            }
+                })
+                .show();
+        alertdialog.setCanceledOnTouchOutside(false);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            onBackPressed();
-            return true;
+    public static void SendStringCommand(String command){
+        try {
+            btSocket.getOutputStream().write(command.getBytes());
         }
-        return super.onKeyDown(keyCode, event);
+        catch (IOException e) {
+            Log.e("Tag", "Writing failed. Tried to write : " + command);
+        }
     }
 
-    @Override
-    public void onBackPressed() {
-        this.finishAffinity();
+    public static String ReceiveStringMessage() {
+        byte [] buffer = new byte[1024];
+        try {
+            btSocket.getInputStream().read(buffer);
+        } catch (IOException e) {
+            Log.e("Tag", "Reading failed");
+        }
+        String b = new String(buffer);
+        return b.substring(0,b.indexOf(0));
     }
 
     @Override

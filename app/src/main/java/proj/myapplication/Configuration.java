@@ -13,7 +13,6 @@ import android.text.InputType;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -90,7 +89,9 @@ public class Configuration extends AppCompatActivity {
             btInputStream = Connexion.btSocket.getInputStream();
         } catch (IOException e) {
             Log.e("Tag", "socket's getOutputStream() method failed", e);
-            ChangeView(Connexion.class);
+            Intent intent = new Intent(this, Connexion.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
         }
 
         //Variables initialisations
@@ -316,14 +317,13 @@ public class Configuration extends AppCompatActivity {
                 return true;
 
             case R.id.menu_comm_disconnect:
-                //disconnect
                 SendStringCommand("disconnect");
-                ChangeView(Connexion.class);
+                finish();
                 return true;
 
             case R.id.menu_comm_close_app:
                 SendStringCommand("disconnect");
-                this.finishAffinity();
+                finishAffinity();
                 return true;
         }
         return false;
@@ -514,7 +514,7 @@ public class Configuration extends AppCompatActivity {
 
     private void Btn_Del_Clicked() {
         if (!selected_configname.equals("")) {
-            new AlertDialog.Builder(Configuration.this)
+            AlertDialog alertdialog = new AlertDialog.Builder(Configuration.this)
                     .setTitle("Warning !")
                     .setMessage("Voulez vous vraiment supprimer la configuration \""+selected_configname+"\" ?")
                     .setIcon(R.drawable.warning_icon)
@@ -537,6 +537,7 @@ public class Configuration extends AppCompatActivity {
                             })
                     .setNegativeButton(R.string.No,  null)
                     .show();
+            alertdialog.setCanceledOnTouchOutside(false);
         }
     }
 
@@ -549,7 +550,7 @@ public class Configuration extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Error : Configuration name contains prohibited characters", Toast.LENGTH_SHORT).show();
         }
         else {
-            new AlertDialog.Builder(Configuration.this)
+            AlertDialog alertdialog = new AlertDialog.Builder(Configuration.this)
                     .setTitle("Warning !")
                     .setMessage("Saving will overwrite any existing configuration with the same name already on the Raspberry Pi\n\nConfiguration Name chosen : " + configName + "\n\nContinue ?")
                     .setIcon(R.drawable.warning_icon)
@@ -565,6 +566,7 @@ public class Configuration extends AppCompatActivity {
                             })
                     .setNegativeButton(R.string.No,  null)
                     .show();
+            alertdialog.setCanceledOnTouchOutside(false);
         }
     }
 
@@ -578,7 +580,7 @@ public class Configuration extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Error : Configuration name contains prohibited characters", Toast.LENGTH_SHORT).show();
         }
         else {
-            new AlertDialog.Builder(Configuration.this)
+            AlertDialog alertdialog = new AlertDialog.Builder(Configuration.this)
                     .setTitle("Warning !")
                     .setMessage("Saving will overwrite any existing configuration with the same name already on the Raspberry Pi\n\nConfiguration Name chosen : " + configName + "\n\nContinue ?")
                     .setIcon(R.drawable.warning_icon)
@@ -591,12 +593,15 @@ public class Configuration extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), "An error has occured.", Toast.LENGTH_SHORT).show();
                                     }
                                     else {
-                                        ChangeView(Communication.class);
+                                        //Start Communication activity
+                                        Intent intent = new Intent(getApplicationContext(), Communication.class);
+                                        startActivity(intent);
                                     }
                                 }
                             })
                     .setNegativeButton(R.string.No,  null)
                     .show();
+            alertdialog.setCanceledOnTouchOutside(false);
         }
     }
 
@@ -606,24 +611,25 @@ public class Configuration extends AppCompatActivity {
         edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
         edittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maximumChars)});
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setMessage("Enter your new NIP.\nYour NIP must have a maximum of 8 characters");
-        alert.setTitle("Change NIP");
-        alert.setView(edittext);
-        alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String NIP = edittext.getText().toString();
-                if (!NIP.equals("")) {
-                    SendStringCommand("changeNIP;" + NIP + ";");
-                    received = ReceiveStringMessage();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "You must enter a NIP before pressing OK.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        alert.setNegativeButton(R.string.Cancel, null);
-        alert.show();
+        AlertDialog alertdialog = new AlertDialog.Builder(this)
+                .setMessage("Enter your new NIP.\nYour NIP must have a maximum of 8 characters")
+                .setTitle("Change NIP")
+                .setView(edittext)
+                .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String NIP = edittext.getText().toString();
+                        if (!NIP.equals("")) {
+                            SendStringCommand("changeNIP;" + NIP + ";");
+                            received = ReceiveStringMessage();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "You must enter a NIP before pressing OK.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.Cancel, null)
+                .show();
+        alertdialog.setCanceledOnTouchOutside(false);
     }
 
     private void Btn_Remove_Clicked() {
@@ -858,7 +864,7 @@ public class Configuration extends AppCompatActivity {
         }
     }
 
-    public static void SendStringCommand(String command){
+    public void SendStringCommand(String command){
         try {
             btOutputStream.write(command.getBytes());
         }
@@ -878,24 +884,10 @@ public class Configuration extends AppCompatActivity {
         return b.substring(0,b.indexOf(0));
     }
 
-    public void ChangeView(Class activity) {
-        Intent intent = new Intent(getApplicationContext(), activity);
-        startActivity(intent);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            onBackPressed();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
     @Override
     public void onBackPressed() {
         SendStringCommand("disconnect");
-        ChangeView(Connexion.class);
+        finish();
     }
 
 }

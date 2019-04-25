@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,7 +64,9 @@ public class Communication extends AppCompatActivity {
             btInputStream = Connexion.btSocket.getInputStream();
         } catch (IOException e) {
             Log.e("Tag", "socket's getOutputStream() method failed", e);
-            ChangeView(Connexion.class);
+            Intent intent = new Intent(this, Connexion.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
         }
 
         //Saving ID of first of each widget for future use
@@ -186,7 +187,7 @@ public class Communication extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_comm_changeConfig:
-                ChangeView(Configuration.class);
+                finish();
                 return true;
 
             case R.id.menu_comm_changeNip:
@@ -195,12 +196,14 @@ public class Communication extends AppCompatActivity {
 
             case R.id.menu_comm_disconnect:
                 SendStringCommand("disconnect");
-                ChangeView(Connexion.class);
+                Intent intent = new Intent(this, Connexion.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 return true;
 
             case R.id.menu_comm_close_app:
                 SendStringCommand("disconnect");
-                this.finishAffinity();
+                finishAffinity();
                 return true;
         }
         return false;
@@ -442,24 +445,25 @@ public class Communication extends AppCompatActivity {
         edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
         edittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maximumChars)});
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setMessage("Enter your new NIP.\nYour NIP must have a maximum of 8 characters");
-        alert.setTitle("Change NIP");
-        alert.setView(edittext);
-        alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String NIP = edittext.getText().toString();
-                if (!NIP.equals("")) {
-                    SendStringCommand("changeNIP;" + NIP + ";");
-                    received = ReceiveStringMessage();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "You must enter a NIP before pressing OK.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        alert.setNegativeButton(R.string.Cancel, null);
-        alert.show();
+        AlertDialog alertdialog = new AlertDialog.Builder(this)
+                .setMessage("Enter your new NIP.\nYour NIP must have a maximum of 8 characters")
+                .setTitle("Change NIP")
+                .setView(edittext)
+                .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String NIP = edittext.getText().toString();
+                        if (!NIP.equals("")) {
+                            SendStringCommand("changeNIP;" + NIP + ";");
+                            received = ReceiveStringMessage();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "You must enter a NIP before pressing OK.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.Cancel, null)
+                .show();
+        alertdialog.setCanceledOnTouchOutside(false);
     }
 
     private void SendStringCommand(String mot){
@@ -482,24 +486,5 @@ public class Communication extends AppCompatActivity {
         String b = new String(mmBuffer3);
         return b.substring(0,b.indexOf(0));
 
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            onBackPressed();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onBackPressed() {
-        ChangeView(Configuration.class);
-    }
-
-    private void ChangeView(Class activity) {
-        Intent intent = new Intent(getApplicationContext(), activity);
-        startActivity(intent);
     }
 }
