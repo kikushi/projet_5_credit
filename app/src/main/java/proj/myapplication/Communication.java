@@ -288,12 +288,14 @@ public class Communication extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if (hintVisible) {
+                findViewById(R.id.Comm_Layout).setVisibility(View.VISIBLE);
                 findViewById(R.id.Hint_Layout).setVisibility(View.GONE);
                 showHideHintBtn.setText(R.string.show_gpio_hint);
                 hintVisible = false;
             }
             else {
                 findViewById(R.id.Hint_Layout).setVisibility(View.VISIBLE);
+                findViewById(R.id.Comm_Layout).setVisibility(View.GONE);
                 showHideHintBtn.setText(R.string.hide_gpio_hint);
                 hintVisible = true;
             }

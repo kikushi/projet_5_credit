@@ -1,5 +1,6 @@
 package proj.myapplication;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -8,6 +9,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.LocationManager;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -208,13 +212,12 @@ public class Connexion extends AppCompatActivity {
                 // Device Found
                 Log.i("Tag", "Device Found");
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                otherDevices.add(device);
                 String name = device.getName();
-                if (name == null) {
-                    name = device.getAddress();
-                }
-                if (!Contains(otherAdapter, name)) {
-                    otherAdapter.add(name);
+                if (name != null) {
+                    if (!Contains(otherAdapter, name)) {
+                        otherDevices.add(device);
+                        otherAdapter.add(name);
+                    }
                 }
             }
         }
@@ -269,6 +272,12 @@ public class Connexion extends AppCompatActivity {
         if (myBtAdapter.isDiscovering()) {
             myBtAdapter.cancelDiscovery();
         }
+
+        //Ask user to enable location permission for the application
+        ActivityCompat.requestPermissions(Connexion.this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                1);
+
         myBtAdapter.startDiscovery();
         registerReceiver(mReceiverActionDiscoveryFinished, filter_discoveryFinished);
         otherSpinner.setVisibility(View.VISIBLE);
@@ -345,8 +354,8 @@ public class Connexion extends AppCompatActivity {
         edittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maximumChars)});
 
         AlertDialog alertdialog = new AlertDialog.Builder(this)
-                .setMessage("Enter your NIP.\nYour NIP must have a maximum of 8 characters")
-                .setTitle("Verifie NIP")
+                .setMessage("Enter your NIP below to continue.\n")
+                .setTitle("NIP Required")
                 .setView(edittext)
                 .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -370,6 +379,9 @@ public class Connexion extends AppCompatActivity {
                                     Log.e("Tag", "tried to access btSocket while it was null");
                                 }
                                 btSocket = null;
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(),"An error has occured. Connexion canceled", Toast.LENGTH_SHORT).show();
                             }
                         }
                         else {

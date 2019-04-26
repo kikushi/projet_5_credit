@@ -183,7 +183,7 @@ public class Configuration extends AppCompatActivity {
         for (int i=0; i<40; i++) {
             rbtnIDs[i] = rbtn01ID + i;
             RadioButton rbtn = findViewById(rbtnIDs[i]);
-            rbtn.setText(i+1);
+            rbtn.setText(String.valueOf(i+1));
             if (PINIsAvailable[i]) {
                 rbtn.setOnClickListener(RadioBtnListener);
             }
@@ -516,7 +516,7 @@ public class Configuration extends AppCompatActivity {
         if (!selected_configname.equals("")) {
             AlertDialog alertdialog = new AlertDialog.Builder(Configuration.this)
                     .setTitle("Warning !")
-                    .setMessage("Voulez vous vraiment supprimer la configuration \""+selected_configname+"\" ?")
+                    .setMessage("Are you sure you want to permanently delete configuration \""+selected_configname+"\" ?")
                     .setIcon(R.drawable.warning_icon)
                     .setPositiveButton(R.string.Yes,
                             new DialogInterface.OnClickListener() {
@@ -612,7 +612,7 @@ public class Configuration extends AppCompatActivity {
         edittext.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maximumChars)});
 
         AlertDialog alertdialog = new AlertDialog.Builder(this)
-                .setMessage("Enter your new NIP.\nYour NIP must have a maximum of 8 characters")
+                .setMessage("Enter your new NIP below.\n")
                 .setTitle("Change NIP")
                 .setView(edittext)
                 .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
