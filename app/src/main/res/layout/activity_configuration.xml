@@ -277,6 +277,7 @@
                 android:hint="@string/enter_configname_here"
                 android:text="@string/default_name"
                 android:longClickable="false"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-_"
                 android:background="@color/cornflower_blue">
             </EditText>
 

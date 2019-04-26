@@ -49,16 +49,6 @@ public class Configuration extends AppCompatActivity {
 
     //EditText ConfigName
     private EditText configNameET;
-    private String blockCharacterSet = "/<>|:?*.%'\\~#^$&!\";";
-    private InputFilter filter = new InputFilter() {
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            if (source != null && blockCharacterSet.contains(("" + source))) {
-                return "";
-            }
-            return null;
-        }
-    };
 
     //Arrays de pinNBs pour Load
     ArrayList<Integer> inBitPins= new ArrayList<>();
@@ -175,7 +165,6 @@ public class Configuration extends AppCompatActivity {
 
         //EditText Configname
         configNameET = findViewById(R.id.editText);
-        configNameET.setFilters(new InputFilter[]{filter});
 
         //RadioButtons
         rbtn01ID = R.id.rbtn01;
@@ -546,9 +535,6 @@ public class Configuration extends AppCompatActivity {
         if (configName.equals("")) {
             Toast.makeText(getApplicationContext(), "Error : You must pick a configuration name before saving it", Toast.LENGTH_LONG).show();
         }
-        else if (blockCharacterSet.contains(("" + configName))) {
-            Toast.makeText(getApplicationContext(), "Error : Configuration name contains prohibited characters", Toast.LENGTH_SHORT).show();
-        }
         else {
             AlertDialog alertdialog = new AlertDialog.Builder(Configuration.this)
                     .setTitle("Warning !")
@@ -574,10 +560,7 @@ public class Configuration extends AppCompatActivity {
 
         String configName = configNameET.getText().toString();
         if (configName.equals("")) {
-            Toast.makeText(getApplicationContext(), "Error : You must pick a configuration name before saving it", Toast.LENGTH_LONG).show();
-        }
-        else if (blockCharacterSet.contains(("" + configName))) {
-            Toast.makeText(getApplicationContext(), "Error : Configuration name contains prohibited characters", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Error : You must choose a configuration name before saving it", Toast.LENGTH_LONG).show();
         }
         else {
             AlertDialog alertdialog = new AlertDialog.Builder(Configuration.this)
