@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -307,7 +308,9 @@ public class Communication extends AppCompatActivity {
         public void onClick(View v) {
             int textViewClickedNumber = v.getId() - inBytesTvId;
             String toastText = GetBytePinsForToastDisplay(inBytePins.get(textViewClickedNumber));
-            Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
         }
     };
 

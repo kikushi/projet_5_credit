@@ -17,7 +17,7 @@ public class CustomAdapter extends ArrayAdapter<PINConfig> {
     //View lookup
     private static class ViewHolder {
         TextView name;
-        TextView informatiion;
+        TextView information;
     }
 
     //Constructeur
@@ -32,24 +32,20 @@ public class CustomAdapter extends ArrayAdapter<PINConfig> {
     public View getView(int position, View rowView, ViewGroup parent) {
         PINConfig pinConfig = getItem(position);
         ViewHolder viewHolder = new ViewHolder();
-        final View result;
 
         if (rowView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             rowView = inflater.inflate(R.layout.row_item, parent, false);
             viewHolder.name = (TextView) rowView.findViewById(R.id.name);
-            viewHolder.informatiion = (TextView) rowView.findViewById(R.id.information);
-
-            result = rowView;
+            viewHolder.information = (TextView) rowView.findViewById(R.id.information);
             rowView.setTag(viewHolder);
         }
         else {
             viewHolder = (ViewHolder) rowView.getTag();
-            result=rowView;
         }
 
         viewHolder.name.setText(pinConfig.getText());
-        viewHolder.informatiion.setText(pinConfig.getSubText());
+        viewHolder.information.setText(pinConfig.getSubText());
         return rowView;
     }
 

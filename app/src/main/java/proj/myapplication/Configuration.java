@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -150,7 +149,6 @@ public class Configuration extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 selected_configname = configNamesAdapter.getItem(position);
-                configNamesListView.setSelector(R.color.lime_green);
             }
         });
         configElementsListView = findViewById(R.id.listview_elements);
@@ -159,7 +157,7 @@ public class Configuration extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 index_selected_element = position;
-                configElementsListView.setSelector(R.color.lime_green);
+
             }
         });
 
@@ -457,10 +455,13 @@ public class Configuration extends AppCompatActivity {
 
     private char GetFirstCharAvailable(String widget_string) {
         char letter = 'a';
+        //a->b->c
         for (int i=0; i<3; i++) {
             if (widget_string.indexOf(letter) == -1) {
+                //If letter is not in string
                 return letter;
             }
+            //Else next letter
             letter++;
         }
         return 'c';
@@ -512,7 +513,6 @@ public class Configuration extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int id) {
                                     //Remove l'element de la listview
                                     configNamesAdapter.remove(selected_configname);
-                                    configNamesListView.setSelector(android.R.color.transparent);
                                     configNamesAdapter.notifyDataSetChanged();
 
                                     SendStringCommand("deleteConfig;"+ selected_configname +";");
@@ -527,6 +527,9 @@ public class Configuration extends AppCompatActivity {
                     .setNegativeButton(R.string.No,  null)
                     .show();
             alertdialog.setCanceledOnTouchOutside(false);
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "You must select a configuration in the list before pressing \"Del\"", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -616,45 +619,73 @@ public class Configuration extends AppCompatActivity {
     }
 
     private void Btn_Remove_Clicked() {
-        Remove(false, configElementsAdapter.get_element(index_selected_element));
-    }
+        if (index_selected_element == -1) {
+            //Nothing selected
+            Toast.makeText(getApplicationContext(), "You must select an element in the list before pressing \"Remove\"", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-    private void Remove(boolean calledByLoad, PINConfig pinConfig) {
-        if (pinConfig != null) {
-            RadioButton rbtn;
 
-            //Remove l'element de la listview
-            if (!calledByLoad) {
-                configElementsList.remove(index_selected_element);
+        PINConfig pinConfig = configElementsAdapter.get_element(index_selected_element);
+        configElementsList.remove(index_selected_element);
+
+        index_selected_element = -1;
+        configElementsAdapter.notifyDataSetChanged();
+
+        if(!pinConfig.getIsByte()){
+            //Bit
+            //Remettre le rbtn disponible
+            int pinNB = pinConfig.getPinNumber();
+            RadioButton rbtn = findViewById(rbtnIDs[pinNB-1]);
+            rbtn.setClickable(true);
+            rbtn.setChecked(false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                rbtn.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
             }
-            index_selected_element = -1;
-            configElementsListView.setSelector(android.R.color.transparent);
-            configElementsAdapter.notifyDataSetChanged();
 
-            if(!pinConfig.getIsByte()){
-                //Bit
-                //Remettre le rbtn disponible
-                rbtn = findViewById(rbtnIDs[pinConfig.getPinNumber()-1]);
-                rbtn.setClickable(true);
-                rbtn.setChecked(false);
-                if (pinConfig.getIsInput())
-                    nbInputBit--;
-                else
-                    nbOutputBit--;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    rbtn.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
-                }
+            if (pinConfig.getIsInput()) {
+                //Input
+                //Add '0' in inputPins at position (pinNB-1)
+                inputPins = inputPins.substring(0, pinNB-1)+'0'+ inputPins.substring(pinNB);
+                nbInputBit--;
             }
             else {
-                //Byte
-                //Remettre les rbtns disponibles
+                //Output
+                //Add '0' in outputPins at position (pinNB-1)
+                outputPins = outputPins.substring(0, pinNB-1)+'0'+ outputPins.substring(pinNB);
+                nbOutputBit--;
+            }
+        }
+        else {
+            //Byte
+            if (pinConfig.getIsInput()) {
+                //Input
                 for (int i=0; i<8;i++) {
-                    rbtn = findViewById(rbtnIDs[pinConfig.getPinNumbers(i)-1]);
+                    int pinNB = pinConfig.getPinNumbers(i);
+                    //Remettre les rbtns disponibles
+                    RadioButton rbtn = findViewById(rbtnIDs[pinNB-1]);
                     rbtn.setClickable(true);
                     rbtn.setChecked(false);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         rbtn.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
                     }
+                    //Add '0' in inputPins at position (pinNB-1)
+                    inputPins = inputPins.substring(0, pinNB-1)+'0'+ inputPins.substring(pinNB);
+                }
+            }
+            else {
+                //Output
+                for (int i=0; i<8;i++) {
+                    int pinNB = pinConfig.getPinNumbers(i);
+                    //Remettre les rbtns disponibles
+                    RadioButton rbtn = findViewById(rbtnIDs[pinNB-1]);
+                    rbtn.setClickable(true);
+                    rbtn.setChecked(false);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        rbtn.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
+                    }
+                    //Add '0' in inputPins at position (pinNB-1)
+                    outputPins = outputPins.substring(0, pinNB-1)+'0'+ outputPins.substring(pinNB);
                 }
             }
         }
@@ -662,16 +693,20 @@ public class Configuration extends AppCompatActivity {
 
     private void btn_Load_Clicked() {
         if (selected_configname.equals("")) {
-            Toast.makeText(getApplicationContext(), "You must select a configuration before loading it", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "You must select a configuration in the list before pressing \"Load\"", Toast.LENGTH_SHORT).show();
         }
         else {
-            //Remove les elements de la listview
+            //Remove all PinConfig elements from ListView
             for (Iterator<PINConfig> it = configElementsList.iterator(); it.hasNext();) {
                 PINConfig item = it.next();
-                Remove(true, item);
+                RemoveWithLoad(item);
                 it.remove();
             }
-            //Remove les boutons déjà checked
+            //Deselect currently selected ListView item
+            index_selected_element = -1;
+            configElementsAdapter.notifyDataSetChanged();
+
+            //Uncheck all currently checked RadioButtons
             for (int i=0; i<40; i++) {
                 if (selectedPins[i]) {
                     //Le rbtn est sélectionné
@@ -680,10 +715,14 @@ public class Configuration extends AppCompatActivity {
                     selectedPins[i] = false;
                 }
             }
-            //Set le edittext avec le configname
+            //Set EditText with ConfigName
             configNameET.setText(selected_configname);
 
-            //Load la config
+            //Reset bit counters
+            nbInputBit = 0;
+            nbOutputBit = 0;
+
+            //Load chosen Config
             inBitPins= new ArrayList<>();
             outBitPins= new ArrayList<>();
             inBytePins= new ArrayList<>();
@@ -707,6 +746,34 @@ public class Configuration extends AppCompatActivity {
         }
     }
 
+    private void RemoveWithLoad(PINConfig pinConfig) {
+        if(!pinConfig.getIsByte()){
+            //Bit
+            int pinNB = pinConfig.getPinNumber();
+            //Remettre le rbtn disponible
+            RadioButton rbtn = findViewById(rbtnIDs[pinNB-1]);
+            rbtn.setClickable(true);
+            rbtn.setChecked(false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                rbtn.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
+            }
+        }
+        else {
+            //Byte
+            for (int i=0; i<8;i++) {
+                int pinNB = pinConfig.getPinNumbers(i);
+                //Remettre les rbtns disponibles
+                RadioButton rbtn = findViewById(rbtnIDs[pinNB-1]);
+                rbtn.setClickable(true);
+                rbtn.setChecked(false);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    rbtn.setButtonTintList(ColorStateList.valueOf(Color.parseColor("#248d51")));
+                }
+            }
+        }
+    }
+
+
     public void AddBitsWithLoad(){
         for (Integer i : inBitPins) {
             //Cree un objet PINConfig
@@ -725,7 +792,7 @@ public class Configuration extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 rbtnClicked.setButtonTintList(ColorStateList.valueOf(Color.GRAY));
             }
-
+            nbInputBit++;
         }
         for (Integer i : outBitPins) {
             //Cree un objet PINConfig
@@ -744,6 +811,7 @@ public class Configuration extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 rbtnClicked.setButtonTintList(ColorStateList.valueOf(Color.GRAY));
             }
+            nbOutputBit++;
         }
     }
 
